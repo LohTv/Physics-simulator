@@ -30,3 +30,5 @@ We will use programming language python, as it is easy to use, we will also use 
 
 Limitations:
 As project uses high level language(python) starting big and complex simulation could run slow. Apart from the limitations of a programming language and library that we use(pymunk), project have theoretically no limitations, because it is only limited by our knowledge and skills of programming.
+
+https://docs.google.com/document/d/1YdrjLxV-tsfsBy-2Zk96stcroOZ92SDeMhVguwEANpU/edit?tab=t.0
