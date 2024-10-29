@@ -10,10 +10,10 @@ Dynamics: Forces and Newton’s laws of motion, and also basic fluid mechanics.
 Thermodynamics: Heat, energy, and the behavior of gases.
 Gravitational Interactions: Effects of gravity between objects.
 Electromagnetic Interactions: Electric fields, magnetic fields, and their interactions.
-Basix Optics: Light, reflection, refraction, and lenses.
-Basic Chemistry: Elementary reactions and molecular interactions.
-Basic Nuclear Physics: Concepts such as radioactive decay and nuclear reactions.
-Basic Relativistic Physics (optional): Time dilation, length contraction, and other effects predicted by Einstein’s theory of relativity.
+*Basic Optics: Light, reflection, refraction, and lenses.
+*Basic Chemistry: Elementary reactions and molecular interactions.
+*Basic Nuclear Physics: Concepts such as radioactive decay and nuclear reactions.
+*Basic Relativistic Physics (optional): Time dilation, length contraction, and other effects predicted by Einstein’s theory of relativity.
 
 The simulator will also contain presets of experiments with explanations created to demonstrate laws of physics.
 
@@ -26,7 +26,7 @@ Interactive physics problems: The program will include physics problems and chal
 
 Problem analysis:
 
+We will use programming language python, as it is easy to use, we will also use python library ‘pymunk’ specialy designed to simulate physics in python. 
+
 Limitations:
 As project uses high level language(python) starting big and complex simulation could run slow. Apart from the limitations of a programming language and library that we use(pymunk), project have theoretically no limitations, because it is only limited by our knowledge and skills of programming.
-
- 
