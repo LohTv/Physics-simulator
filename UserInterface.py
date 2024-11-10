@@ -70,6 +70,8 @@ Button_Tools.childrens = [Button_WorldSettings, Button_AddObject, Button_GoBack]
 
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 
+Buttons = [Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings]
+
 while running:
     screen.fill((0, 0, 0))
     space.step(1 / FPS)
@@ -82,13 +84,13 @@ while running:
         if Button_Tools.is_clicked(event):
             for button in Button_Tools.childrens:
                 button.is_seen = True
+            Button_GoBack.childrens = Button_Tools.childrens
 
         if Button_GoBack.is_clicked(event):
-            for button in Button_Tools.childrens:
+            for button in Button_GoBack.childrens:
                 button.is_seen = False
 
-    Button_Tools.draw(screen)
-    for button in Button_Tools.childrens:
+    for button in Buttons:
         button.draw(screen)
 
     pygame.display.flip()
