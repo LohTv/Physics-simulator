@@ -84,12 +84,18 @@ Button_Maps.layer = [Button_Tools, Button_Maps]
 Button_Maps.childrens = [Button_Map1, Button_Map2,  Button_GoBack]
 
 Button_AddObject.layer = [Button_AddObject, Button_WorldSettings]
-Button_AddObject.childrens = [Button_Object1, Button_Object2,  Button_GoBack]
+Button_AddObject.childrens = [Button_Object1, Button_Object2]
+
+Button_AddObject.parent = Button_Tools
+Button_Maps.parent = Button_Tools
+Button_Object2.parent = Button_AddObject
+Button_Object1.parent = Button_AddObject
+
 
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 
 Buttons = [Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2]
-
+Top_Layer = Button_Tools.layer
 while running:
     screen.fill((0, 0, 0))
     space.step(1 / FPS)
@@ -132,9 +138,10 @@ while running:
             for button in Button_GoBack.childrens:
                 button.is_seen = True
             Button_GoBack.layer = Button_GoBack.childrens
-            Parent = Button_GoBack.parent
-            if Parent.parent is not None:
-                Button_GoBack.childrens = Parent.parent.layer
+            if Button_GoBack.parent.parent:
+                Button_GoBack.childrens = Button_GoBack.parent.parent.layer
+            if Button_GoBack.layer == Top_Layer:
+                Button_GoBack.is_seen = False
 
 
 
