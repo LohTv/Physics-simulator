@@ -1,10 +1,14 @@
 import pygame
 import pymunk
 import pymunk.pygame_util
+import pyautogui
 
+
+WIDTH = pyautogui.size()[0] * 0.95
+HEIGHT = pyautogui.size()[1] * 0.95
 pygame.init()
 FPS = 60
-WIDTH, HEIGHT = 1600, 1000
+# WIDTH, HEIGHT = 1600, 1000
 GRAVITY = 0
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Physics-simulator")
@@ -31,6 +35,8 @@ class Button:
         self.rect = pygame.Rect(x, y, width, height)
         self.is_seen = is_seen
         self.childrens = []
+        self.layer = []
+        self.parent = None
 
     def draw(self, screen):
         if self.is_seen:
@@ -61,16 +67,20 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
     space.add(body, shape)
     return shape
 
+Button_Map1 = Button(False, 40, 30, 200, 80, 'Map1', 40)
+Button_Map2 = Button(False, 40, 150, 200, 80, 'Map2', 40)
+Button_Maps = Button(True, 40, 150, 200, 80, 'Maps', 40)
 Button_Tools = Button(True, 40, 30, 200, 80, 'Tools', 40)
 Button_WorldSettings = Button(False, 40, 30, 200, 80, 'World Settings', 30)
 Button_AddObject = Button(False, 40, 150, 200, 80, 'Add Object', 30)
-Button_GoBack = Button(False, 40, 850, 200, 80, 'Go Back', 40)
+Button_GoBack = Button(False, 40, 875, 200, 80, 'Go Back', 40)
 
 Button_Tools.childrens = [Button_WorldSettings, Button_AddObject, Button_GoBack]
-
+Button_Tools.layer = [Button_Tools, Button_Maps]
+Button_Maps.childrens = [Button_Map1, Button_Map2]
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 
-Buttons = [Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings]
+Buttons = [Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2]
 
 while running:
     screen.fill((0, 0, 0))
@@ -82,13 +92,25 @@ while running:
             running = False
 
         if Button_Tools.is_clicked(event):
+            for button in Button_Tools.layer:
+                button.is_seen = False
             for button in Button_Tools.childrens:
                 button.is_seen = True
-            Button_GoBack.childrens = Button_Tools.childrens
+            Button_GoBack.layer = Button_Tools.childrens
+            Button_GoBack.childrens = Button_Tools.layer
+            Button_GoBack.parents = Button_Tools
 
         if Button_GoBack.is_clicked(event):
-            for button in Button_GoBack.childrens:
+            for button in Button_GoBack.layer:
                 button.is_seen = False
+            for button in Button_GoBack.childrens:
+                button.is_seen = True
+            Button_GoBack.layer = Button_GoBack.childrens
+            Parent = Button_GoBack.parent
+            if Parent is not None:
+                Button_GoBack.childrens = Parent.parent.layer
+
+
 
     for button in Buttons:
         button.draw(screen)
