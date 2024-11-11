@@ -9,12 +9,12 @@ HEIGHT = pyautogui.size()[1] * 0.95
 pygame.init()
 FPS = 60
 # WIDTH, HEIGHT = 1600, 1000
-GRAVITY = 0
+# GRAVITY = 0
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Physics-simulator")
 clock = pygame.time.Clock()
 space = pymunk.Space()
-space.gravity = (0, GRAVITY)
+# space.gravity = (0, GRAVITY)
 running = True
 draw_options = pymunk.pygame_util.DrawOptions(screen)
 
@@ -67,20 +67,28 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
     space.add(body, shape)
     return shape
 
+Button_Object1 = Button(False, 40, 30, 200, 80, 'Object1', 40)
+Button_Object2 = Button(False, 40, 150, 200, 80, 'Object2', 40)
 Button_Map1 = Button(False, 40, 30, 200, 80, 'Map1', 40)
 Button_Map2 = Button(False, 40, 150, 200, 80, 'Map2', 40)
 Button_Maps = Button(True, 40, 150, 200, 80, 'Maps', 40)
 Button_Tools = Button(True, 40, 30, 200, 80, 'Tools', 40)
 Button_WorldSettings = Button(False, 40, 30, 200, 80, 'World Settings', 30)
 Button_AddObject = Button(False, 40, 150, 200, 80, 'Add Object', 30)
-Button_GoBack = Button(False, 40, 875, 200, 80, 'Go Back', 40)
+Button_GoBack = Button(False, 40, HEIGHT*0.88, 200, 80, 'Go Back', 40)
 
 Button_Tools.childrens = [Button_WorldSettings, Button_AddObject, Button_GoBack]
 Button_Tools.layer = [Button_Tools, Button_Maps]
-Button_Maps.childrens = [Button_Map1, Button_Map2]
+
+Button_Maps.layer = [Button_Tools, Button_Maps]
+Button_Maps.childrens = [Button_Map1, Button_Map2,  Button_GoBack]
+
+Button_AddObject.layer = [Button_AddObject, Button_WorldSettings]
+Button_AddObject.childrens = [Button_Object1, Button_Object2,  Button_GoBack]
+
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 
-Buttons = [Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2]
+Buttons = [Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2]
 
 while running:
     screen.fill((0, 0, 0))
@@ -91,23 +99,41 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        if Button_Tools.is_clicked(event):
+        if Button_Tools.is_clicked(event) and Button_Tools.is_seen:
             for button in Button_Tools.layer:
                 button.is_seen = False
             for button in Button_Tools.childrens:
                 button.is_seen = True
             Button_GoBack.layer = Button_Tools.childrens
             Button_GoBack.childrens = Button_Tools.layer
-            Button_GoBack.parents = Button_Tools
+            Button_GoBack.parent = Button_Tools
 
-        if Button_GoBack.is_clicked(event):
+        if Button_Maps.is_clicked(event) and Button_Maps.is_seen:
+            for button in Button_Maps.layer:
+                button.is_seen = False
+            for button in Button_Maps.childrens:
+                button.is_seen = True
+            Button_GoBack.layer = Button_Maps.childrens
+            Button_GoBack.childrens = Button_Maps.layer
+            Button_GoBack.parent = Button_Maps
+
+        if Button_AddObject.is_clicked(event) and Button_AddObject.is_seen:
+            for button in Button_AddObject.layer:
+                button.is_seen = False
+            for button in Button_AddObject.childrens:
+                button.is_seen = True
+            Button_GoBack.layer = Button_AddObject.childrens
+            Button_GoBack.childrens = Button_AddObject.layer
+            Button_GoBack.parent = Button_AddObject
+
+        if Button_GoBack.is_clicked(event) and Button_GoBack.is_seen:
             for button in Button_GoBack.layer:
                 button.is_seen = False
             for button in Button_GoBack.childrens:
                 button.is_seen = True
             Button_GoBack.layer = Button_GoBack.childrens
             Parent = Button_GoBack.parent
-            if Parent is not None:
+            if Parent.parent is not None:
                 Button_GoBack.childrens = Parent.parent.layer
 
 
