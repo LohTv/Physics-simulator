@@ -2,7 +2,6 @@ import pygame
 import pymunk
 import pymunk.pygame_util
 import pyautogui
-from pymsgbox import buttonsFrame
 
 WIDTH = pyautogui.size()[0] * 0.95
 HEIGHT = pyautogui.size()[1] * 0.95
@@ -20,8 +19,8 @@ draw_options = pymunk.pygame_util.DrawOptions(screen)
 
 class Button:
     def __init__(self, is_seen, x, y, width, height, text='', font_size=30,
-                 text_color=(255, 255, 255), button_color=(0, 128, 255),
-                 hover_color=(50, 150, 255)):
+                 text_color=(255, 255, 255), button_color=(169,169,169),
+                 hover_color=(119,136,153)):
         self.x = x
         self.y = y
         self.width = width
@@ -37,6 +36,7 @@ class Button:
         self.childrens = []
         self.layer = []
         self.parent = None
+        self.clicked = False
 
     def draw(self, screen):
         if self.is_seen:
@@ -51,11 +51,12 @@ class Button:
             screen.blit(text_surf, text_rect)
 
     def is_clicked(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if self.is_seen and event.type == pygame.MOUSEBUTTONUP:
             mouse_pos = pygame.mouse.get_pos()
             if self.rect.collidepoint(mouse_pos):
                 return True
         return False
+
 
 def create_wall(space, width, height, pos, color, elasticity, friction):
     body = pymunk.Body(body_type=pymunk.Body.STATIC)
@@ -66,6 +67,9 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
     shape.friction = friction
     space.add(body, shape)
     return shape
+
+
+Button_Test1 = Button(False, 40, 30, 200, 80, 'Const1', 40)
 Button_Const1 = Button(False, 40, 30, 200, 80, 'Const1', 40)
 Button_Const2 = Button(False, 40, 150, 200, 80, 'Const2', 40)
 Button_Object1 = Button(False, 40, 30, 200, 80, 'Object1', 40)
@@ -87,15 +91,24 @@ Button_Maps.childrens = [Button_Map1, Button_Map2, Button_GoBack]
 Button_AddObject.layer = [Button_AddObject, Button_WorldSettings, Button_GoBack]
 Button_AddObject.childrens = [Button_Object1, Button_Object2, Button_GoBack]
 
-Button_WorldSettings.childrens = [Button_Const1, Button_Const2]
-Button_AddObject.parent = Button_Tools
+Button_WorldSettings.layer = [Button_WorldSettings, Button_AddObject, Button_GoBack]
+Button_WorldSettings.childrens = [Button_Const1, Button_Const2, Button_GoBack]
+
+Button_Map2.layer = [Button_Map2, Button_Map1, Button_GoBack]
+Button_Map2.childrens = [Button_Test1, Button_GoBack]
+
+Button_Const1.parent = Button_WorldSettings
+Button_Const2.parent = Button_WorldSettings
 Button_Object2.parent = Button_AddObject
 Button_Object1.parent = Button_AddObject
-
+Button_WorldSettings.parent = Button_Tools
+Button_AddObject.parent = Button_Tools
+Button_Map2.parent = Button_Maps
+Button_Test1.parent = Button_Map2
 
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 
-Buttons = [Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2]
+Buttons = [Button_Test1, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1]
 Top_Layer = Button_Tools.layer
 while running:
     screen.fill((0, 0, 0))
@@ -106,7 +119,27 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+        if Button_Map2.is_clicked(event) and Button_Map2.is_seen:
+            for button in Button_Map2.layer:
+                button.is_seen = False
+            for button in Button_Map2.childrens:
+                button.is_seen = True
+            Button_GoBack.layer = Button_Map2.childrens
+            Button_GoBack.childrens = Button_Map2.layer
+            Button_GoBack.parent = Button_Map2
+
+        if Button_WorldSettings.is_clicked(event) and Button_WorldSettings.is_seen:
+            print('ButtonWorldSettingsPressed')
+            for button in Button_WorldSettings.layer:
+                button.is_seen = False
+            for button in Button_WorldSettings.childrens:
+                button.is_seen = True
+            Button_GoBack.layer = Button_WorldSettings.childrens
+            Button_GoBack.childrens = Button_WorldSettings.layer
+            Button_GoBack.parent = Button_WorldSettings
+
         if Button_Tools.is_clicked(event) and Button_Tools.is_seen:
+            print('ButtontoolsisPressed')
             for button in Button_Tools.layer:
                 button.is_seen = False
             for button in Button_Tools.childrens:
