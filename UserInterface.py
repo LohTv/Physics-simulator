@@ -2,7 +2,7 @@ import pygame
 import pymunk
 import pymunk.pygame_util
 import pyautogui
-
+from pymsgbox import buttonsFrame
 
 WIDTH = pyautogui.size()[0] * 0.95
 HEIGHT = pyautogui.size()[1] * 0.95
@@ -66,7 +66,8 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
     shape.friction = friction
     space.add(body, shape)
     return shape
-
+Button_Const1 = Button(False, 40, 30, 200, 80, 'Const1', 40)
+Button_Const2 = Button(False, 40, 150, 200, 80, 'Const2', 40)
 Button_Object1 = Button(False, 40, 30, 200, 80, 'Object1', 40)
 Button_Object2 = Button(False, 40, 150, 200, 80, 'Object2', 40)
 Button_Map1 = Button(False, 40, 30, 200, 80, 'Map1', 40)
@@ -81,13 +82,13 @@ Button_Tools.childrens = [Button_WorldSettings, Button_AddObject, Button_GoBack]
 Button_Tools.layer = [Button_Tools, Button_Maps]
 
 Button_Maps.layer = [Button_Tools, Button_Maps]
-Button_Maps.childrens = [Button_Map1, Button_Map2,  Button_GoBack]
+Button_Maps.childrens = [Button_Map1, Button_Map2, Button_GoBack]
 
-Button_AddObject.layer = [Button_AddObject, Button_WorldSettings]
-Button_AddObject.childrens = [Button_Object1, Button_Object2]
+Button_AddObject.layer = [Button_AddObject, Button_WorldSettings, Button_GoBack]
+Button_AddObject.childrens = [Button_Object1, Button_Object2, Button_GoBack]
 
+Button_WorldSettings.childrens = [Button_Const1, Button_Const2]
 Button_AddObject.parent = Button_Tools
-Button_Maps.parent = Button_Tools
 Button_Object2.parent = Button_AddObject
 Button_Object1.parent = Button_AddObject
 
@@ -140,8 +141,7 @@ while running:
             Button_GoBack.layer = Button_GoBack.childrens
             if Button_GoBack.parent.parent:
                 Button_GoBack.childrens = Button_GoBack.parent.parent.layer
-            if Button_GoBack.layer == Top_Layer:
-                Button_GoBack.is_seen = False
+
 
 
 
