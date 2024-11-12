@@ -3,6 +3,7 @@ import pymunk
 import pymunk.pygame_util
 import pyautogui
 from Button_Add_Ball import Add_Ball
+from Mouse import Mouse
 
 WIDTH = pyautogui.size()[0] * 0.95
 HEIGHT = pyautogui.size()[1] * 0.95
@@ -14,9 +15,10 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Physics-simulator")
 clock = pygame.time.Clock()
 space = pymunk.Space()
-# space.gravity = (0, 98)
+space.gravity = (0, 981)
 running = True
 draw_options = pymunk.pygame_util.DrawOptions(screen)
+MouseState = None
 
 class Button:
     def __init__(self, is_seen, x, y, width, height, text='', font_size=30,
@@ -106,7 +108,9 @@ Button_Map2.parent = Button_Maps
 
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 
+Objects = []
 Buttons = [Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1]
+mouse = Mouse(None)
 Top_Layer = Button_Tools.layer
 while running:
     screen.fill((0, 0, 0))
@@ -116,6 +120,9 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        if Button_Object1.is_clicked(event) and Button_Object1.is_seen:
+            mouse.state = 'ReadyToAddBall'
 
         if Button_WorldSettings.is_clicked(event) and Button_WorldSettings.is_seen:
             for button in Button_WorldSettings.layer:
@@ -154,6 +161,7 @@ while running:
             Button_GoBack.parent = Button_AddObject
 
         if Button_GoBack.is_clicked(event) and Button_GoBack.is_seen:
+            mouse.state = None
             for button in Button_GoBack.layer:
                 button.is_seen = False
             for button in Button_GoBack.childrens:
@@ -162,7 +170,14 @@ while running:
             if Button_GoBack.parent.parent:
                 Button_GoBack.childrens = Button_GoBack.parent.parent.layer
 
+        state = mouse.getstate(event, screen)
+        if state == 'DrawBall':
+            mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), 50, mass=1, elasticity=0.5, friction=0.5, color=(255, 255, 255, 100))
 
+        for obj in Objects:
+            if obj.body.position[0] < 300:
+                space.remove(obj.body, obj)
+                Objects.remove(obj)
 
 
     for button in Buttons:
