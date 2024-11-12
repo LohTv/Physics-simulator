@@ -2,7 +2,6 @@ import pygame
 import pymunk
 import pymunk.pygame_util
 import pyautogui
-from Button_Add_Ball import Add_Ball
 from Mouse import Mouse
 
 WIDTH = pyautogui.size()[0] * 0.95
@@ -15,7 +14,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Physics-simulator")
 clock = pygame.time.Clock()
 space = pymunk.Space()
-space.gravity = (0, 981)
+space.gravity = (0, 1000)
 running = True
 draw_options = pymunk.pygame_util.DrawOptions(screen)
 MouseState = None
@@ -75,7 +74,7 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 Button_Const1 = Button(False, 40, 30, 200, 80, 'Const1', 40)
 Button_Const2 = Button(False, 40, 150, 200, 80, 'Const2', 40)
 Button_Object1 = Button(False, 40, 30, 200, 80, 'Add Ball', 40)
-Button_Object2 = Button(False, 40, 150, 200, 80, 'Object2', 40)
+Button_Object2 = Button(False, 40, 150, 200, 80, 'Add Cube', 40)
 Button_Map1 = Button(False, 40, 30, 200, 80, 'Map1', 40)
 Button_Map2 = Button(False, 40, 150, 200, 80, 'Map2', 40)
 Button_Maps = Button(True, 40, 150, 200, 80, 'Maps', 40)
@@ -123,6 +122,9 @@ while running:
 
         if Button_Object1.is_clicked(event) and Button_Object1.is_seen:
             mouse.state = 'ReadyToAddBall'
+
+        if Button_Object2.is_clicked(event) and Button_Object1.is_seen:
+            mouse.state = 'ReadyToAddCube'
 
         if Button_WorldSettings.is_clicked(event) and Button_WorldSettings.is_seen:
             for button in Button_WorldSettings.layer:
@@ -172,7 +174,11 @@ while running:
 
         state = mouse.getstate(event, screen)
         if state == 'DrawBall':
-            mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), 50, mass=1, elasticity=0.5, friction=0.5, color=(255, 255, 255, 100))
+            ball = mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), 30, mass=1, elasticity=1, friction=0.5, color=(255, 255, 255, 100))
+            Objects.append(ball)
+        if state == 'DrawCube':
+            cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (50, 50), elasticity=1, friction=0.5, color=(255, 255, 255, 100))
+            Objects.append(cube)
 
         for obj in Objects:
             if obj.body.position[0] < 300:
