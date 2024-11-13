@@ -70,7 +70,7 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
     space.add(body, shape)
     return shape
 
-
+Button_Draw = Button(False, 40, 270, 200, 80, 'Draw', 40)
 Button_CleanAll = Button(False, 40, HEIGHT*0.88 - 120, 200, 80, 'Clean All', 40)
 Button_Const1 = Button(False, 40, 30, 200, 80, 'Gravity', 40)
 Button_Const2 = Button(False, 40, 150, 200, 80, 'Const2', 40)
@@ -91,7 +91,7 @@ Button_Maps.layer = [Button_Tools, Button_Maps]
 Button_Maps.childrens = [Button_Map1, Button_Map2, Button_GoBack]
 
 Button_AddObject.layer = [Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack]
-Button_AddObject.childrens = [Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack]
+Button_AddObject.childrens = [Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack]
 
 Button_WorldSettings.layer = [Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack]
 Button_WorldSettings.childrens = [Button_CleanAll, Button_Const1, Button_Const2, Button_GoBack]
@@ -101,6 +101,7 @@ Button_Const1.parent = Button_WorldSettings
 Button_Const2.parent = Button_WorldSettings
 Button_Object2.parent = Button_AddObject
 Button_Object1.parent = Button_AddObject
+Button_Draw.parent = Button_AddObject
 Button_WorldSettings.parent = Button_Tools
 Button_AddObject.parent = Button_Tools
 Button_Map2.parent = Button_Maps
@@ -109,7 +110,7 @@ Button_Map2.parent = Button_Maps
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 
 Objects = []
-Buttons = [Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
+Buttons = [Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
 mouse = Mouse(None)
 Top_Layer = Button_Tools.layer
 while running:
@@ -126,6 +127,9 @@ while running:
 
         if Button_Object2.is_clicked(event) and Button_Object2.is_seen:
             mouse.state = 'ReadyToAddCube'
+
+        if Button_Draw.is_clicked(event) and Button_Draw.is_seen:
+            mouse.state = 'ReadyToAddDraw'
 
         if Button_CleanAll.is_clicked(event) and Button_CleanAll.is_seen:
             to_remove = []
@@ -182,11 +186,15 @@ while running:
                 Button_GoBack.childrens = Button_GoBack.parent.parent.layer
 
         state = mouse.getstate(event, screen)
+
         if state == 'DrawBall':
-            ball = mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), 30, mass=1, elasticity=0.5, friction=0.5, color=(255, 255, 255, 100))
+            ball = mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), 30, mass=1, elasticity=1, friction=0, color=(255, 255, 255, 100))
             Objects.append(ball)
         if state == 'DrawCube':
-            cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (50, 50), elasticity=0.5, friction=0.5, color=(255, 255, 255, 100))
+            cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (50, 50), elasticity=1, friction=0.5, color=(255, 255, 255, 100))
+            Objects.append(cube)
+        if state == 'DrawModeCube':
+            cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (20, 20), elasticity=1, friction=0.5, color=(255, 255, 255, 100))
             Objects.append(cube)
 
         for obj in Objects:
