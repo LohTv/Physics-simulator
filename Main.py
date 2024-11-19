@@ -2,6 +2,7 @@ import pygame
 import pymunk
 import pymunk.pygame_util
 import pyautogui
+import pygame_gui
 from Mouse import Mouse
 
 WIDTH = pyautogui.size()[0] * 0.95
@@ -14,6 +15,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Physics-simulator")
 clock = pygame.time.Clock()
 space = pymunk.Space()
+# MANAGER = pygame_gui.UIManager((WIDTH, HEIGHT))
 space.gravity = (0, 1000)
 running = True
 draw_options = pymunk.pygame_util.DrawOptions(screen)
@@ -39,16 +41,19 @@ class Button:
         self.layer = []
         self.parent = None
         self.clicked = False
-
-    def draw(self, screen):
+        self.activated = False
+        self.user_text = ''
+    def draw(self, screen, text):
         if self.is_seen:
             mouse_pos = pygame.mouse.get_pos()
             if self.rect.collidepoint(mouse_pos):
                 pygame.draw.rect(screen, self.hover_color, self.rect)
+            elif self.activated:
+                pygame.draw.rect(screen, self.hover_color, self.rect)
             else:
                 pygame.draw.rect(screen, self.button_color, self.rect)
 
-            text_surf = self.font.render(self.text, True, self.text_color)
+            text_surf = self.font.render(text, True, self.text_color)
             text_rect = text_surf.get_rect(center=(self.x + self.width // 2, self.y + self.height // 2))
             screen.blit(text_surf, text_rect)
 
@@ -96,6 +101,7 @@ Button_AddObject.childrens = [Button_CleanAll, Button_Object1, Button_Object2, B
 Button_WorldSettings.layer = [Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack]
 Button_WorldSettings.childrens = [Button_CleanAll, Button_Const1, Button_Const2, Button_GoBack]
 
+Button_Const1.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_GoBack]
 
 Button_Const1.parent = Button_WorldSettings
 Button_Const2.parent = Button_WorldSettings
@@ -112,6 +118,7 @@ Objects = []
 Buttons = [Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
 mouse = Mouse(None)
 Top_Layer = Button_Tools.layer
+ActivatedButton = None
 while running:
     screen.fill((0, 0, 0))
     space.step(1 / FPS)
@@ -126,6 +133,12 @@ while running:
 
         if Button_Object2.is_clicked(event) and Button_Object2.is_seen:
             mouse.state = 'ReadyToAddCube'
+
+        if Button_Const1.is_clicked(event) and Button_Const1.is_seen and Button_Const1.activated == False:
+            for button in Button_Const1.layer:
+                button.activated = False
+            Button_Const1.activated = True
+            ActivatedButton = Button_Const1
 
         if Button_CleanAll.is_clicked(event) and Button_CleanAll.is_seen:
             to_remove = []
@@ -173,21 +186,39 @@ while running:
 
         if Button_GoBack.is_clicked(event) and Button_GoBack.is_seen:
             mouse.state = None
+            ActivatedButton = None
             for button in Button_GoBack.layer:
                 button.is_seen = False
+                button.activated = False
             for button in Button_GoBack.childrens:
                 button.is_seen = True
+                button.activated = False
             Button_GoBack.layer = Button_GoBack.childrens
             if Button_GoBack.parent.parent:
                 Button_GoBack.childrens = Button_GoBack.parent.parent.layer
 
         state = mouse.getstate(event, screen)
         if state == 'DrawBall':
-            ball = mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), 30, mass=1, elasticity=0.5, friction=0.5, color=(255, 255, 255, 100))
+            ball = mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), 30, mass=1, elasticity=0.9, friction=0.5, color=(255, 255, 255, 100))
             Objects.append(ball)
         if state == 'DrawCube':
-            cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (50, 50), elasticity=0.5, friction=0.5, color=(255, 255, 255, 100))
+            cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (50, 50), elasticity=0.9, friction=0.5, color=(255, 255, 255, 100))
             Objects.append(cube)
+
+        if event.type == pygame.KEYDOWN and ActivatedButton != None:
+            if event.key == pygame.K_BACKSPACE:
+                ActivatedButton.user_text = ActivatedButton.user_text[:-1]
+            if event.key == pygame.K_RETURN:
+                if ActivatedButton == Button_Const1:
+                    try:
+                        Text_input = float(ActivatedButton.user_text)
+                    except ValueError:
+                        Text_input = 1000.0
+                    space.gravity = (0, Text_input)
+                ActivatedButton.activated = False
+                ActivatedButton = None
+            elif event.key != pygame.K_BACKSPACE and event.key != pygame.K_RETURN:
+                ActivatedButton.user_text += event.unicode
 
         for obj in Objects:
             if obj.body.position[0] < 300:
@@ -196,7 +227,11 @@ while running:
 
 
     for button in Buttons:
-        button.draw(screen)
+        if button.activated:
+            button.draw(screen, button.user_text)
+        else:
+            button.draw(screen, button.text)
+
 
     pygame.display.flip()
     clock.tick(FPS)
