@@ -3,6 +3,7 @@ import pymunk
 import pymunk.pygame_util
 import pyautogui
 from Mouse import Mouse
+from VectorClass import Vector
 
 WIDTH = pyautogui.size()[0] * 0.95
 HEIGHT = pyautogui.size()[1] * 0.95
@@ -73,7 +74,7 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 Button_Draw = Button(False, 40, 270, 200, 80, 'Draw', 40)
 Button_CleanAll = Button(False, 40, HEIGHT*0.88 - 120, 200, 80, 'Clean All', 40)
 Button_Const1 = Button(False, 40, 30, 200, 80, 'Gravity', 40)
-Button_Const2 = Button(False, 40, 150, 200, 80, 'Const2', 40)
+Button_Const2 = Button(False, 40, 150, 200, 80, 'Add Walls', 40)
 Button_Object1 = Button(False, 40, 30, 200, 80, 'Add Ball', 40)
 Button_Object2 = Button(False, 40, 150, 200, 80, 'Add Cube', 40)
 Button_Map1 = Button(False, 40, 30, 200, 80, 'Map1', 40)
@@ -114,16 +115,22 @@ Buttons = [Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_Wo
 mouse = Mouse(None)
 Top_Layer = Button_Tools.layer
 while running:
-    screen.fill((0, 0, 0))
-    space.step(1 / FPS)
-    space.debug_draw(draw_options)
-
+    lines = []
+    centres = []
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
         if Button_Object1.is_clicked(event) and Button_Object1.is_seen:
             mouse.state = 'ReadyToAddBall'
+
+        if Button_Const2.is_clicked(event) and Button_Const2.is_seen:
+            wall1 = create_wall(space, 40, 2000, (1800, 500), (255, 255, 255), 1, 0)
+            wall2 = create_wall(space, WIDTH, 40, (WIDTH/2, 0), (255, 255, 255), 1, 0)
+            wall3 = create_wall(space, WIDTH, 40, (WIDTH / 2, HEIGHT), (255, 255, 255), 1, 0)
+            Objects.append(wall1)
+            Objects.append(wall2)
+            Objects.append(wall3)
 
         if Button_Object2.is_clicked(event) and Button_Object2.is_seen:
             mouse.state = 'ReadyToAddCube'
@@ -188,7 +195,7 @@ while running:
         state = mouse.getstate(event, screen)
 
         if state == 'DrawBall':
-            ball = mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), 30, mass=1, elasticity=1, friction=0, color=(255, 255, 255, 100))
+            ball = mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), 30, mass=1, elasticity=0.8, friction=1, color=(255, 255, 255, 100))
             Objects.append(ball)
         if state == 'DrawCube':
             cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (50, 50), elasticity=1, friction=0.5, color=(255, 255, 255, 100))
@@ -202,10 +209,14 @@ while running:
                 space.remove(obj.body, obj)
                 Objects.remove(obj)
 
+    screen.fill((0, 0, 0))
+    space.step(1 / FPS)
+    space.debug_draw(draw_options)
 
     for button in Buttons:
         button.draw(screen)
-
+    # for line, centre in zip(lines, centres):
+    #     line.Draw(screen, centre)
     pygame.display.flip()
     clock.tick(FPS)
 
