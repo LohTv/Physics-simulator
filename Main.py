@@ -76,8 +76,9 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 
 Button_Draw = Button(False, 40, 270, 200, 80, 'Draw', 40)
 Button_CleanAll = Button(False, 40, HEIGHT*0.88 - 120, 200, 80, 'Clean All', 40)
-Button_Const1 = Button(False, 40, 30, 200, 80, 'Gravity', 40)
-Button_Const2 = Button(False, 40, 150, 200, 80, 'Add Walls', 40)
+Button_Const1 = Button(False, 40, 30, 200, 80, 'Gravity - Y', 40)
+Button_Const3 = Button(False, 40, 150, 200, 80, 'Gravity - X', 40)
+Button_Const2 = Button(False, 40, 270, 200, 80, 'Add Walls', 40)
 Button_Object1 = Button(False, 40, 30, 200, 80, 'Add Ball', 40)
 Button_Object2 = Button(False, 40, 150, 200, 80, 'Add Cube', 40)
 Button_Map1 = Button(False, 40, 30, 200, 80, 'Map1', 40)
@@ -98,11 +99,13 @@ Button_AddObject.layer = [Button_CleanAll, Button_AddObject, Button_WorldSetting
 Button_AddObject.childrens = [Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack]
 
 Button_WorldSettings.layer = [Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack]
-Button_WorldSettings.childrens = [Button_CleanAll, Button_Const1, Button_Const2, Button_GoBack]
+Button_WorldSettings.childrens = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
 
 
-Button_Const1.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_GoBack]
+Button_Const1.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
+Button_Const3.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
 
+Button_Const3.parent = Button_WorldSettings
 Button_Const1.parent = Button_WorldSettings
 Button_Const2.parent = Button_WorldSettings
 Button_Object2.parent = Button_AddObject
@@ -116,11 +119,12 @@ Button_Map2.parent = Button_Maps
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 
 Objects = []
-Buttons = [Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
+Buttons = [Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
 mouse = Mouse(None)
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
-
+Gravity_Y = 1000
+Gravity_X = 0
 while running:
     screen.fill((0, 0, 0))
     space.step(1 / FPS)
@@ -144,6 +148,12 @@ while running:
                 button.activated = False
             Button_Const1.activated = True
             ActivatedButton = Button_Const1
+
+        if Button_Const3.is_clicked(event) and Button_Const3.is_seen and Button_Const3.activated == False:
+            for button in Button_Const3.layer:
+                button.activated = False
+            Button_Const3.activated = True
+            ActivatedButton = Button_Const3
 
         if Button_Const2.is_clicked(event) and Button_Const2.is_seen:
             wall1 = create_wall(space, 40, 2000, (1800, 500), (255, 255, 255), 1, 0)
@@ -210,7 +220,7 @@ while running:
         state = mouse.getstate(event, screen)
 
         if state == 'DrawBall':
-            ball = mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), 30, mass=1, elasticity=1, friction=0.5, color=(255, 255, 255, 100))
+            ball = mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), 30, mass=1, elasticity=0.9, friction=0.5, color=(255, 255, 255, 100))
             Objects.append(ball)
         if state == 'DrawCube':
             cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (50, 50), elasticity=1, friction=0.5, color=(255, 255, 255, 100))
@@ -225,10 +235,17 @@ while running:
             if event.key == pygame.K_RETURN:
                 if ActivatedButton == Button_Const1:
                     try:
-                        Text_input = float(ActivatedButton.user_text)
+                        Gravity_Y = float(ActivatedButton.user_text)
                     except ValueError:
-                        Text_input = 1000.0
-                    space.gravity = (0, Text_input)
+                        pass
+                    space.gravity = (Gravity_X, Gravity_Y)
+
+                if ActivatedButton == Button_Const3:
+                    try:
+                        Gravity_X = float(ActivatedButton.user_text)
+                    except ValueError:
+                        pass
+                    space.gravity = (Gravity_X, Gravity_Y)
                 ActivatedButton.activated = False
                 ActivatedButton = None
             elif event.key != pygame.K_BACKSPACE and event.key != pygame.K_RETURN:
