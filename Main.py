@@ -274,7 +274,9 @@ while running:
 
         if Button_GoBack.is_clicked(event) and Button_GoBack.is_seen:
             mouse.state = None
+            ActivatedButton = None
             for button in Button_GoBack.layer:
+                button.activated = False
                 button.is_seen = False
             for button in Button_GoBack.childrens:
                 button.is_seen = True
