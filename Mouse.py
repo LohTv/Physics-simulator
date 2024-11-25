@@ -2,8 +2,10 @@ import pygame
 import pymunk
 
 class Mouse():
-    def __init__(self, state):
+    def __init__(self, state, ball_radius, cube_size):
         self.state = state
+        self.ball_radius = ball_radius
+        self.cube_size = cube_size
 
     def Add_Ball(self, space, pos, radius, mass, elasticity, friction, color):
         moment = pymunk.moment_for_circle(mass, 0, radius)
@@ -29,17 +31,17 @@ class Mouse():
     def getstate(self, event, screen):
         self.mouse_x, self.mouse_y = pygame.mouse.get_pos()
 
-        if self.state == 'ReadyToAddBall' :
-            circle_radius = 30
-            circle_color = (255, 255, 0)
+        if self.state == 'ReadyToAddBall':
+            circle_radius = self.ball_radius
+            circle_color = (255, 255, 255)
             outline_thickness = 3
             pygame.draw.circle(screen, circle_color, (self.mouse_x, self.mouse_y), circle_radius, outline_thickness)
             if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
                 return 'DrawBall'
 
         if self.state == 'ReadyToAddCube':
-            square_size = 50
-            square_color = (255, 255, 0)
+            square_size = self.cube_size
+            square_color = (255, 255, 255)
             outline_thickness = 3
             pygame.draw.rect(screen, square_color, (
             self.mouse_x - square_size // 2, self.mouse_y - square_size // 2, square_size, square_size),outline_thickness)

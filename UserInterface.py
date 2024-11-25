@@ -58,6 +58,15 @@ class Button:
                 return True
         return False
 
+    def is_right_clicked(self, event):
+        if self.is_seen and event.type == pygame.MOUSEBUTTONUP and event.button == 3:
+            mouse_pos = pygame.mouse.get_pos()
+            if self.rect.collidepoint(mouse_pos):
+                return True
+        return False
+
+
+
 
 def create_wall(space, width, height, pos, color, elasticity, friction):
     body = pymunk.Body(body_type=pymunk.Body.STATIC)
@@ -117,12 +126,12 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        if Button_WorldSettings.is_clicked(event) and Button_WorldSettings.is_seen:
-            for button in Button_WorldSettings.layer:
+        if Button_WorldSettings.is_right_clicked(event) and Button_WorldSettings.is_seen:
+            for button in Button_Object1.layer:
                 button.is_seen = False
-            for button in Button_WorldSettings.childrens:
+            for button in Button_Object1.childrens:
                 button.is_seen = True
-            Button_GoBack.layer = Button_WorldSettings.childrens
+            Button_GoBack.layer = Button_Object1.childrens
             Button_GoBack.childrens = Button_WorldSettings.layer
             Button_GoBack.parent = Button_WorldSettings
 

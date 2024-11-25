@@ -41,6 +41,7 @@ class Button:
         self.clicked = False
         self.activated = False
         self.user_text = ''
+
     def draw(self, screen, text):
         if self.is_seen:
             mouse_pos = pygame.mouse.get_pos()
@@ -63,7 +64,6 @@ class Button:
         return False
 
 
-
 def create_wall(space, width, height, pos, color, elasticity, friction):
     body = pymunk.Body(body_type=pymunk.Body.STATIC)
     body.position = pos
@@ -74,6 +74,11 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
     space.add(body, shape)
     return shape
 
+
+Button_Ball_Elasticity = Button(False, 40, 270, 200, 80, 'Elasticity', 40)
+Button_Cube_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
+Button_Ball_Mass = Button(False, 40, 150, 200, 80, 'Mass', 40)
+Button_Ball_Radius = Button(False, 40, 30, 200, 80, 'Radius', 40)
 Button_Draw = Button(False, 40, 270, 200, 80, 'Draw', 40)
 Button_CleanAll = Button(False, 40, HEIGHT*0.88 - 120, 200, 80, 'Clean All', 40)
 Button_Const1 = Button(False, 40, 30, 200, 80, 'Gravity - Y', 40)
@@ -101,10 +106,24 @@ Button_AddObject.childrens = [Button_Draw, Button_CleanAll, Button_Object1, Butt
 Button_WorldSettings.layer = [Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack]
 Button_WorldSettings.childrens = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
 
+Button_Object1.layer = [Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
+Button_Object1.childrens = [Button_Ball_Elasticity, Button_Ball_Radius, Button_Ball_Mass, Button_GoBack, Button_CleanAll]
+
+Button_Object2.layer = [Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
+Button_Object2.childrens = [Button_Cube_Size, Button_GoBack, Button_CleanAll]
 
 Button_Const1.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
 Button_Const3.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
 
+Button_Ball_Radius.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
+Button_Ball_Mass.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
+Button_Cube_Size.layer = [Button_CleanAll, Button_GoBack]
+Button_Ball_Elasticity.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
+
+Button_Ball_Elasticity.parent = Button_Object1
+Button_Cube_Size.parent = Button_Object2
+Button_Ball_Mass.parent = Button_Object1
+Button_Ball_Radius.parent = Button_Object1
 Button_Const3.parent = Button_WorldSettings
 Button_Const1.parent = Button_WorldSettings
 Button_Const2.parent = Button_WorldSettings
@@ -119,12 +138,16 @@ Button_Map2.parent = Button_Maps
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 
 Objects = []
-Buttons = [Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
-mouse = Mouse(None)
+Buttons = [Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
 Gravity_X = 0
+Ball_Radius = 30
+Cube_Size = 50
+Ball_Mass = 1
+Ball_Elasticity = 1
+mouse = Mouse(None, Ball_Radius, Cube_Size)
 while running:
     screen.fill((0, 0, 0))
     space.step(1 / FPS)
@@ -134,7 +157,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        if Button_Object1.is_clicked(event) and Button_Object1.is_seen:
+        if Button_Object1.is_clicked(event) and Button_Object1.is_seen and event.button != 3:
             mouse.state = 'ReadyToAddBall'
 
         if Button_Object2.is_clicked(event) and Button_Object2.is_seen:
@@ -142,6 +165,48 @@ while running:
 
         if Button_Draw.is_clicked(event) and Button_Draw.is_seen:
             mouse.state = 'ReadyToAddDraw'
+
+        if Button_Object1.is_clicked(event) and Button_Object1.is_seen and event.button == 3:
+            for button in Button_Object1.layer:
+                button.is_seen = False
+            for button in Button_Object1.childrens:
+                button.is_seen = True
+            Button_GoBack.layer = Button_Object1.childrens
+            Button_GoBack.childrens = Button_Object1.layer
+            Button_GoBack.parent = Button_Object1
+
+        if Button_Object2.is_clicked(event) and Button_Object2.is_seen and event.button == 3:
+            for button in Button_Object2.layer:
+                button.is_seen = False
+            for button in Button_Object2.childrens:
+                button.is_seen = True
+            Button_GoBack.layer = Button_Object2.childrens
+            Button_GoBack.childrens = Button_Object2.layer
+            Button_GoBack.parent = Button_Object2
+
+        if Button_Cube_Size.is_clicked(event) and Button_Cube_Size.is_seen and Button_Cube_Size.activated == False and event.button != 3:
+            for button in Button_Cube_Size.layer:
+                button.activated = False
+            Button_Cube_Size.activated = True
+            ActivatedButton = Button_Cube_Size
+
+        if Button_Ball_Radius.is_clicked(event) and Button_Ball_Radius.is_seen and Button_Ball_Radius.activated == False and event.button != 3:
+            for button in Button_Ball_Radius.layer:
+                button.activated = False
+            Button_Ball_Radius.activated = True
+            ActivatedButton = Button_Ball_Radius
+
+        if Button_Ball_Elasticity.is_clicked(event) and Button_Ball_Elasticity.is_seen and Button_Ball_Elasticity.activated == False:
+            for button in Button_Ball_Elasticity.layer:
+                button.activated = False
+            Button_Ball_Elasticity.activated = True
+            ActivatedButton = Button_Ball_Elasticity
+
+        if Button_Ball_Mass.is_clicked(event) and Button_Ball_Mass.is_seen and Button_Ball_Mass.activated == False:
+            for button in Button_Ball_Mass.layer:
+                button.activated = False
+            Button_Ball_Mass.activated = True
+            ActivatedButton = Button_Ball_Mass
 
         if Button_Const1.is_clicked(event) and Button_Const1.is_seen and Button_Const1.activated == False:
             for button in Button_Const1.layer:
@@ -220,10 +285,10 @@ while running:
         state = mouse.getstate(event, screen)
 
         if state == 'DrawBall':
-            ball = mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), 30, mass=1, elasticity=0.9, friction=0.5, color=(255, 255, 255, 100))
+            ball = mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), Ball_Radius, mass=Ball_Mass, elasticity=Ball_Elasticity, friction=0.5, color=(255, 255, 255, 100))
             Objects.append(ball)
         if state == 'DrawCube':
-            cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (50, 50), elasticity=1, friction=0.5, color=(255, 255, 255, 100))
+            cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Cube_Size, Cube_Size), elasticity=1, friction=0.5, color=(255, 255, 255, 100))
             Objects.append(cube)
         if state == 'DrawModeCube':
             cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (20, 20), elasticity=1, friction=0.5, color=(255, 255, 255, 100))
@@ -246,6 +311,33 @@ while running:
                     except ValueError:
                         pass
                     space.gravity = (Gravity_X, Gravity_Y)
+
+                if ActivatedButton == Button_Ball_Radius:
+                    try:
+                        Ball_Radius = float(ActivatedButton.user_text)
+                        mouse.ball_radius = Ball_Radius
+                    except ValueError:
+                        pass
+
+                if ActivatedButton == Button_Ball_Mass:
+                    try:
+                        Ball_Mass = float(ActivatedButton.user_text)
+                    except ValueError:
+                        pass
+
+                if ActivatedButton == Button_Cube_Size:
+                    try:
+                        Cube_Size= float(ActivatedButton.user_text)
+                        mouse.cube_size = Cube_Size
+                    except ValueError:
+                        pass
+
+                if ActivatedButton == Button_Ball_Elasticity:
+                    try:
+                        Ball_Elasticity = float(ActivatedButton.user_text)
+                    except ValueError:
+                        pass
+
                 ActivatedButton.activated = False
                 ActivatedButton = None
             elif event.key != pygame.K_BACKSPACE and event.key != pygame.K_RETURN:
