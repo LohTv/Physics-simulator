@@ -375,6 +375,10 @@ while running:
                 ActivatedButton.user_text += event.unicode
 
         for obj in Objects:
+            if Allow_Gravity:
+                for ob in Objects:
+                    if isinstance(ob, pymunk.Circle) and ob != obj:
+                        apply_gravity_force(obj, ob, G)
             if obj.body.position[0] < 300:
                 space.remove(obj.body, obj)
                 Objects.remove(obj)
