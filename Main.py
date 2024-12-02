@@ -157,7 +157,7 @@ Ball_Mass = 1
 Ball_Elasticity = 1
 Cube_Elasticity = 1
 Allow_Gravity = False
-G = 0.1
+G = 100000
 mouse = Mouse(None, Ball_Radius, Cube_Size)
 while running:
     screen.fill((0, 0, 0))
@@ -239,8 +239,10 @@ while running:
 
         if Button_Gravity_Between_Objects.is_clicked(event) and Button_Gravity_Between_Objects.is_seen:
             if Allow_Gravity == False:
+                Button_Gravity_Between_Objects.button_color = (119,136,153)
                 Allow_Gravity = True
             else:
+                Button_Gravity_Between_Objects.button_color = (169, 169, 169)
                 Allow_Gravity = False
 
         if Button_Const2.is_clicked(event) and Button_Const2.is_seen:
@@ -376,9 +378,10 @@ while running:
 
         for obj in Objects:
             if Allow_Gravity:
-                for ob in Objects:
-                    if isinstance(ob, pymunk.Circle) and ob != obj:
-                        apply_gravity_force(obj, ob, G)
+                if isinstance(obj, pymunk.Circle):
+                    for ob in Objects:
+                        if isinstance(ob, pymunk.Circle) and ob != obj:
+                            apply_gravity_force(obj, ob, G)
             if obj.body.position[0] < 300:
                 space.remove(obj.body, obj)
                 Objects.remove(obj)

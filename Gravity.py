@@ -3,12 +3,12 @@ from VectorClass import Vector
 
 
 def calculate_gravity(obj1, obj2, G):
-    dx = obj2.position.x - obj1.position.x
-    dy = obj2.position.y - obj1.position.y
+    dx = obj2.body.position.x - obj1.body.position.x
+    dy = obj2.body.position.y - obj1.body.position.y
     distance = math.sqrt(dx**2 + dy**2)
 
-    if distance < obj1.shape.radius + obj2.shape.radius:
-        distance = obj1.shape.radius + obj2.shape.radius
+    if distance < obj1.radius + obj2.radius:
+        distance = obj1.radius + obj2.radius
 
     force_magnitude = G * (obj1.mass * obj2.mass) / (distance**2)
 
