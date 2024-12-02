@@ -4,6 +4,8 @@ import pymunk.pygame_util
 import pyautogui
 from Mouse import Mouse
 from VectorClass import Vector
+from Gravity import *
+
 WIDTH = pyautogui.size()[0] * 0.95
 HEIGHT = pyautogui.size()[1] * 0.95
 pygame.init()
@@ -75,6 +77,7 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
     return shape
 
 
+Button_Gravity_Between_Objects = Button(False, 40, 390, 200, 80, 'Allow Gravity', 40)
 Button_Cube_Elasticity = Button(False, 40, 150, 200, 80, 'Elasticity', 40)
 Button_Ball_Elasticity = Button(False, 40, 270, 200, 80, 'Elasticity', 40)
 Button_Cube_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
@@ -105,7 +108,7 @@ Button_AddObject.layer = [Button_CleanAll, Button_AddObject, Button_WorldSetting
 Button_AddObject.childrens = [Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack]
 
 Button_WorldSettings.layer = [Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack]
-Button_WorldSettings.childrens = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
+Button_WorldSettings.childrens = [Button_Gravity_Between_Objects, Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
 
 Button_Object1.layer = [Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Object1.childrens = [Button_Ball_Elasticity, Button_Ball_Radius, Button_Ball_Mass, Button_GoBack, Button_CleanAll]
@@ -113,8 +116,9 @@ Button_Object1.childrens = [Button_Ball_Elasticity, Button_Ball_Radius, Button_B
 Button_Object2.layer = [Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Object2.childrens = [Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
 
-Button_Const1.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
-Button_Const3.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
+Button_Const1.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Gravity_Between_Objects]
+Button_Const3.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Gravity_Between_Objects]
+Button_Gravity_Between_Objects.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Gravity_Between_Objects]
 
 Button_Ball_Radius.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
 Button_Ball_Mass.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
@@ -122,6 +126,7 @@ Button_Cube_Size.layer = [Button_Cube_Size, Button_Cube_Elasticity, Button_Clean
 Button_Cube_Elasticity.layer = [Button_Cube_Size, Button_Cube_Elasticity, Button_CleanAll, Button_GoBack]
 Button_Ball_Elasticity.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
 
+Button_Gravity_Between_Objects.parent = Button_WorldSettings
 Button_Cube_Elasticity.parent = Button_Object2
 Button_Ball_Elasticity.parent = Button_Object1
 Button_Cube_Size.parent = Button_Object2
@@ -141,7 +146,7 @@ Button_Map2.parent = Button_Maps
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 
 Objects = []
-Buttons = [Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
+Buttons = [Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
@@ -151,6 +156,8 @@ Cube_Size = 50
 Ball_Mass = 1
 Ball_Elasticity = 1
 Cube_Elasticity = 1
+Allow_Gravity = False
+G = 0.1
 mouse = Mouse(None, Ball_Radius, Cube_Size)
 while running:
     screen.fill((0, 0, 0))
@@ -229,6 +236,12 @@ while running:
                 button.activated = False
             Button_Const3.activated = True
             ActivatedButton = Button_Const3
+
+        if Button_Gravity_Between_Objects.is_clicked(event) and Button_Gravity_Between_Objects.is_seen:
+            if Allow_Gravity == False:
+                Allow_Gravity = True
+            else:
+                Allow_Gravity = False
 
         if Button_Const2.is_clicked(event) and Button_Const2.is_seen:
             wall1 = create_wall(space, 40, 2000, (1800, 500), (255, 255, 255), 1, 0)
