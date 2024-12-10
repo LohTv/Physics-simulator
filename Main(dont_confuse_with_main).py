@@ -410,10 +410,10 @@ while running:
                 if isinstance(obj, pymunk.Circle):
                     for ob in Objects:
                         if isinstance(ob, pymunk.Circle) and ob != obj:
-                            apply_gravity_force(obj, ob, G)
+                            # apply_gravity_force(obj, ob, G)
                             # planet_gravity(obj, ob, G, 0, 1/FPS)
-                            # a = apply_gravity_acceleration(obj, ob, G)
-                            # obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
+                            a = apply_gravity_acceleration(obj, ob, G)
+                            obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
 
             if obj.body.position[0] < 300:
                 space.remove(obj.body, obj)

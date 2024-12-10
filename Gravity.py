@@ -20,8 +20,8 @@ def calculate_gravity(obj1, obj2, G):
 
 def apply_gravity_force(obj1, obj2, G):
     force = calculate_gravity(obj1, obj2, G)
-    obj1.body.apply_force_at_local_point((force.x, force.y), (0, 0))
-    obj2.body.apply_force_at_local_point((-force.x, -force.y), (0, 0))
+    obj1.body.apply_force_at_local_point((force.x, force.y))
+    # obj2.body.apply_force_at_local_point((-force.x, -force.y), (0, 0))
 
 def apply_gravity_acceleration(obj1, obj2, G):
     force = calculate_gravity(obj1, obj2, G)
