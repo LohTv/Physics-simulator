@@ -43,7 +43,7 @@ class Vector():
         # pygame.draw.polygon(screen, (255, 0, 0),[left_end, right_end, end_point_point])
 
 def VectorByTwoPoints(a, b):
-    return Vector(b[0], b[1]) - Vector(a[0], a[1])
+    return Vector(b[0] - a[0], b[1] - a[1])
 
 def DrawVect(screen, centre, vect):
     pos = centre.val

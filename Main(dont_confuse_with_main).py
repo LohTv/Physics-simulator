@@ -77,6 +77,8 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
     return shape
 
 
+Button_Draw_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
+Button_Forces = Button(False, 40, 270, 200, 80, 'Forces', 40)
 Button_Gravity_Between_Objects = Button(False, 40, 390, 200, 80, 'Allow Gravity', 40)
 Button_Cube_Elasticity = Button(False, 40, 150, 200, 80, 'Elasticity', 40)
 Button_Ball_Elasticity = Button(False, 40, 270, 200, 80, 'Elasticity', 40)
@@ -98,16 +100,16 @@ Button_WorldSettings = Button(False, 40, 30, 200, 80, 'World Settings', 30)
 Button_AddObject = Button(False, 40, 150, 200, 80, 'Add Object', 30)
 Button_GoBack = Button(False, 40, HEIGHT*0.88, 200, 80, 'Go Back', 40)
 
-Button_Tools.childrens = [Button_WorldSettings, Button_AddObject, Button_GoBack, Button_CleanAll]
+Button_Tools.childrens = [Button_WorldSettings, Button_Forces, Button_AddObject, Button_GoBack, Button_CleanAll]
 Button_Tools.layer = [Button_Tools, Button_Maps]
 
 Button_Maps.layer = [Button_Tools, Button_Maps]
 Button_Maps.childrens = [Button_Map1, Button_Map2, Button_GoBack]
 
-Button_AddObject.layer = [Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack]
+Button_AddObject.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack]
 Button_AddObject.childrens = [Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack]
 
-Button_WorldSettings.layer = [Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack]
+Button_WorldSettings.layer = [Button_Forces, Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack]
 Button_WorldSettings.childrens = [Button_Gravity_Between_Objects, Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
 
 Button_Object1.layer = [Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
@@ -115,6 +117,9 @@ Button_Object1.childrens = [Button_Ball_Elasticity, Button_Ball_Radius, Button_B
 
 Button_Object2.layer = [Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Object2.childrens = [Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
+
+Button_Draw.layer = [Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
+Button_Draw.childrens = [Button_Draw_Size, Button_GoBack, Button_CleanAll]
 
 Button_Const1.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Gravity_Between_Objects]
 Button_Const3.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Gravity_Between_Objects]
@@ -140,25 +145,27 @@ Button_Object1.parent = Button_AddObject
 Button_Draw.parent = Button_AddObject
 Button_WorldSettings.parent = Button_Tools
 Button_AddObject.parent = Button_Tools
+Button_Forces.parent = Button_Tools
 Button_Map2.parent = Button_Maps
 
 
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 
 Objects = []
-Buttons = [Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
+Buttons = [Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
 Gravity_X = 0
 Ball_Radius = 30
 Cube_Size = 50
+Draw_Size = 20
 Ball_Mass = 1
 Ball_Elasticity = 1
 Cube_Elasticity = 1
 Allow_Gravity = False
-G = 100000
-mouse = Mouse(None, Ball_Radius, Cube_Size)
+G = 10000
+mouse = Mouse(None, Ball_Radius, Cube_Size, Draw_Size)
 while running:
     screen.fill((0, 0, 0))
     space.step(1 / FPS)
@@ -174,8 +181,23 @@ while running:
         if Button_Object2.is_clicked(event) and Button_Object2.is_seen:
             mouse.state = 'ReadyToAddCube'
 
-        if Button_Draw.is_clicked(event) and Button_Draw.is_seen:
+        if Button_Draw.is_clicked(event) and Button_Draw.is_seen and event.button != 3:
             mouse.state = 'ReadyToAddDraw'
+
+        if Button_Draw_Size.is_clicked(event) and Button_Draw_Size.is_seen and Button_Draw_Size.activated == False:
+            for button in Button_Draw_Size.layer:
+                button.activated = False
+            Button_Draw_Size.activated = True
+            ActivatedButton = Button_Draw_Size
+
+        if Button_Draw.is_clicked(event) and Button_Draw.is_seen and event.button == 3:
+            for button in Button_Draw.layer:
+                button.is_seen = False
+            for button in Button_Draw.childrens:
+                button.is_seen = True
+            Button_GoBack.layer = Button_Draw.childrens
+            Button_GoBack.childrens = Button_Draw.layer
+            Button_GoBack.parent = Button_Draw
 
         if Button_Object1.is_clicked(event) and Button_Object1.is_seen and event.button == 3:
             for button in Button_Object1.layer:
@@ -318,13 +340,20 @@ while running:
             cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Cube_Size, Cube_Size), elasticity=Cube_Elasticity, friction=0.5, color=(255, 255, 255, 100))
             Objects.append(cube)
         if state == 'DrawModeCube':
-            cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (20, 20), elasticity=1, friction=0.5, color=(255, 255, 255, 100))
+            cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Draw_Size, Draw_Size), elasticity=1, friction=0.5, color=(255, 255, 255, 100))
             Objects.append(cube)
 
         if event.type == pygame.KEYDOWN and ActivatedButton != None:
             if event.key == pygame.K_BACKSPACE:
                 ActivatedButton.user_text = ActivatedButton.user_text[:-1]
             if event.key == pygame.K_RETURN:
+                if ActivatedButton == Button_Draw_Size:
+                    try:
+                        Draw_Size = float(ActivatedButton.user_text)
+                        mouse.draw_size = Draw_Size
+                    except ValueError:
+                        pass
+
                 if ActivatedButton == Button_Const1:
                     try:
                         Gravity_Y = float(ActivatedButton.user_text)
@@ -381,14 +410,18 @@ while running:
                 if isinstance(obj, pymunk.Circle):
                     for ob in Objects:
                         if isinstance(ob, pymunk.Circle) and ob != obj:
-                            # apply_gravity_force(obj, ob, G)
-                            a = apply_gravity_acceleration(obj, ob, G)
-                            obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
+                            apply_gravity_force(obj, ob, G)
+                            # planet_gravity(obj, ob, G, 0, 1/FPS)
+                            # a = apply_gravity_acceleration(obj, ob, G)
+                            # obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
 
             if obj.body.position[0] < 300:
                 space.remove(obj.body, obj)
                 Objects.remove(obj)
-        if len(Objects) > 10000:
+            # if obj.body.position[1] > 10000:
+            #     space.remove(obj.body, obj)
+            #     Objects.remove(obj)
+        if len(Objects) > 1000:
             last_obj = Objects.pop()
             space.remove(last_obj.body, last_obj)
 
