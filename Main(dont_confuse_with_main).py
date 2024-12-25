@@ -170,7 +170,25 @@ while running:
     screen.fill((0, 0, 0))
     space.step(1 / FPS)
     space.debug_draw(draw_options)
+    for obj in Objects:
+            if Allow_Gravity:
+                if isinstance(obj, pymunk.Circle):
+                    for ob in Objects:
+                        if isinstance(ob, pymunk.Circle) and ob != obj:
+                            # apply_gravity_force(obj, ob, G)
+                            # planet_gravity(obj, ob, G, 0, 1/FPS)
+                            a = apply_gravity_acceleration(obj, ob, G)
+                            obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
 
+            if obj.body.position[0] < 300:
+                space.remove(obj.body, obj)
+                Objects.remove(obj)
+            # if obj.body.position[1] > 10000:
+            #     space.remove(obj.body, obj)
+            #     Objects.remove(obj)
+    if len(Objects) > 1000:
+        last_obj = Objects.pop()
+        space.remove(last_obj.body, last_obj)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -404,35 +422,13 @@ while running:
                 ActivatedButton = None
             elif event.key != pygame.K_BACKSPACE and event.key != pygame.K_RETURN:
                 ActivatedButton.user_text += event.unicode
-
-        for obj in Objects:
-            if Allow_Gravity:
-                if isinstance(obj, pymunk.Circle):
-                    for ob in Objects:
-                        if isinstance(ob, pymunk.Circle) and ob != obj:
-                            # apply_gravity_force(obj, ob, G)
-                            # planet_gravity(obj, ob, G, 0, 1/FPS)
-                            a = apply_gravity_acceleration(obj, ob, G)
-                            obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
-
-            if obj.body.position[0] < 300:
-                space.remove(obj.body, obj)
-                Objects.remove(obj)
-            # if obj.body.position[1] > 10000:
-            #     space.remove(obj.body, obj)
-            #     Objects.remove(obj)
-        if len(Objects) > 1000:
-            last_obj = Objects.pop()
-            space.remove(last_obj.body, last_obj)
-
-
+            pygame.display.flip()
+            clock.tick(FPS)
     for button in Buttons:
         if button.activated:
             button.draw(screen, button.user_text)
         else:
             button.draw(screen, button.text)
-
     pygame.display.flip()
     clock.tick(FPS)
-
 pygame.quit()
