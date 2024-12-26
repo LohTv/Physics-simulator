@@ -348,7 +348,7 @@ while running:
             Button_GoBack.layer = Button_GoBack.childrens
             if Button_GoBack.parent.parent:
                 Button_GoBack.childrens = Button_GoBack.parent.parent.layer
-
+                Button_GoBack.parent = Button_GoBack.parent.parent
         state = mouse.getstate(event, screen)
 
         if state == 'DrawBall':
