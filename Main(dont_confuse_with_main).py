@@ -5,6 +5,7 @@ import pyautogui
 from Mouse import Mouse
 from VectorClass import Vector
 from Gravity import *
+from map1 import CreateMap1
 
 WIDTH = pyautogui.size()[0] * 0.95
 HEIGHT = pyautogui.size()[1] * 0.95
@@ -124,6 +125,7 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
     return shape
 
 
+
 Button_Pause = Button_with_Image(True, 340, 15, 80, 80,  r'Sprites/pause1.png', 'Sprites/pause2.png')
 Button_Draw_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
 Button_Forces = Button(False, 40, 270, 200, 80, 'Forces', 40)
@@ -152,7 +154,7 @@ Button_Tools.childrens = [Button_WorldSettings, Button_Forces, Button_AddObject,
 Button_Tools.layer = [Button_Tools, Button_Maps]
 
 Button_Maps.layer = [Button_Tools, Button_Maps]
-Button_Maps.childrens = [Button_Map1, Button_Map2, Button_GoBack]
+Button_Maps.childrens = [Button_Map1, Button_Map2, Button_GoBack, Button_CleanAll]
 
 Button_AddObject.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack]
 Button_AddObject.childrens = [Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack]
@@ -198,7 +200,6 @@ Button_Map2.parent = Button_Maps
 
 
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
-
 Objects = []
 Buttons = [Button_Pause, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
 Top_Layer = Button_Tools.layer
@@ -231,17 +232,37 @@ while running:
                                 obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
 
                 if obj.body.position[0] < 300:
-                    space.remove(obj.body, obj)
-                    Objects.remove(obj)
-                # if obj.body.position[1] > 10000:
-                #     space.remove(obj.body, obj)
-                #     Objects.remove(obj)
+                    if isinstance(obj, pymunk.Segment):
+                        pass
+                    else:
+                        space.remove(obj, obj.body)
+                        Objects.remove(obj)
+                if obj.body.position[1] > 10000:
+                    if isinstance(obj, pymunk.Segment):
+                        pass
+                    else:
+                        space.remove(obj, obj.body)
+                        Objects.remove(obj)
         if len(Objects) > 1000:
             last_obj = Objects.pop()
-            space.remove(last_obj.body, last_obj)
+            if isinstance(last_obj, pymunk.Segment):
+                space.remove(last_obj)
+            else:
+                space.remove(last_obj, last_obj.body)
+
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        if Button_Map1.is_clicked(event) and Button_Map1.is_seen:
+            for obj in Objects:
+                if isinstance(obj, pymunk.Segment):
+                    space.remove(obj)  # Remove static segments
+                else:
+                    space.remove(obj, obj.body)  # Remove dynamic objects
+            Objects = CreateMap1(space)
+
 
         if Button_Pause.is_clicked(event) and Button_Pause.is_seen:
             paused = not paused
@@ -347,12 +368,12 @@ while running:
             Objects.append(wall3)
 
         if Button_CleanAll.is_clicked(event) and Button_CleanAll.is_seen:
-            to_remove = []
             for obj in Objects:
-                to_remove.append(obj)
-            for obj in to_remove:
-                space.remove(obj.body, obj)
-                Objects.remove(obj)
+                if isinstance(obj, pymunk.Segment):
+                    space.remove(obj)  # Remove static segments
+                else:
+                    space.remove(obj, obj.body)  # Remove dynamic objects
+            Objects.clear()
 
         if Button_WorldSettings.is_clicked(event) and Button_WorldSettings.is_seen:
             for button in Button_WorldSettings.layer:
