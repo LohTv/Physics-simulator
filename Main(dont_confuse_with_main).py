@@ -66,6 +66,53 @@ class Button:
         return False
 
 
+class Button_with_Image:
+    def __init__(self, is_seen, x, y, width, height, image_path1='', image_path2='', text='', font='', text_color=''):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        # self.image_path2 = image_path2
+        # self.image_path1 = image_path1
+        # self.image_path = image_path1
+        self.rect = pygame.Rect(x, y, width, height)
+        self.is_seen = is_seen
+        self.childrens = []
+        self.layer = []
+        self.parent = None
+        self.clicked = False
+        self.activated = False
+        self.text = text
+        self.font = font
+        self.text_color = text_color
+        if image_path1:
+            self.image1 = pygame.image.load(image_path1)
+            self.image1 = pygame.transform.scale(self.image1, (width, height))  # Scale image to button size
+            self.image = self.image1  # Set the initial image
+
+        if image_path2:
+            self.image2 = pygame.image.load(image_path2)
+            self.image2 = pygame.transform.scale(self.image2, (width, height))  # Scale image to button size
+
+    def draw(self, screen, text=''):
+        if self.is_seen:
+            screen.blit(self.image, (self.x, self.y))
+        if text:  # If text is provided, render it
+            text_surf = self.font.render(text, True, self.text_color)
+            text_rect = text_surf.get_rect(center=(self.x + self.width // 2, self.y + self.height // 2))
+            screen.blit(text_surf, text_rect)
+    def is_clicked(self, event):
+        if self.is_seen and event.type == pygame.MOUSEBUTTONUP:
+            mouse_pos = pygame.mouse.get_pos()
+            if self.rect.collidepoint(mouse_pos):
+                if self.image == self.image1:
+                    self.image = self.image2
+                elif self.image == self.image2:
+                    self.image = self.image1
+                return True
+        return False
+
+
 def create_wall(space, width, height, pos, color, elasticity, friction):
     body = pymunk.Body(body_type=pymunk.Body.STATIC)
     body.position = pos
@@ -77,6 +124,7 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
     return shape
 
 
+Button_Pause = Button_with_Image(True, 340, 15, 80, 80,  r'Sprites/pause1.png', 'Sprites/pause2.png')
 Button_Draw_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
 Button_Forces = Button(False, 40, 270, 200, 80, 'Forces', 40)
 Button_Gravity_Between_Objects = Button(False, 40, 390, 200, 80, 'Allow Gravity', 40)
@@ -152,7 +200,7 @@ Button_Map2.parent = Button_Maps
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 
 Objects = []
-Buttons = [Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
+Buttons = [Button_Pause, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
@@ -166,32 +214,37 @@ Cube_Elasticity = 1
 Allow_Gravity = False
 G = 10000
 mouse = Mouse(None, Ball_Radius, Cube_Size, Draw_Size)
+paused = False
 while running:
     screen.fill((0, 0, 0))
-    space.step(1 / FPS)
     space.debug_draw(draw_options)
-    for obj in Objects:
-            if Allow_Gravity:
-                if isinstance(obj, pymunk.Circle):
-                    for ob in Objects:
-                        if isinstance(ob, pymunk.Circle) and ob != obj:
-                            # apply_gravity_force(obj, ob, G)
-                            # planet_gravity(obj, ob, G, 0, 1/FPS)
-                            a = apply_gravity_acceleration(obj, ob, G)
-                            obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
+    if paused == False:
+        space.step(1 / FPS)
+        for obj in Objects:
+                if Allow_Gravity:
+                    if isinstance(obj, pymunk.Circle):
+                        for ob in Objects:
+                            if isinstance(ob, pymunk.Circle) and ob != obj:
+                                # apply_gravity_force(obj, ob, G)
+                                # planet_gravity(obj, ob, G, 0, 1/FPS)
+                                a = apply_gravity_acceleration(obj, ob, G)
+                                obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
 
-            if obj.body.position[0] < 300:
-                space.remove(obj.body, obj)
-                Objects.remove(obj)
-            # if obj.body.position[1] > 10000:
-            #     space.remove(obj.body, obj)
-            #     Objects.remove(obj)
-    if len(Objects) > 1000:
-        last_obj = Objects.pop()
-        space.remove(last_obj.body, last_obj)
+                if obj.body.position[0] < 300:
+                    space.remove(obj.body, obj)
+                    Objects.remove(obj)
+                # if obj.body.position[1] > 10000:
+                #     space.remove(obj.body, obj)
+                #     Objects.remove(obj)
+        if len(Objects) > 1000:
+            last_obj = Objects.pop()
+            space.remove(last_obj.body, last_obj)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        if Button_Pause.is_clicked(event) and Button_Pause.is_seen:
+            paused = not paused
 
         if Button_Object1.is_clicked(event) and Button_Object1.is_seen and event.button != 3:
             mouse.state = 'ReadyToAddBall'
@@ -422,8 +475,8 @@ while running:
                 ActivatedButton = None
             elif event.key != pygame.K_BACKSPACE and event.key != pygame.K_RETURN:
                 ActivatedButton.user_text += event.unicode
-            pygame.display.flip()
-            clock.tick(FPS)
+            # pygame.display.flip()
+            # clock.tick(FPS)
     for button in Buttons:
         if button.activated:
             button.draw(screen, button.user_text)
