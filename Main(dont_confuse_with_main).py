@@ -232,11 +232,12 @@ while running:
                                 obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
 
                 if obj.body.position[0] < 300:
-                    if isinstance(obj, pymunk.Segment):
-                        pass
-                    else:
-                        space.remove(obj, obj.body)
-                        Objects.remove(obj)
+                    if obj.body.position[0] < 300:
+                        if isinstance(obj, pymunk.Segment):
+                            pass
+                        elif obj.body.body_type != pymunk.Body.STATIC:
+                            space.remove(obj, obj.body)
+                            Objects.remove(obj)
                 if obj.body.position[1] > 10000:
                     if isinstance(obj, pymunk.Segment):
                         pass
@@ -370,9 +371,9 @@ while running:
         if Button_CleanAll.is_clicked(event) and Button_CleanAll.is_seen:
             for obj in Objects:
                 if isinstance(obj, pymunk.Segment):
-                    space.remove(obj)  # Remove static segments
-                else:
-                    space.remove(obj, obj.body)  # Remove dynamic objects
+                    pass
+                elif obj.body.body_type != pymunk.Body.STATIC:
+                    space.remove(obj, obj.body)
             Objects.clear()
 
         if Button_WorldSettings.is_clicked(event) and Button_WorldSettings.is_seen:
