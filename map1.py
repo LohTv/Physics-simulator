@@ -43,17 +43,17 @@ def CreateMap1(space):
     objectstoadd = [segment_shape1, segment_shape2, segment_shape3, segment_shape4, segment_shape5]
     for r in range(13):
         if r == 12:
-            for i in range(375, int(WIDTH), 100):
-                segment = pymunk.Segment(space.static_body, (i, 100 + HEIGHT / 6 + 110 + r*40),(i, HEIGHT), 5)
+            for i in range(375, int(WIDTH), 90):
+                segment = pymunk.Segment(space.static_body, (i, 70 + HEIGHT / 6 + 110 + r*40),(i, HEIGHT), 5)
                 space.add(segment)
                 objectstoadd.append(segment)
         else:
             for i in range(375, int(WIDTH), 100):
                 if r % 2 == 0:
-                    ball = Add_Ball(space, (i, 100 + HEIGHT / 6 + 110 + r*40))
+                    ball = Add_Ball(space, (i, 70 + HEIGHT / 6 + 110 + r*40))
                     objectstoadd.append(ball)
                 else:
-                    ball = Add_Ball(space, (i + 50, 100 + HEIGHT / 6 + 110 + r * 40))
+                    ball = Add_Ball(space, (i + 50, 70 + HEIGHT / 6 + 110 + r * 40))
                     objectstoadd.append(ball)
 
 
