@@ -142,7 +142,7 @@ Button_Const3 = Button(False, 40, 150, 200, 80, 'Gravity - X', 40)
 Button_Const2 = Button(False, 40, 270, 200, 80, 'Add Walls', 40)
 Button_Object1 = Button(False, 40, 30, 200, 80, 'Add Ball', 40)
 Button_Object2 = Button(False, 40, 150, 200, 80, 'Add Cube', 40)
-Button_Map1 = Button(False, 40, 30, 200, 80, 'Map1', 40)
+Button_Map1 = Button(False, 40, 30, 200, 80, 'Galton board', 40)
 Button_Map2 = Button(False, 40, 150, 200, 80, 'Map2', 40)
 Button_Maps = Button(True, 40, 150, 200, 80, 'Maps', 40)
 Button_Tools = Button(True, 40, 30, 200, 80, 'Tools', 40)
@@ -371,8 +371,8 @@ while running:
         if Button_CleanAll.is_clicked(event) and Button_CleanAll.is_seen:
             for obj in Objects:
                 if isinstance(obj, pymunk.Segment):
-                    pass
-                elif obj.body.body_type != pymunk.Body.STATIC:
+                    space.remove(obj)
+                else:
                     space.remove(obj, obj.body)
             Objects.clear()
 
