@@ -126,6 +126,7 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 
 
 
+Button_Add_Liquid = Button(False, 40, 390, 200, 80, 'Add Liquid', 40)
 Button_Pause = Button_with_Image(True, 340, 15, 80, 80,  r'Sprites/pause1.png', 'Sprites/pause2.png')
 Button_Draw_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
 Button_Forces = Button(False, 40, 270, 200, 80, 'Forces', 40)
@@ -157,18 +158,21 @@ Button_Maps.layer = [Button_Tools, Button_Maps]
 Button_Maps.childrens = [Button_Map1, Button_Map2, Button_GoBack, Button_CleanAll]
 
 Button_AddObject.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack]
-Button_AddObject.childrens = [Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack]
+Button_AddObject.childrens = [Button_Add_Liquid, Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack]
 
 Button_WorldSettings.layer = [Button_Forces, Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack]
 Button_WorldSettings.childrens = [Button_Gravity_Between_Objects, Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
 
-Button_Object1.layer = [Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
+Button_Object1.layer = [Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Object1.childrens = [Button_Ball_Elasticity, Button_Ball_Radius, Button_Ball_Mass, Button_GoBack, Button_CleanAll]
 
-Button_Object2.layer = [Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
+Button_Object2.layer = [Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Object2.childrens = [Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
 
-Button_Draw.layer = [Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
+Button_Add_Liquid.layer = [Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
+Button_Add_Liquid.childrens = []
+
+Button_Draw.layer = [Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Draw.childrens = [Button_Draw_Size, Button_GoBack, Button_CleanAll]
 
 Button_Const1.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Gravity_Between_Objects]
@@ -181,6 +185,7 @@ Button_Cube_Size.layer = [Button_Cube_Size, Button_Cube_Elasticity, Button_Clean
 Button_Cube_Elasticity.layer = [Button_Cube_Size, Button_Cube_Elasticity, Button_CleanAll, Button_GoBack]
 Button_Ball_Elasticity.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
 
+Button_Add_Liquid.parent = Button_AddObject
 Button_Gravity_Between_Objects.parent = Button_WorldSettings
 Button_Cube_Elasticity.parent = Button_Object2
 Button_Ball_Elasticity.parent = Button_Object1
@@ -201,12 +206,14 @@ Button_Map2.parent = Button_Maps
 
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 Objects = []
-Buttons = [Button_Pause, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
+Buttons = [Button_Add_Liquid, Button_Pause, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
 Gravity_X = 0
 Ball_Radius = 30
+Liquid_Radiuss = 5
+Liquid_Mass = 1
 Cube_Size = 50
 Draw_Size = 20
 Ball_Mass = 1
@@ -214,7 +221,7 @@ Ball_Elasticity = 1
 Cube_Elasticity = 1
 Allow_Gravity = False
 G = 10000
-mouse = Mouse(None, Ball_Radius, Cube_Size, Draw_Size)
+mouse = Mouse(None, Ball_Radius, Cube_Size, Draw_Size, Liquid_Radiuss)
 paused = False
 while running:
     screen.fill((0, 0, 0))
@@ -232,18 +239,18 @@ while running:
                                 obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
 
                 if obj.body.position[0] < 300:
-                    if obj.body.position[0] < 300:
-                        if isinstance(obj, pymunk.Segment):
-                            pass
-                        elif obj.body.body_type != pymunk.Body.STATIC:
-                            space.remove(obj, obj.body)
-                            Objects.remove(obj)
-                if obj.body.position[1] > 10000:
                     if isinstance(obj, pymunk.Segment):
                         pass
                     else:
                         space.remove(obj, obj.body)
                         Objects.remove(obj)
+                if obj.body.position[1] > 1000000:
+                    if isinstance(obj, pymunk.Segment):
+                        pass
+                    else:
+                        space.remove(obj, obj.body)
+                        Objects.remove(obj)
+
         if len(Objects) > 1000:
             last_obj = Objects.pop()
             if isinstance(last_obj, pymunk.Segment):
@@ -276,6 +283,9 @@ while running:
 
         if Button_Draw.is_clicked(event) and Button_Draw.is_seen and event.button != 3:
             mouse.state = 'ReadyToAddDraw'
+
+        if Button_Add_Liquid.is_clicked(event) and Button_Add_Liquid.is_seen and event.button != 3:
+            mouse.state = 'ReadyToAddLiquid'
 
         if Button_Draw_Size.is_clicked(event) and Button_Draw_Size.is_seen and Button_Draw_Size.activated == False:
             for button in Button_Draw_Size.layer:
@@ -435,7 +445,9 @@ while running:
         if state == 'DrawModeCube':
             cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Draw_Size, Draw_Size), elasticity=1, friction=0.5, color=(255, 255, 255, 100))
             Objects.append(cube)
-
+        if state == 'DrawLiquid':
+            liquid = mouse.Add_Liquid(space, (mouse.mouse_x, mouse.mouse_y), Liquid_Mass, Liquid_Radiuss, surface_tension=50, color=(255, 255, 255, 100))
+            Objects += liquid
         if event.type == pygame.KEYDOWN and ActivatedButton != None:
             if event.key == pygame.K_BACKSPACE:
                 ActivatedButton.user_text = ActivatedButton.user_text[:-1]

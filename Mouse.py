@@ -1,12 +1,14 @@
 import pygame
 import pymunk
+from liquid_Class import Liquid
 
 class Mouse():
-    def __init__(self, state, ball_radius, cube_size, draw_size):
+    def __init__(self, state, ball_radius, cube_size, draw_size, liquid_radius):
         self.state = state
         self.ball_radius = ball_radius
         self.cube_size = cube_size
         self.draw_size = draw_size
+        self.liquid_radius = liquid_radius
 
     def Add_Ball(self, space, pos, radius, mass, elasticity, friction, color):
         moment = pymunk.moment_for_circle(mass, 0, radius)
@@ -28,6 +30,11 @@ class Mouse():
         shape.color = color
         space.add(body, shape)
         return shape
+
+    def Add_Liquid(self, space: object, pos: object, mass: object, radius: object, surface_tension: object, color: object) -> object:
+        liquid = Liquid(mass, radius,  surface_tension, (0, 0, 100, 70))
+        liquidpart = liquid.Create_Liquid(space, pos)
+        return liquidpart
 
     def getstate(self, event, screen):
         self.mouse_x, self.mouse_y = pygame.mouse.get_pos()
@@ -61,10 +68,18 @@ class Mouse():
                 return 'DrawModeCube'
 
         if self.state == 'DrawModeCube':
-            if event.type == pygame.MOUSEMOTION and pygame.mouse.get_pressed()[0]:
+            if event.type == pygame.MOUSEMOTION and pygame.mouse.get_pressed()[0] and self.mouse_x > 300:
                 return 'DrawModeCube'
             if event.type == pygame.MOUSEBUTTONUP:
                 self.state = 'ReadyToAddDraw'
                 return None
+
+        if self.state == 'ReadyToAddLiquid':
+            if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
+                circle_radius = self.liquid_radius
+                circle_color = (255, 255, 255)
+                outline_thickness = 3
+                pygame.draw.circle(screen, circle_color, (self.mouse_x, self.mouse_y), circle_radius, outline_thickness)
+                return 'DrawLiquid'
 
         return None
