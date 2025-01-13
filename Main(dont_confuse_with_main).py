@@ -229,32 +229,26 @@ while running:
     space.debug_draw(draw_options)
     if paused == False:
         space.step(1 / FPS)
-        for obj in Objects:
-                if isinstance(obj, liquid_Class.Water_Particle):
-                    for ob in Objects:
-                        if isinstance(obj, liquid_Class.Water_Particle) and ob != obj:
-                            liquid_Class.Apply_Tension(obj, ob)
-                if Allow_Gravity:
-                    if isinstance(obj, pymunk.Circle):
-                        for ob in Objects:
-                            if isinstance(ob, pymunk.Circle) and ob != obj:
-                                # apply_gravity_force(obj, ob, G)
-                                # planet_gravity(obj, ob, G, 0, 1/FPS)
-                                a = apply_gravity_acceleration(obj, ob, G)
-                                obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
-                            if isinstance(obj, liquid_Class.Water_Particle):
-                                a = apply_gravity_acceleration(obj, ob, G)
-                                obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
-                    if isinstance(obj, liquid_Class.Water_Particle):
-                        for ob in Objects:
-                            if isinstance(ob, pymunk.Circle):
-                                # apply_gravity_force(obj, ob, G)
-                                # planet_gravity(obj, ob, G, 0, 1/FPS)
-                                a = apply_gravity_acceleration(obj, ob, G)
-                                obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
-                            if isinstance(obj, liquid_Class.Water_Particle)  and ob != obj:
-                                a = apply_gravity_acceleration(obj, ob, G)
-                                obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
+        water_particles = [obj for obj in Objects if isinstance(obj, liquid_Class.Water_Particle)]
+        circles = [obj for obj in Objects if isinstance(obj, pymunk.Circle)]
+
+        for i, obj in enumerate(water_particles):
+            for j in range(i + 1, len(water_particles)):
+                liquid_Class.Apply_Tension(obj, water_particles[j])
+
+
+        if Allow_Gravity:
+            for obj in circles:
+                for ob in Objects:
+                    if ob != obj:
+                        a = apply_gravity_acceleration(obj, ob, G)
+                        obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
+
+            for obj in water_particles:
+                for ob in Objects:
+                    if ob != obj:
+                        a = apply_gravity_acceleration(obj, ob, G)
+                        obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
                 if obj.body in space.bodies:
                     if obj.body.position[0] < 300:
                         if isinstance(obj, pymunk.Segment):
@@ -479,7 +473,7 @@ while running:
             cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Draw_Size, Draw_Size), elasticity=1, friction=0.5, color=(255, 255, 255, 100))
             Objects.append(cube)
         if state == 'DrawLiquid':
-            liquid = mouse.Add_Liquid(space, (mouse.mouse_x, mouse.mouse_y), Liquid_Mass, Liquid_Radiuss, surface_tension=50, color=(255, 255, 255, 100))
+            liquid = mouse.Add_Liquid(space, (mouse.mouse_x, mouse.mouse_y), Liquid_Mass, Liquid_Radiuss, surface_tension=25, color=(255, 255, 255, 100))
             Objects += liquid
         if event.type == pygame.KEYDOWN and ActivatedButton != None:
             if event.key == pygame.K_BACKSPACE:
