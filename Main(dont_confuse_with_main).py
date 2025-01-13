@@ -226,7 +226,7 @@ mouse = Mouse(None, Ball_Radius, Cube_Size, Draw_Size, Liquid_Radiuss)
 paused = False
 while running:
     print(Objects)
-    print(space.bodies)
+    print('shapes: ', space.shapes)
     screen.fill((0, 0, 0))
     space.debug_draw(draw_options)
     if paused == False:
@@ -297,6 +297,7 @@ while running:
                 else:
                     space.remove(obj, obj.body)  # Remove dynamic objects
             Objects = CreateMap1(space)
+
 
 
         if Button_Pause.is_clicked(event) and Button_Pause.is_seen:
@@ -407,9 +408,9 @@ while running:
 
         if Button_CleanAll.is_clicked(event) and Button_CleanAll.is_seen:
             for obj in Objects:
+                if isinstance(obj, pymunk.Segment):
+                    space.remove(obj)
                 if obj.body in space.bodies:
-                    if isinstance(obj, pymunk.Segment):
-                        space.remove(obj)
                     if isinstance(obj, liquid_Class.Water_Particle):
                         space.remove(obj.particle, obj.body)
                     else:

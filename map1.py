@@ -117,6 +117,7 @@ def CreateMap1(space):
         if r == 12:
             for i in range(375, int(WIDTH), 100):
                 segment = pymunk.Segment(space.static_body, (i, 70 + HEIGHT / 6 + 110 + r*40),(i, HEIGHT), 5)
+                segment.color = pg.color.THECOLORS['grey']
                 space.add(segment)
                 objectstoadd.append(segment)
         else:
