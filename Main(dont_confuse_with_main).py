@@ -225,13 +225,15 @@ G = 10000
 mouse = Mouse(None, Ball_Radius, Cube_Size, Draw_Size, Liquid_Radiuss)
 paused = False
 while running:
-    print(Objects)
-    print('shapes: ', space.shapes)
     screen.fill((0, 0, 0))
     space.debug_draw(draw_options)
     if paused == False:
         space.step(1 / FPS)
         for obj in Objects:
+                if isinstance(obj, liquid_Class.Water_Particle):
+                    for ob in Objects:
+                        if isinstance(obj, liquid_Class.Water_Particle) and ob != obj:
+                            liquid_Class.Apply_Tension(obj, ob)
                 if Allow_Gravity:
                     if isinstance(obj, pymunk.Circle):
                         for ob in Objects:

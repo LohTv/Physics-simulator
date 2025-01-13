@@ -19,12 +19,6 @@ class Water_Particle:
         self.particle = Add_Ball(space, radius=self.radius, mass=self.mass,  elasticity=0.5, friction = 0.5, color=self.color, pos=pos)
         self.body = self.particle.body
         return self.particle
-    def Apply_Tension(self, other):
-        force = VectorByTwoPoints(self.body[0], other.body[0])
-        dist = force.magnitude
-        if dist < self.surf_tens:
-            force = 10*force/(dist**2)
-            self.body.apply_force_at_local_point((force.x, force.y))
 
 
 class Liquid:
@@ -34,7 +28,7 @@ class Liquid:
         self.color = color
         self.radius = radius
         self.radiuspart = 7
-        self.particles = set()
+        self.particles = []
 
     def Create_Liquid(self, space, pos):
         """
@@ -43,7 +37,7 @@ class Liquid:
         :param space: The pymunk space where particles will be added.
         :param num_particles: The number of particles to spawn inside the liquid.
         """
-        num_particles = int(round((self.radius**2))/100)
+        num_particles = int(round((self.radius**2))/50)
         for _ in range(num_particles):
             # Generate random angle and distance in polar coordinates
             angle = random.uniform(0, 2 * math.pi)
@@ -56,8 +50,13 @@ class Liquid:
             # Create a water particle at the calculated position
             particle = Water_Particle(self.mass, self.surf_tens, self.color, self.radiuspart)
             particle.Create_Water_Particle((x, y), space)
-            self.particles.add(particle)
+            self.particles.append(particle)
         return self.particles
 
-
+def Apply_Tension(self, other):
+    force = VectorByTwoPoints(self.body.position, other.body.position)
+    dist = force.magnitude
+    if dist < self.surf_tens:
+        force = (force * (1/(dist**2))) * 10.0
+        self.body.apply_force_at_local_point((force.x, force.y))
 
