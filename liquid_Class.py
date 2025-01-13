@@ -54,7 +54,7 @@ class Liquid:
             y = pos[1] + distance * math.sin(angle)
 
             # Create a water particle at the calculated position
-            particle = Water_Particle(self.mass, self.surf_tens, self.color, self.radius)
+            particle = Water_Particle(self.mass, self.surf_tens, self.color, self.radiuspart)
             particle.Create_Water_Particle((x, y), space)
             self.particles.add(particle)
         return self.particles

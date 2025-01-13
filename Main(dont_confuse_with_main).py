@@ -225,6 +225,8 @@ G = 10000
 mouse = Mouse(None, Ball_Radius, Cube_Size, Draw_Size, Liquid_Radiuss)
 paused = False
 while running:
+    print(Objects)
+    print(space.bodies)
     screen.fill((0, 0, 0))
     space.debug_draw(draw_options)
     if paused == False:
@@ -251,25 +253,26 @@ while running:
                             if isinstance(obj, liquid_Class.Water_Particle)  and ob != obj:
                                 a = apply_gravity_acceleration(obj, ob, G)
                                 obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
-
-                if obj.body.position[0] < 300:
-                    if isinstance(obj, pymunk.Segment):
-                        pass
-                    if isinstance(obj, liquid_Class.Water_Particle):
-                        space.remove(obj.particle, obj.body)
-                        Objects.remove(obj)
-                    else:
-                        space.remove(obj, obj.body)
-                        Objects.remove(obj)
-                if obj.body.position[1] > 1000000:
-                    if isinstance(obj, pymunk.Segment):
-                        pass
-                    if isinstance(obj, liquid_Class.Water_Particle):
-                        space.remove(obj.particle, obj.body)
-
-                    else:
-                        space.remove(obj, obj.body)
-                        Objects.remove(obj)
+                if obj.body in space.bodies:
+                    if obj.body.position[0] < 300:
+                        if isinstance(obj, pymunk.Segment):
+                            pass
+                        if isinstance(obj, liquid_Class.Water_Particle):
+                            space.remove(obj.particle, obj.body)
+                            Objects.remove(obj)
+                        else:
+                            space.remove(obj, obj.body)
+                            Objects.remove(obj)
+                if obj.body in space.bodies:
+                    if obj.body.position[1] > 1000000:
+                        if isinstance(obj, pymunk.Segment):
+                            pass
+                        if isinstance(obj, liquid_Class.Water_Particle):
+                            space.remove(obj.particle, obj.body)
+                            Objects.remove(obj)
+                        else:
+                            space.remove(obj, obj.body)
+                            Objects.remove(obj)
 
         if len(Objects) > 1000:
             last_obj = Objects.pop()
@@ -404,12 +407,13 @@ while running:
 
         if Button_CleanAll.is_clicked(event) and Button_CleanAll.is_seen:
             for obj in Objects:
-                if isinstance(obj, pymunk.Segment):
-                    space.remove(obj)
-                if isinstance(obj, liquid_Class.Water_Particle):
-                    space.remove(obj.particle, obj.body)
-                else:
-                    space.remove(obj, obj.body)
+                if obj.body in space.bodies:
+                    if isinstance(obj, pymunk.Segment):
+                        space.remove(obj)
+                    if isinstance(obj, liquid_Class.Water_Particle):
+                        space.remove(obj.particle, obj.body)
+                    else:
+                        space.remove(obj, obj.body)
             Objects.clear()
 
         if Button_WorldSettings.is_clicked(event) and Button_WorldSettings.is_seen:
