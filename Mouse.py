@@ -75,10 +75,11 @@ class Mouse():
                 return None
 
         if self.state == 'ReadyToAddLiquid':
+            circle_radius = self.ball_radius
+            circle_color = (255, 255, 255)
+            outline_thickness = 3
+            pygame.draw.circle(screen, circle_color, (self.mouse_x, self.mouse_y), circle_radius, outline_thickness)
             if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
-                circle_radius = self.liquid_radius
-                circle_color = (255, 255, 255)
-                outline_thickness = 3
                 pygame.draw.circle(screen, circle_color, (self.mouse_x, self.mouse_y), circle_radius, outline_thickness)
                 return 'DrawLiquid'
 
