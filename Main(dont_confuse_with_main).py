@@ -106,12 +106,13 @@ class Button_with_Image:
     def is_clicked(self, event):
         if self.is_seen and event.type == pygame.MOUSEBUTTONUP:
             mouse_pos = pygame.mouse.get_pos()
-            if self.rect.collidepoint(mouse_pos):
-                if self.image == self.image1:
-                    self.image = self.image2
-                elif self.image == self.image2:
-                    self.image = self.image1
-                return True
+            if self.image2:
+                if self.rect.collidepoint(mouse_pos):
+                    if self.image == self.image1:
+                        self.image = self.image2
+                    elif self.image == self.image2:
+                        self.image = self.image1
+                    return True
         return False
 
 
@@ -128,6 +129,7 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 
 
 Button_Add_Liquid = Button(False, 40, 390, 200, 80, 'Add Liquid', 40)
+Button_Settings = Button_with_Image(True, 1270, 15, 80, 80,  r'Sprites/settings.png', )
 Button_Pause = Button_with_Image(True, 340, 15, 80, 80,  r'Sprites/pause1.png', 'Sprites/pause2.png')
 Button_Draw_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
 Button_Forces = Button(False, 40, 270, 200, 80, 'Forces', 40)
@@ -207,7 +209,7 @@ Button_Map2.parent = Button_Maps
 
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 Objects = []
-Buttons = [Button_Add_Liquid, Button_Pause, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll]
+Buttons = [Button_Add_Liquid, Button_Pause,Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
@@ -293,7 +295,7 @@ while running:
                 else:
                     space.remove(obj, obj.body)  # Remove dynamic objects
             Objects = CreateMap1(space)
-
+        if Button_Settings.is_clicked(event):
 
 
         if Button_Pause.is_clicked(event) and Button_Pause.is_seen:
@@ -525,6 +527,7 @@ while running:
                         Ball_Elasticity = float(ActivatedButton.user_text)
                     except ValueError:
                         pass
+
 
                 if ActivatedButton == Button_Cube_Elasticity:
                     try:
