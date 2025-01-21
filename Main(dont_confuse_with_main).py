@@ -7,7 +7,7 @@ from Mouse import Mouse
 from VectorClass import Vector
 from Gravity import *
 from map1 import CreateMap1
-from settings import open_settings_window
+
 
 WIDTH = pyautogui.size()[0] * 0.95
 HEIGHT = pyautogui.size()[1] * 0.95
@@ -17,12 +17,18 @@ FPS = 60
 # GRAVITY = 0
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Physics-simulator")
+pygame.mixer.init()
+pygame.mixer.music.load(r'Music/Music1.mp3')
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.5)
 clock = pygame.time.Clock()
 space = pymunk.Space()
 space.gravity = (0, 1000)
 running = True
 draw_options = pymunk.pygame_util.DrawOptions(screen)
 MouseState = None
+# root = tk.Tk()
+# root.withdraw()
 
 class Button:
     def __init__(self, is_seen, x, y, width, height, text='', font_size=30,
@@ -88,6 +94,7 @@ class Button_with_Image:
         self.text = text
         self.font = font
         self.text_color = text_color
+
         if image_path1:
             self.image1 = pygame.image.load(image_path1)
             self.image1 = pygame.transform.scale(self.image1, (width, height))  # Scale image to button size
@@ -104,16 +111,17 @@ class Button_with_Image:
             text_surf = self.font.render(text, True, self.text_color)
             text_rect = text_surf.get_rect(center=(self.x + self.width // 2, self.y + self.height // 2))
             screen.blit(text_surf, text_rect)
+
     def is_clicked(self, event):
         if self.is_seen and event.type == pygame.MOUSEBUTTONUP:
             mouse_pos = pygame.mouse.get_pos()
-            if self.image_path2:
-                if self.rect.collidepoint(mouse_pos):
-                    if self.image == self.image1:
-                        self.image = self.image2
-                    elif self.image == self.image2:
-                        self.image = self.image1
-                    return True
+            if self.rect.collidepoint(mouse_pos):
+                if self.image_path2:
+                        if self.image == self.image1:
+                            self.image = self.image2
+                        elif self.image == self.image2:
+                            self.image = self.image1
+                return True
         return False
 
 
@@ -128,9 +136,8 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
     return shape
 
 
-
 Button_Add_Liquid = Button(False, 40, 390, 200, 80, 'Add Liquid', 40)
-Button_Settings = Button_with_Image(True, 1700, 15, 80, 80,  r'Sprites/settings.png', )
+Button_Settings = Button_with_Image(True, WIDTH - 90, 15, 80, 80,  r'Sprites/settings.png')
 Button_Pause = Button_with_Image(True, 340, 15, 80, 80,  r'Sprites/pause1.png', 'Sprites/pause2.png')
 Button_Draw_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
 Button_Forces = Button(False, 40, 270, 200, 80, 'Forces', 40)
@@ -207,10 +214,21 @@ Button_AddObject.parent = Button_Tools
 Button_Forces.parent = Button_Tools
 Button_Map2.parent = Button_Maps
 
+settings = {
+    "language": "English",
+    "volume": 50
+}
+
+
+def save_callback(new_settings):
+    global settings
+    settings.update(new_settings)
+    print("Updated settings:", new_settings)
+
 
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 Objects = []
-Buttons = [Button_Add_Liquid, Button_Pause,Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
+Buttons = [Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
@@ -287,18 +305,22 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+        if Button_Settings.is_clicked(event) and Button_Settings.is_seen:
+            pass
+            # print("Settings button clicked")
+            # open_settings_thread(root, settings, save_callback)
+
         if Button_Map1.is_clicked(event) and Button_Map1.is_seen:
             for obj in Objects:
                 if isinstance(obj, pymunk.Segment):
-                    space.remove(obj)  # Remove static segments
-                if isinstance(obj, liquid_Class.Water_Particle):
-                    space.remove(obj.particle, obj.body)
-                else:
-                    space.remove(obj, obj.body)  # Remove dynamic objects
+                    space.remove(obj)
+                if obj.body in space.bodies:
+                    if isinstance(obj, liquid_Class.Water_Particle):
+                        space.remove(obj.particle, obj.body)
+                    else:
+                        space.remove(obj, obj.body)
             Objects = CreateMap1(space)
 
-        if Button_Settings.is_clicked(event) and Button_Settings.is_seen and event.button != 3:
-         open_settings_window(screen, p)
         if Button_Pause.is_clicked(event) and Button_Pause.is_seen:
             paused = not paused
 
@@ -484,7 +506,7 @@ while running:
             if event.key == pygame.K_RETURN:
                 if ActivatedButton == Button_Draw_Size:
                     try:
-                        Draw_Size = float(ActivatedButton.user_text)
+                        Draw_Size = abs(float(ActivatedButton.user_text))
                         mouse.draw_size = Draw_Size
                     except ValueError:
                         pass
@@ -505,34 +527,34 @@ while running:
 
                 if ActivatedButton == Button_Ball_Radius:
                     try:
-                        Ball_Radius = float(ActivatedButton.user_text)
+                        Ball_Radius = abs(float(ActivatedButton.user_text))
                         mouse.ball_radius = Ball_Radius
                     except ValueError:
                         pass
 
                 if ActivatedButton == Button_Ball_Mass:
                     try:
-                        Ball_Mass = float(ActivatedButton.user_text)
+                        Ball_Mass = abs(float(ActivatedButton.user_text))
                     except ValueError:
                         pass
 
                 if ActivatedButton == Button_Cube_Size:
                     try:
-                        Cube_Size= float(ActivatedButton.user_text)
+                        Cube_Size= abs(float(ActivatedButton.user_text))
                         mouse.cube_size = Cube_Size
                     except ValueError:
                         pass
 
                 if ActivatedButton == Button_Ball_Elasticity:
                     try:
-                        Ball_Elasticity = float(ActivatedButton.user_text)
+                        Ball_Elasticity = abs(float(ActivatedButton.user_text))
                     except ValueError:
                         pass
 
 
                 if ActivatedButton == Button_Cube_Elasticity:
                     try:
-                        Cube_Elasticity = float(ActivatedButton.user_text)
+                        Cube_Elasticity = abs(float(ActivatedButton.user_text))
                     except ValueError:
                         pass
 
