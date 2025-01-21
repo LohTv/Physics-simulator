@@ -2,9 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 def open_settings_window(parent, current_settings, save_callback):
-    """
-    Open a settings window to allow changing language and volume.
-    """
+
     def save_and_close():
         # Update settings and close the settings window
         new_settings = {

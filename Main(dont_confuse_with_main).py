@@ -7,6 +7,7 @@ from Mouse import Mouse
 from VectorClass import Vector
 from Gravity import *
 from map1 import CreateMap1
+from settings import open_settings_window
 
 WIDTH = pyautogui.size()[0] * 0.95
 HEIGHT = pyautogui.size()[1] * 0.95
@@ -74,9 +75,9 @@ class Button_with_Image:
         self.y = y
         self.width = width
         self.height = height
-        # self.image_path2 = image_path2
-        # self.image_path1 = image_path1
-        # self.image_path = image_path1
+        self.image_path2 = image_path2
+        self.image_path1 = image_path1
+        self.image_path = image_path1
         self.rect = pygame.Rect(x, y, width, height)
         self.is_seen = is_seen
         self.childrens = []
@@ -106,7 +107,7 @@ class Button_with_Image:
     def is_clicked(self, event):
         if self.is_seen and event.type == pygame.MOUSEBUTTONUP:
             mouse_pos = pygame.mouse.get_pos()
-            if self.image2:
+            if self.image_path2:
                 if self.rect.collidepoint(mouse_pos):
                     if self.image == self.image1:
                         self.image = self.image2
@@ -129,7 +130,7 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 
 
 Button_Add_Liquid = Button(False, 40, 390, 200, 80, 'Add Liquid', 40)
-Button_Settings = Button_with_Image(True, 1270, 15, 80, 80,  r'Sprites/settings.png', )
+Button_Settings = Button_with_Image(True, 1700, 15, 80, 80,  r'Sprites/settings.png', )
 Button_Pause = Button_with_Image(True, 340, 15, 80, 80,  r'Sprites/pause1.png', 'Sprites/pause2.png')
 Button_Draw_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
 Button_Forces = Button(False, 40, 270, 200, 80, 'Forces', 40)
@@ -295,9 +296,9 @@ while running:
                 else:
                     space.remove(obj, obj.body)  # Remove dynamic objects
             Objects = CreateMap1(space)
-        if Button_Settings.is_clicked(event):
 
-
+        if Button_Settings.is_clicked(event) and Button_Settings.is_seen and event.button != 3:
+         open_settings_window(screen, p)
         if Button_Pause.is_clicked(event) and Button_Pause.is_seen:
             paused = not paused
 
