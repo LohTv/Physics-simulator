@@ -1,6 +1,7 @@
 import pygame
 import pymunk
 from liquid_Class import Liquid
+from gas_Class import Gas
 
 class Mouse():
     def __init__(self, state, ball_radius, cube_size, draw_size, liquid_radius):
@@ -31,10 +32,15 @@ class Mouse():
         space.add(body, shape)
         return shape
 
-    def Add_Liquid(self, space: object, pos: object, mass: object, radius: object, surface_tension: object, color: object) -> object:
+    def Add_Liquid(self, space: object, pos: object, mass: object, radius: object, surface_tension: object, color: object):
         liquid = Liquid(mass, radius,  surface_tension, (0, 0, 100, 70))
         liquidpart = liquid.Create_Liquid(space, pos)
         return liquidpart
+
+    def Add_Gas(self, space: object, pos: object, mass: object, radius: object, temperature: object, color: object):
+        gas = Gas(mass, radius, color, temperature)
+        gaspart = gas.Create_Gas(space, pos)
+        return gaspart
 
     def getstate(self, event, screen):
         self.mouse_x, self.mouse_y = pygame.mouse.get_pos()
@@ -82,5 +88,14 @@ class Mouse():
             if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
                 pygame.draw.circle(screen, circle_color, (self.mouse_x, self.mouse_y), circle_radius, outline_thickness)
                 return 'DrawLiquid'
+
+        if self.state == 'ReadyToAddGas':
+            circle_radius = self.ball_radius
+            circle_color = (255, 255, 255)
+            outline_thickness = 3
+            pygame.draw.circle(screen, circle_color, (self.mouse_x, self.mouse_y), circle_radius, outline_thickness)
+            if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
+                pygame.draw.circle(screen, circle_color, (self.mouse_x, self.mouse_y), circle_radius, outline_thickness)
+                return 'DrawGas'
 
         return None
