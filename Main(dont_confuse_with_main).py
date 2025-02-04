@@ -77,7 +77,7 @@ class Button:
 
 
 class Button_with_Image:
-    def __init__(self, is_seen, x, y, width, height, image_path1='', image_path2='', text='', font='', text_color=''):
+    def __init__(self, is_seen, x, y, width, height, image_path1='', image_path2='', text='', font='', text_color='', hover_image = ''):
         self.x = x
         self.y = y
         self.width = width
@@ -85,6 +85,7 @@ class Button_with_Image:
         self.image_path2 = image_path2
         self.image_path1 = image_path1
         self.image_path = image_path1
+        self.hover_image = hover_image
         self.rect = pygame.Rect(x, y, width, height)
         self.is_seen = is_seen
         self.childrens = []
@@ -103,15 +104,26 @@ class Button_with_Image:
 
         if image_path2:
             self.image2 = pygame.image.load(image_path2)
-            self.image2 = pygame.transform.scale(self.image2, (width, height))  # Scale image to button size
+            self.image2 = pygame.transform.scale(self.image2, (width, height))
+
+        if hover_image:
+            self.hover_image= pygame.image.load(hover_image)
+            self.hover_image = pygame.transform.scale(self.hover_image, (width, height))
+        # Scale image to button size
 
     def draw(self, screen, text=''):
-        if self.is_seen:
-            screen.blit(self.image, (self.x, self.y))
-        if text:  # If text is provided, render it
-            text_surf = self.font.render(text, True, self.text_color)
-            text_rect = text_surf.get_rect(center=(self.x + self.width // 2, self.y + self.height // 2))
-            screen.blit(text_surf, text_rect)
+            if self.is_seen:
+                mouse_pos = pygame.mouse.get_pos()
+                if self.rect.collidepoint(mouse_pos) and self.hover_image:
+                    screen.blit(self.hover_image, (self.x, self.y))
+                elif self.activated and self.hover_image:
+                    screen.blit(self.hover_image, (self.x, self.y))
+                else:
+                    screen.blit(self.image, (self.x, self.y))
+            if text:  # If text is provided, render it
+                text_surf = self.font.render(text, True, self.text_color)
+                text_rect = text_surf.get_rect(center=(self.x + self.width // 2, self.y + self.height // 2))
+                screen.blit(text_surf, text_rect)
 
     def is_clicked(self, event):
         if self.is_seen and event.type == pygame.MOUSEBUTTONUP:
@@ -139,8 +151,8 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 
 Button_Add_Gas = Button(False, 40, 510, 200, 80, 'Add Gas', 40)
 Button_Add_Liquid = Button(False, 40, 390, 200, 80, 'Add Liquid', 40)
-Button_Settings = Button_with_Image(True, WIDTH - 90, 15, 80, 80,  r'Sprites/settings.png')
-Button_Pause = Button_with_Image(True, 340, 15, 80, 80,  r'Sprites/pause1.png', 'Sprites/pause2.png')
+Button_Settings = Button_with_Image(True, WIDTH - 90, 15, 80, 80,  'Sprites/settings.png')
+Button_Pause = Button_with_Image(True, 340, 15, 80, 80,  'Sprites/pause1.png', 'Sprites/pause2.png')
 Button_Draw_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
 Button_Forces = Button(False, 40, 270, 200, 80, 'Forces', 40)
 Button_Gravity_Between_Objects = Button(False, 40, 390, 200, 80, 'Allow Gravity', 40)
@@ -162,7 +174,7 @@ Button_Maps = Button(True, 40, 150, 200, 80, 'Maps', 40)
 Button_Tools = Button(True, 40, 30, 200, 80, 'Tools', 40)
 Button_WorldSettings = Button(False, 40, 30, 200, 80, 'World Settings', 30)
 Button_AddObject = Button(False, 40, 150, 200, 80, 'Add Object', 30)
-Button_GoBack = Button_with_Image(False, 40, HEIGHT*0.88, 200, 80, r'Sprites/go_back.png')
+Button_GoBack = Button_with_Image(False, 40, HEIGHT*0.88, 200, 80, 'Sprites/go_back.png', hover_image='Sprites/hovers/go_back2.png')
 
 Button_Tools.childrens = [Button_WorldSettings, Button_Forces, Button_AddObject, Button_GoBack, Button_CleanAll]
 Button_Tools.layer = [Button_Tools, Button_Maps]
