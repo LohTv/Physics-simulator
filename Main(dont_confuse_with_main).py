@@ -162,7 +162,7 @@ Button_Cube_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
 Button_Ball_Mass = Button(False, 40, 150, 200, 80, 'Mass', 40)
 Button_Ball_Radius = Button(False, 40, 30, 200, 80, 'Radius', 40)
 Button_Draw = Button(False, 40, 270, 200, 80, 'Draw', 40)
-Button_CleanAll = Button(False, 40, HEIGHT*0.88 - 120, 200, 80, 'Clean All', 40)
+Button_CleanAll = Button_with_Image(False, 40, HEIGHT*0.88 - 120, 200, 80, 'Sprites/clean_all.png', hover_image='Sprites/hovers/clean_all2.png')
 Button_Const1 = Button(False, 40, 30, 200, 80, 'Gravity - Y', 40)
 Button_Const3 = Button(False, 40, 150, 200, 80, 'Gravity - X', 40)
 Button_Const2 = Button(False, 40, 270, 200, 80, 'Add Walls', 40)
@@ -200,7 +200,7 @@ Button_Add_Liquid.childrens = []
 Button_Add_Gas.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Add_Gas.childrens = []
 
-Button_Draw.layer = [Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
+Button_Draw.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Draw.childrens = [Button_Draw_Size, Button_GoBack, Button_CleanAll]
 
 Button_Const1.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Gravity_Between_Objects]
