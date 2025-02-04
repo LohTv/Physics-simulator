@@ -162,7 +162,7 @@ Button_Maps = Button(True, 40, 150, 200, 80, 'Maps', 40)
 Button_Tools = Button(True, 40, 30, 200, 80, 'Tools', 40)
 Button_WorldSettings = Button(False, 40, 30, 200, 80, 'World Settings', 30)
 Button_AddObject = Button(False, 40, 150, 200, 80, 'Add Object', 30)
-Button_GoBack = Button(False, 40, HEIGHT*0.88, 200, 80, 'Go Back', 40)
+Button_GoBack = Button_with_Image(False, 40, HEIGHT*0.88, 200, 80, r'Sprites/go_back.png')
 
 Button_Tools.childrens = [Button_WorldSettings, Button_Forces, Button_AddObject, Button_GoBack, Button_CleanAll]
 Button_Tools.layer = [Button_Tools, Button_Maps]
