@@ -12,8 +12,9 @@ class Gas_Particle:
         self.radius = radius
         self.color = color
         self.body = None
+
     def Create_Gas_Particle(self, pos, space):
-        self.particle = Add_Ball(space, radius=self.radius, mass=self.mass,  elasticity=1, friction = 0, color=self.color, pos=pos)
+        self.particle = Add_Ball(space, radius=self.radius, mass=self.mass,  elasticity=10, friction = 1, color=self.color, pos=pos)
         self.body = self.particle.body
         return self.particle
 
@@ -24,7 +25,7 @@ class Gas:
         self.color = color
         self.radius = radius
         self.temp = temperature
-        self.radiuspart = 7
+        self.radiuspart = 3
         self.particles = []
 
     def Create_Gas(self, space, pos):
@@ -50,10 +51,11 @@ class Gas:
             particle = Gas_Particle(self.mass, self.color, self.radiuspart)
             particle.Create_Gas_Particle((x, y), space)
             velocity_angle = random.uniform(0, 2 * math.pi)
-            speed = random.uniform(0, self.temp)
+            speed = random.uniform(self.temp/2, self.temp)
             particle.body.velocity = (
                 speed * math.cos(velocity_angle),
                 speed * math.sin(velocity_angle)
             )
+            particle.body.activate()
             self.particles.append(particle)
         return self.particles

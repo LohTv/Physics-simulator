@@ -149,6 +149,8 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
     return shape
 
 
+if not 'Sprites/LeBron(Thegoat).png':
+    print(1/0)
 Button_Add_Gas = Button(False, 40, 510, 200, 80, 'Add Gas', 40)
 Button_Add_Liquid = Button(False, 40, 390, 200, 80, 'Add Liquid', 40)
 Button_Settings = Button_with_Image(True, WIDTH - 90, 15, 80, 80,  'Sprites/settings.png')
@@ -254,7 +256,7 @@ Gravity_X = 0
 Ball_Radius = 30
 Liquid_Radiuss = 30
 Liquid_Mass = 1
-Gas_Mass = 1
+Gas_Mass = 0.1
 Gas_Radiuss =30
 Cube_Size = 50
 Draw_Size = 20
@@ -303,10 +305,10 @@ while running:
                 if obj.body.position[0] < 300:
                     if isinstance(obj, pymunk.Segment):
                         pass
-                    if isinstance(obj, liquid_Class.Water_Particle):
+                    elif isinstance(obj, liquid_Class.Water_Particle):
                         space.remove(obj.particle, obj.body)
                         Objects.remove(obj)
-                    if isinstance(obj, gas_Class.Gas_Particle):
+                    elif isinstance(obj, gas_Class.Gas_Particle):
                         space.remove(obj.particle, obj.body)
                         Objects.remove(obj)
                     else:
@@ -474,7 +476,7 @@ while running:
                 if obj.body in space.bodies:
                     if isinstance(obj, liquid_Class.Water_Particle):
                         space.remove(obj.particle, obj.body)
-                    if isinstance(obj,gas_Class.Gas_Particle):
+                    elif isinstance(obj,gas_Class.Gas_Particle):
                         space.remove(obj.particle, obj.body)
                     else:
                         space.remove(obj, obj.body)
@@ -537,13 +539,13 @@ while running:
             cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Cube_Size, Cube_Size), elasticity=Cube_Elasticity, friction=0.5, color=(255, 255, 255, 100))
             Objects.append(cube)
         if state == 'DrawModeCube':
-            cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Draw_Size, Draw_Size), elasticity=1, friction=0.5, color=(255, 255, 255, 100))
+            cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Draw_Size, Draw_Size), elasticity=1, friction=0, color=(255, 255, 255, 100))
             Objects.append(cube)
         if state == 'DrawLiquid':
             liquid = mouse.Add_Liquid(space, (mouse.mouse_x, mouse.mouse_y), Liquid_Mass, Liquid_Radiuss, surface_tension=25, color=(255, 255, 255, 100))
             Objects += liquid
         if state == 'DrawGas':
-            gas = mouse.Add_Gas(space, (mouse.mouse_x, mouse.mouse_y), Gas_Mass, Gas_Radiuss, temperature=0, color=(255, 255, 255, 100))
+            gas = mouse.Add_Gas(space, (mouse.mouse_x, mouse.mouse_y), Gas_Mass, Gas_Radiuss, temperature=1000, color=(255, 255, 255, 100))
             Objects += gas
         if event.type == pygame.KEYDOWN and ActivatedButton != None:
             if event.key == pygame.K_BACKSPACE:
