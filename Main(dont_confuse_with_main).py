@@ -151,6 +151,10 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 
 if not 'Sprites/LeBron(Thegoat).png':
     print(1/0)
+
+Button_Gas_Size = Button(False, 40, 270, 200, 80, 'Size', 40)
+Button_Temperature = Button(False, 40, 150, 200, 80, 'Temperature', 40)
+Button_Gas_Mass = Button(False, 40, 30, 200, 80, 'Mass', 40)
 Button_Add_Gas = Button(False, 40, 510, 200, 80, 'Add Gas', 40)
 Button_Add_Liquid = Button(False, 40, 390, 200, 80, 'Add Liquid', 40)
 Button_Settings = Button_with_Image(True, WIDTH - 90, 15, 80, 80,  'Sprites/settings.png')
@@ -178,6 +182,15 @@ Button_WorldSettings = Button(False, 40, 30, 200, 80, 'World Settings', 30)
 Button_AddObject = Button(False, 40, 150, 200, 80, 'Add Object', 30)
 Button_GoBack = Button_with_Image(False, 40, HEIGHT*0.88, 200, 80, 'Sprites/go_back.png', hover_image='Sprites/hovers/go_back2.png')
 
+Button_Gas_Size.layer = [Button_CleanAll, Button_GoBack, Button_Gas_Mass, Button_Temperature, Button_Gas_Size]
+Button_Gas_Size.childrens = []
+
+Button_Temperature.layer = [Button_CleanAll, Button_GoBack, Button_Gas_Mass, Button_Temperature, Button_Gas_Size]
+Button_Temperature.childrens = []
+
+Button_Gas_Mass.layer = [Button_CleanAll, Button_GoBack, Button_Gas_Mass, Button_Temperature, Button_Gas_Size]
+Button_Gas_Mass.childrens = []
+
 Button_Tools.childrens = [Button_WorldSettings, Button_Forces, Button_AddObject, Button_GoBack, Button_CleanAll]
 Button_Tools.layer = [Button_Tools, Button_Maps]
 
@@ -200,7 +213,7 @@ Button_Add_Liquid.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Bu
 Button_Add_Liquid.childrens = []
 
 Button_Add_Gas.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
-Button_Add_Gas.childrens = []
+Button_Add_Gas.childrens = [Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_GoBack, Button_CleanAll]
 
 Button_Draw.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Draw.childrens = [Button_Draw_Size, Button_GoBack, Button_CleanAll]
@@ -215,6 +228,9 @@ Button_Cube_Size.layer = [Button_Cube_Size, Button_Cube_Elasticity, Button_Clean
 Button_Cube_Elasticity.layer = [Button_Cube_Size, Button_Cube_Elasticity, Button_CleanAll, Button_GoBack]
 Button_Ball_Elasticity.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
 
+Button_Gas_Size.parent = Button_Add_Gas
+Button_Temperature.parent = Button_Add_Gas
+Button_Gas_Mass.parent = Button_Add_Gas
 Button_Add_Gas.parent = Button_AddObject
 Button_Add_Liquid.parent = Button_AddObject
 Button_Gravity_Between_Objects.parent = Button_WorldSettings
@@ -248,7 +264,7 @@ def save_callback(new_settings):
 
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 Objects = []
-Buttons = [Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
+Buttons = [Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
@@ -256,6 +272,7 @@ Gravity_X = 0
 Ball_Radius = 30
 Liquid_Radiuss = 30
 Liquid_Mass = 1
+Gas_Temp = 1000
 Gas_Mass = 0.1
 Gas_Radiuss = 30
 Cube_Size = 50
@@ -265,7 +282,7 @@ Ball_Elasticity = 1
 Cube_Elasticity = 1
 Allow_Gravity = False
 G = 10000
-mouse = Mouse(None, Ball_Radius, Cube_Size, Draw_Size, Liquid_Radiuss)
+mouse = Mouse(None, Ball_Radius, Cube_Size, Draw_Size, Liquid_Radiuss, Gas_Radiuss)
 paused = False
 while running:
     screen.fill((0, 0, 0))
@@ -280,22 +297,21 @@ while running:
             for j in range(i + 1, len(water_particles)):
                 liquid_Class.Apply_Tension(obj, water_particles[j])
 
-
         if Allow_Gravity:
             for obj in circles:
-                for ob in Objects:
+                for ob in circles + water_particles + gas_particles:
                     if ob != obj:
                         a = apply_gravity_acceleration(obj, ob, G)
                         obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
 
             for obj in water_particles:
-                for ob in Objects:
+                for ob in circles + water_particles + gas_particles:
                     if ob != obj:
                         a = apply_gravity_acceleration(obj, ob, G)
                         obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
 
             for obj in gas_particles:
-                for ob in Objects:
+                for ob in  circles + water_particles + gas_particles:
                     if ob != obj:
                         a = apply_gravity_acceleration(obj, ob, G)
                         obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
@@ -314,8 +330,9 @@ while running:
                     else:
                         space.remove(obj, obj.body)
                         Objects.remove(obj)
+
             if obj.body in space.bodies:
-                if obj.body.position[1] > 1000000:
+                if obj.body.position[1] > 10000:
                     if isinstance(obj, pymunk.Segment):
                         pass
                     if isinstance(obj, liquid_Class.Water_Particle):
@@ -328,16 +345,18 @@ while running:
                         space.remove(obj, obj.body)
                         Objects.remove(obj)
 
-        if len(Objects) > 1000:
+        if len(Objects) > 2000:
             last_obj = Objects.pop()
+            print(last_obj)
             if isinstance(last_obj, pymunk.Segment):
                 space.remove(last_obj)
-            if isinstance(last_obj, liquid_Class.Water_Particle):
-                space.remove(last_obj.particle, last_obj.body)
-            if isinstance(last_obj, gas_Class.Gas_Particle):
-                space.remove(last_obj.particle, last_obj.body)
-            else:
-                space.remove(last_obj, last_obj.body)
+            if last_obj.body in space.bodies:
+                if isinstance(last_obj, liquid_Class.Water_Particle):
+                    space.remove(last_obj.particle, last_obj.body)
+                elif isinstance(last_obj, gas_Class.Gas_Particle):
+                    space.remove(last_obj.particle, last_obj.body)
+                else:
+                    space.remove(last_obj, last_obj.body)
 
 
     for event in pygame.event.get():
@@ -360,7 +379,32 @@ while running:
                         space.remove(obj, obj.body)
             Objects = CreateMap1(space)
 
+        if Button_Gas_Size.is_clicked(event) and Button_Gas_Size.is_seen and Button_Gas_Size.activated == False:
+            for button in Button_Gas_Size.layer:
+                button.activated = False
+            Button_Gas_Size.activated = True
+            ActivatedButton = Button_Gas_Size
 
+        if Button_Temperature.is_clicked(event) and Button_Temperature.is_seen and Button_Temperature.activated == False:
+            for button in Button_Temperature.layer:
+                button.activated = False
+            Button_Temperature.activated = True
+            ActivatedButton = Button_Temperature
+
+        if Button_Gas_Mass.is_clicked(event) and Button_Gas_Mass.is_seen and Button_Gas_Mass.activated == False:
+            for button in Button_Gas_Mass.layer:
+                button.activated = False
+            Button_Gas_Mass.activated = True
+            ActivatedButton = Button_Gas_Mass
+
+        if Button_Add_Gas.is_clicked(event) and Button_Add_Gas.is_seen and event.button == 3:
+            for button in Button_Add_Gas.layer:
+                button.is_seen = False
+            for button in Button_Add_Gas.childrens:
+                button.is_seen = True
+            Button_GoBack.layer = Button_Add_Gas.childrens
+            Button_GoBack.childrens = Button_Add_Gas.layer
+            Button_GoBack.parent = Button_Add_Gas
 
         if Button_Pause.is_clicked(event) and Button_Pause.is_seen:
             paused = not paused
@@ -543,11 +587,11 @@ while running:
         if state == 'DrawModeCube':
             cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Draw_Size, Draw_Size), elasticity=1, friction=0, color=(255, 255, 255, 100))
             Objects.append(cube)
-        if state == 'DrawLiquid':
+        if state == 'DrawLiquid' and len(Objects) < 1001:
             liquid = mouse.Add_Liquid(space, (mouse.mouse_x, mouse.mouse_y), Liquid_Mass, Liquid_Radiuss, surface_tension=10, color=(255, 255, 255, 100))
             Objects += liquid
-        if state == 'DrawGas':
-            gas = mouse.Add_Gas(space, (mouse.mouse_x, mouse.mouse_y), Gas_Mass, Gas_Radiuss, temperature=1000, color=(255, 255, 255, 100))
+        if state == 'DrawGas' and len(Objects) < 1001:
+            gas = mouse.Add_Gas(space, (mouse.mouse_x, mouse.mouse_y), Gas_Mass, Gas_Radiuss, temperature=Gas_Temp, color=(255, 255, 255, 100))
             Objects += gas
         if event.type == pygame.KEYDOWN and ActivatedButton != None:
             if event.key == pygame.K_BACKSPACE:
@@ -604,6 +648,25 @@ while running:
                 if ActivatedButton == Button_Cube_Elasticity:
                     try:
                         Cube_Elasticity = abs(float(ActivatedButton.user_text))
+                    except ValueError:
+                        pass
+
+                if ActivatedButton == Button_Gas_Mass:
+                    try:
+                        Gas_Mass = abs(float(ActivatedButton.user_text))
+                    except ValueError:
+                        pass
+
+                if ActivatedButton == Button_Temperature:
+                    try:
+                        Gas_Temp = abs(float(ActivatedButton.user_text))
+                    except ValueError:
+                        pass
+
+                if ActivatedButton == Button_Gas_Size:
+                    try:
+                        Gas_Radiuss = abs(float(ActivatedButton.user_text))
+                        mouse.gas_radius = Gas_Radiuss
                     except ValueError:
                         pass
 

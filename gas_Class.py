@@ -48,7 +48,7 @@ class Gas:
         :param space: The pymunk space where particles will be added.
         :param num_particles: The number of particles to spawn inside the liquid.
         """
-        num_particles = int(round((self.radius**2))/5)
+        num_particles = int(round((self.radius**2))/20)
 
         for _ in range(num_particles):
             # Generate random angle and distance in polar coordinates

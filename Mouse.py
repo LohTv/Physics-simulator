@@ -4,12 +4,13 @@ from liquid_Class import Liquid
 from gas_Class import Gas
 
 class Mouse():
-    def __init__(self, state, ball_radius, cube_size, draw_size, liquid_radius):
+    def __init__(self, state, ball_radius, cube_size, draw_size, liquid_radius, gas_radius):
         self.state = state
         self.ball_radius = ball_radius
         self.cube_size = cube_size
         self.draw_size = draw_size
         self.liquid_radius = liquid_radius
+        self.gas_radius = gas_radius
 
     def Add_Ball(self, space, pos, radius, mass, elasticity, friction, color):
         moment = pymunk.moment_for_circle(mass, 0, radius)
@@ -90,7 +91,7 @@ class Mouse():
                 return 'DrawLiquid'
 
         if self.state == 'ReadyToAddGas':
-            circle_radius = self.ball_radius
+            circle_radius = self.gas_radius
             circle_color = (255, 255, 255)
             outline_thickness = 3
             pygame.draw.circle(screen, circle_color, (self.mouse_x, self.mouse_y), circle_radius, outline_thickness)
