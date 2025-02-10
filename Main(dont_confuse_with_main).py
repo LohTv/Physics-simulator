@@ -257,7 +257,7 @@ Ball_Radius = 30
 Liquid_Radiuss = 30
 Liquid_Mass = 1
 Gas_Mass = 0.1
-Gas_Radiuss =30
+Gas_Radiuss = 30
 Cube_Size = 50
 Draw_Size = 20
 Ball_Mass = 1
@@ -359,6 +359,8 @@ while running:
                     else:
                         space.remove(obj, obj.body)
             Objects = CreateMap1(space)
+
+
 
         if Button_Pause.is_clicked(event) and Button_Pause.is_seen:
             paused = not paused
@@ -542,7 +544,7 @@ while running:
             cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Draw_Size, Draw_Size), elasticity=1, friction=0, color=(255, 255, 255, 100))
             Objects.append(cube)
         if state == 'DrawLiquid':
-            liquid = mouse.Add_Liquid(space, (mouse.mouse_x, mouse.mouse_y), Liquid_Mass, Liquid_Radiuss, surface_tension=25, color=(255, 255, 255, 100))
+            liquid = mouse.Add_Liquid(space, (mouse.mouse_x, mouse.mouse_y), Liquid_Mass, Liquid_Radiuss, surface_tension=10, color=(255, 255, 255, 100))
             Objects += liquid
         if state == 'DrawGas':
             gas = mouse.Add_Gas(space, (mouse.mouse_x, mouse.mouse_y), Gas_Mass, Gas_Radiuss, temperature=1000, color=(255, 255, 255, 100))
@@ -616,6 +618,7 @@ while running:
             button.draw(screen, button.user_text)
         else:
             button.draw(screen, button.text)
+
     pygame.display.flip()
     clock.tick(FPS)
 pygame.quit()

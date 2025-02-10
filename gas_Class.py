@@ -4,17 +4,30 @@ import pymunk.pygame_util
 from pygame import Surface
 import random
 import math
-from Button_Add_Ball import Add_Ball
+# from Button_Add_Ball import Add_Ball
+
+
+def Add_Ball(space, pos, radius, mass, elasticity, friction, color):
+    moment = pymunk.moment_for_circle(mass, 0, radius)
+    body = pymunk.Body(mass, moment, body_type=pymunk.Body.DYNAMIC)
+    body.position = pos
+    shape = pymunk.Circle(body, radius)
+    shape.color = color
+    space.add(body, shape)
+    shape.elasticity = elasticity
+    shape.friction = friction
+    return shape
 
 class Gas_Particle:
-    def __init__(self, mass,  color, radius=7):
+    def __init__(self, mass,  color, radius=30):
         self.mass = mass
         self.radius = radius
         self.color = color
         self.body = None
 
+
     def Create_Gas_Particle(self, pos, space):
-        self.particle = Add_Ball(space, radius=self.radius, mass=self.mass,  elasticity=10, friction = 1, color=self.color, pos=pos)
+        self.particle = Add_Ball(space, radius=self.radius, mass=self.mass,  elasticity=1, friction = 0, color=self.color, pos=pos)
         self.body = self.particle.body
         return self.particle
 
@@ -25,7 +38,7 @@ class Gas:
         self.color = color
         self.radius = radius
         self.temp = temperature
-        self.radiuspart = 3
+        self.radiuspart = 1
         self.particles = []
 
     def Create_Gas(self, space, pos):
@@ -49,13 +62,12 @@ class Gas:
 
             # Create a water particle at the calculated position
             particle = Gas_Particle(self.mass, self.color, self.radiuspart)
-            particle.Create_Gas_Particle((x, y), space)
+            particle.Create_Gas_Particle((x, y), space=space)
             velocity_angle = random.uniform(0, 2 * math.pi)
             speed = random.uniform(self.temp/2, self.temp)
             particle.body.velocity = (
                 speed * math.cos(velocity_angle),
                 speed * math.sin(velocity_angle)
             )
-            particle.body.activate()
             self.particles.append(particle)
         return self.particles
