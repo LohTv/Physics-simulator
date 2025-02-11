@@ -4,11 +4,8 @@ import sys
 # Initialize Pygame
 pygame.init()
 
-def draw_text(surface, text, font, color, x, y):
-    text_surface = font.render(text, True, color)
-    surface.blit(text_surface, (x, y))
-
-def draw_slider(surface, x, y, width, value, min_value, max_value):
+def
+    rface, x, y, width, value, min_value, max_value):
     # Draw the slider track
     pygame.draw.rect(surface, (200, 200, 200), (x, y, width, 10))
     # Draw the slider thumb
