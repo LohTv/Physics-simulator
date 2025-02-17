@@ -161,7 +161,7 @@ Button_Settings = Button_with_Image(True, WIDTH - 90, 15, 80, 80,  'Sprites/sett
 Button_Pause = Button_with_Image(True, 340, 15, 80, 80,  'Sprites/pause1.png', 'Sprites/pause2.png')
 Button_Draw_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
 Button_Forces = Button(False, 40, 270, 200, 80, 'Forces', 40)
-Button_Gravity_Between_Objects = Button(False, 40, 390, 200, 80, 'Allow Gravity', 40)
+Button_Gravity_Between_Objects = Button(False, 40, 30, 200, 80, 'Allow Gravity', 40)
 Button_Cube_Elasticity = Button(False, 40, 150, 200, 80, 'Elasticity', 40)
 Button_Ball_Elasticity = Button(False, 40, 270, 200, 80, 'Elasticity', 40)
 Button_Cube_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
@@ -201,7 +201,7 @@ Button_AddObject.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Butt
 Button_AddObject.childrens = [Button_Add_Gas, Button_Add_Liquid, Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack]
 
 Button_WorldSettings.layer = [Button_Forces, Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack]
-Button_WorldSettings.childrens = [Button_Gravity_Between_Objects, Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
+Button_WorldSettings.childrens = [ Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
 
 Button_Object1.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Object1.childrens = [Button_Ball_Elasticity, Button_Ball_Radius, Button_Ball_Mass, Button_GoBack, Button_CleanAll]
@@ -218,9 +218,12 @@ Button_Add_Gas.childrens = [Button_Gas_Size, Button_Temperature, Button_Gas_Mass
 Button_Draw.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Draw.childrens = [Button_Draw_Size, Button_GoBack, Button_CleanAll]
 
-Button_Const1.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Gravity_Between_Objects]
-Button_Const3.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Gravity_Between_Objects]
-Button_Gravity_Between_Objects.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Gravity_Between_Objects]
+Button_Forces.childrens = [Button_GoBack, Button_CleanAll, Button_Gravity_Between_Objects]
+Button_Forces.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack]
+
+Button_Const1.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
+Button_Const3.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
+Button_Gravity_Between_Objects.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
 
 Button_Ball_Radius.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
 Button_Ball_Mass.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
@@ -228,12 +231,13 @@ Button_Cube_Size.layer = [Button_Cube_Size, Button_Cube_Elasticity, Button_Clean
 Button_Cube_Elasticity.layer = [Button_Cube_Size, Button_Cube_Elasticity, Button_CleanAll, Button_GoBack]
 Button_Ball_Elasticity.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
 
+
 Button_Gas_Size.parent = Button_Add_Gas
 Button_Temperature.parent = Button_Add_Gas
 Button_Gas_Mass.parent = Button_Add_Gas
 Button_Add_Gas.parent = Button_AddObject
 Button_Add_Liquid.parent = Button_AddObject
-Button_Gravity_Between_Objects.parent = Button_WorldSettings
+Button_Gravity_Between_Objects.parent = Button_Forces
 Button_Cube_Elasticity.parent = Button_Object2
 Button_Ball_Elasticity.parent = Button_Object1
 Button_Cube_Size.parent = Button_Object2
@@ -506,6 +510,15 @@ while running:
             else:
                 Button_Gravity_Between_Objects.button_color = (169, 169, 169)
                 Allow_Gravity = False
+
+        if Button_Forces.is_clicked(event) and Button_Forces.is_seen:
+            for button in Button_Forces.layer:
+                button.is_seen = False
+            for button in Button_Forces.childrens:
+                button.is_seen = True
+            Button_GoBack.layer = Button_Forces.childrens
+            Button_GoBack.childrens = Button_Forces.layer
+            Button_GoBack.parent = Button_Forces
 
         if Button_Const2.is_clicked(event) and Button_Const2.is_seen:
             wall1 = create_wall(space, 40, 2000, (1800, 500), (255, 255, 255), 1, 0)
