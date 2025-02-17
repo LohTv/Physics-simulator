@@ -152,7 +152,7 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 if not 'Sprites/LeBron(Thegoat).png':
     print(1/0)
 
-Button_Gas_Size = Button(False, 40, 270, 200, 80, 'Size', 40)
+Button_Gas_Size = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/size.png', hover_image='Sprites/hovers/size2.png')
 Button_Temperature = Button(False, 40, 150, 200, 80, 'Temperature', 40)
 Button_Gas_Mass = Button(False, 40, 30, 200, 80, 'Mass', 40)
 Button_Add_Gas = Button(False, 40, 510, 200, 80, 'Add Gas', 40)
@@ -162,11 +162,11 @@ Button_Pause = Button_with_Image(True, 340, 15, 80, 80,  'Sprites/pause1.png', '
 Button_Draw_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
 Button_Forces = Button(False, 40, 270, 200, 80, 'Forces', 40)
 Button_Gravity_Between_Objects = Button(False, 40, 30, 200, 80, 'Allow Gravity', 40)
-Button_Cube_Elasticity = Button(False, 40, 150, 200, 80, 'Elasticity', 40)
-Button_Ball_Elasticity = Button(False, 40, 270, 200, 80, 'Elasticity', 40)
+Button_Cube_Elasticity = Button_with_Image(False, 40, 150, 200, 80, 'Sprites/elasticity.png', hover_image='Sprites/hovers/elasticity2.png')
+Button_Ball_Elasticity = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/elasticity.png', hover_image='Sprites/hovers/elasticity2.png')
 Button_Cube_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
 Button_Ball_Mass = Button(False, 40, 150, 200, 80, 'Mass', 40)
-Button_Ball_Radius = Button(False, 40, 30, 200, 80, 'Radius', 40)
+Button_Ball_Radius = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/radius.png', hover_image='Sprites/hovers/radius2.png')
 Button_Draw = Button(False, 40, 270, 200, 80, 'Draw', 40)
 Button_CleanAll = Button_with_Image(False, 40, HEIGHT*0.88 - 120, 200, 80, 'Sprites/clean_all.png', hover_image='Sprites/hovers/clean_all2.png')
 Button_Const1 = Button(False, 40, 30, 200, 80, 'Gravity - Y', 40)
@@ -201,7 +201,7 @@ Button_AddObject.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Butt
 Button_AddObject.childrens = [Button_Add_Gas, Button_Add_Liquid, Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack]
 
 Button_WorldSettings.layer = [Button_Forces, Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack]
-Button_WorldSettings.childrens = [ Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
+Button_WorldSettings.childrens = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack]
 
 Button_Object1.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Object1.childrens = [Button_Ball_Elasticity, Button_Ball_Radius, Button_Ball_Mass, Button_GoBack, Button_CleanAll]
