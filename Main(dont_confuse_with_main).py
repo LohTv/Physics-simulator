@@ -79,7 +79,7 @@ class Button:
 
 
 class Button_with_Image:
-    def __init__(self, is_seen, x, y, width, height, image_path1='', image_path2='', text='', font='', text_color='', hover_image = ''):
+    def __init__(self, is_seen, x, y, width, height, image_path1='', image_path2='', text='', font='', text_color=(255, 255, 255), hover_image = '', font_size=30):
         self.x = x
         self.y = y
         self.width = width
@@ -98,6 +98,9 @@ class Button_with_Image:
         self.text = text
         self.font = font
         self.text_color = text_color
+        self.user_text = ''
+        self.font = pygame.font.SysFont('Arial', font_size)
+
 
         if image_path1:
             self.image1 = pygame.image.load(image_path1)
@@ -168,7 +171,7 @@ Button_Cube_Elasticity = Button_with_Image(False, 40, 150, 200, 80, 'Sprites/ela
 Button_Ball_Elasticity = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/elasticity.png', hover_image='Sprites/hovers/elasticity2.png')
 Button_Cube_Size = Button(False, 40, 30, 200, 80, 'Size', 40)
 Button_Ball_Mass = Button(False, 40, 150, 200, 80, 'Mass', 40)
-Button_Ball_Radius = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/radius.png', hover_image='Sprites/hovers/radius2.png')
+Button_Ball_Radius = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/radius.png', hover_image='Sprites/hovers/radius2.png', text_color='white')
 Button_Draw = Button(False, 40, 270, 200, 80, 'Draw', 40)
 Button_CleanAll = Button_with_Image(False, 40, HEIGHT*0.88 - 120, 200, 80, 'Sprites/clean_all.png', hover_image='Sprites/hovers/clean_all2.png')
 Button_Const1 = Button(False, 40, 30, 200, 80, 'Gravity - Y', 40)
@@ -716,7 +719,7 @@ while running:
                     (0, 0),
                     shape.body.world_to_local(nearest),
                     )
-                mouse_joint.max_force = 50000  # Limits the force to avoid jerky movements
+                mouse_joint.max_force = 5000  # Limits the force to avoid jerky movements
                 mouse_joint.error_bias = (1 - 0.15) ** 60
                 space.add(mouse_joint)
 
