@@ -8,6 +8,8 @@ from Mouse import Mouse
 from VectorClass import Vector
 from Gravity import *
 from map1 import CreateMap1
+from pymunk.vec2d import Vec2d
+import math
 
 
 WIDTH = pyautogui.size()[0] * 0.95
@@ -287,8 +289,11 @@ Cube_Elasticity = 1
 Allow_Gravity = False
 G = 10000
 mouse = Mouse(None, Ball_Radius, Cube_Size, Draw_Size, Liquid_Radiuss, Gas_Radiuss)
+mouse_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
+mouse_joint = None
 paused = False
 while running:
+    mouse_body.position = pygame.mouse.get_pos()
     screen.fill((0, 0, 0))
     space.debug_draw(draw_options)
     if paused == False:
@@ -338,16 +343,14 @@ while running:
             if obj.body in space.bodies:
                 if obj.body.position[1] > 10000:
                     if isinstance(obj, pymunk.Segment):
-                        pass
-                    if isinstance(obj, liquid_Class.Water_Particle):
-                        space.remove(obj.particle, obj.body)
-                        Objects.remove(obj)
-                    if isinstance(obj, gas_Class.Gas_Particle):
-                        space.remove(obj.particle, obj.body)
-                        Objects.remove(obj)
-                    else:
-                        space.remove(obj, obj.body)
-                        Objects.remove(obj)
+                        space.remove(obj)
+                    if obj.body in space.bodies:
+                        if isinstance(obj, liquid_Class.Water_Particle):
+                            space.remove(obj.particle, obj.body)
+                        elif isinstance(obj, gas_Class.Gas_Particle):
+                            space.remove(obj.particle, obj.body)
+                        else:
+                            space.remove(obj, obj.body)
 
         if len(Objects) > 2000:
             last_obj = Objects.pop()
@@ -367,6 +370,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+
         if Button_Settings.is_clicked(event) and Button_Settings.is_seen:
             pass
             # print("Settings button clicked")
@@ -378,6 +382,8 @@ while running:
                     space.remove(obj)
                 if obj.body in space.bodies:
                     if isinstance(obj, liquid_Class.Water_Particle):
+                        space.remove(obj.particle, obj.body)
+                    elif isinstance(obj, gas_Class.Gas_Particle):
                         space.remove(obj.particle, obj.body)
                     else:
                         space.remove(obj, obj.body)
@@ -687,6 +693,38 @@ while running:
                 ActivatedButton = None
             elif event.key != pygame.K_BACKSPACE and event.key != pygame.K_RETURN:
                 ActivatedButton.user_text += event.unicode
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if mouse_joint is not None:
+                space.remove(mouse_joint)
+                mouse_joint = None
+
+            p = Vec2d(*event.pos)
+            # Query for the nearest dynamic shape under the mouse pointer
+            hit = space.point_query_nearest(p, 5, pymunk.ShapeFilter())
+            if hit is not None and hit.shape.body.body_type == pymunk.Body.DYNAMIC:
+                shape = hit.shape
+                # Determine the closest point on the shape
+                if hit.distance > 0:
+                    nearest = hit.point
+                else:
+                    nearest = p
+                # Create a PivotJoint between mouse_body and the shape’s body
+                mouse_joint = pymunk.PivotJoint(
+                    mouse_body,
+                    shape.body,
+                    (0, 0),
+                    shape.body.world_to_local(nearest),
+                    )
+                mouse_joint.max_force = 50000  # Limits the force to avoid jerky movements
+                mouse_joint.error_bias = (1 - 0.15) ** 60
+                space.add(mouse_joint)
+
+        elif event.type == pygame.MOUSEBUTTONUP:
+                # Remove the mouse joint when the button is released
+            if mouse_joint is not None:
+                space.remove(mouse_joint)
+                mouse_joint = None
             # pygame.display.flip()
             # clock.tick(FPS)
     for button in Buttons:
@@ -696,5 +734,6 @@ while running:
             button.draw(screen, button.text)
 
     pygame.display.flip()
+    pygame.display.set_caption(f"fps: {clock.get_fps()}")
     clock.tick(FPS)
 pygame.quit()
