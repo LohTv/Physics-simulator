@@ -2,7 +2,7 @@ import pygame
 import pymunk
 import pymunk.pygame_util
 from pygame import Surface
-from VectorClass import Vector, VectorByTwoPoints
+from VectorClass import *
 import random
 import math
 from Button_Add_Ball import Add_Ball
@@ -54,10 +54,30 @@ class Liquid:
             self.particles.append(particle)
         return self.particles
 
-def Apply_Tension(self, other):
-    force = VectorByTwoPoints(self.body.position, other.body.position)
-    dist = force.magnitude
-    if dist < self.surf_tens:
-        force = (force * (1/(dist**2))) * 10.0
-        self.body.apply_force_at_local_point((force.x, force.y))
+def apply_surface_tension_acceleration(self, other, rest_distance):
+
+    direction = other.body.position - self.body.position
+    direction_vect = Vector(direction[0], direction[1])
+    current_distance = direction.length
+    if current_distance == 0:
+        return (0, 0)
+
+    elif current_distance >= 21:
+        return (0, 0)
+
+    displacement = current_distance - rest_distance
+
+    k = self.surf_tens
+
+    force_magnitude = k * displacement
+
+    force = direction_vect.Normalise()*force_magnitude
+
+    acceleration = force*(1/self.body.mass)
+
+    accel = acceleration.val
+
+    return accel
+
+
 
