@@ -62,7 +62,7 @@ def apply_surface_tension_acceleration(self, other, rest_distance):
     if current_distance == 0:
         return (0, 0)
 
-    elif current_distance >= 21:
+    elif current_distance >= 100:
         return (0, 0)
 
     displacement = current_distance - rest_distance

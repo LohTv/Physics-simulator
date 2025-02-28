@@ -80,7 +80,7 @@ class Button:
 
 
 class Button_with_Image:
-    def __init__(self, is_seen, x, y, width, height, image_path1='', image_path2='', text='', font='', text_color=(255, 255, 255), hover_image = '', font_size=30):
+    def __init__(self, is_seen, x, y, width, height, image_path1='', image_path2='', text='', font='', text_color=(255, 255, 255), hover_image = '', font_size=30, special_need=False):
         self.x = x
         self.y = y
         self.width = width
@@ -101,7 +101,7 @@ class Button_with_Image:
         self.text_color = text_color
         self.user_text = ''
         self.font = pygame.font.SysFont('Arial', font_size)
-
+        self.special_need = special_need
 
         if image_path1:
             self.image1 = pygame.image.load(image_path1)
@@ -122,8 +122,8 @@ class Button_with_Image:
                 mouse_pos = pygame.mouse.get_pos()
                 if self.rect.collidepoint(mouse_pos) and self.hover_image:
                     screen.blit(self.hover_image, (self.x, self.y))
-                elif self.activated and self.hover_image:
-                    screen.blit(self.hover_image, (self.x, self.y))
+                elif self.activated and self.image2:
+                    screen.blit(self.image2, (self.x, self.y))
                 else:
                     screen.blit(self.image, (self.x, self.y))
             if text:  # If text is provided, render it
@@ -135,7 +135,7 @@ class Button_with_Image:
         if self.is_seen and event.type == pygame.MOUSEBUTTONUP:
             mouse_pos = pygame.mouse.get_pos()
             if self.rect.collidepoint(mouse_pos):
-                if self.image_path2:
+                if self.image_path2 and self.special_need:
                         if self.image == self.image1:
                             self.image = self.image2
                         elif self.image == self.image2:
@@ -158,13 +158,13 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 if not 'Sprites/LeBron(Thegoat).png':
     print(1/0)
 
-Button_Gas_Size = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/size.png', hover_image='Sprites/hovers/size2.png')
+Button_Gas_Size = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/size.png', hover_image='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
 Button_Temperature = Button(False, 40, 150, 200, 80, 'Temperature', 40)
 Button_Gas_Mass = Button(False, 40, 30, 200, 80, 'Mass', 40)
 Button_Add_Gas = Button(False, 40, 510, 200, 80, 'Add Gas', 40)
 Button_Add_Liquid = Button(False, 40, 390, 200, 80, 'Add Liquid', 40)
 Button_Settings = Button_with_Image(True, WIDTH - 90, 15, 80, 80,  'Sprites/settings.png')
-Button_Pause = Button_with_Image(True, 340, 15, 80, 80,  'Sprites/pause1.png', 'Sprites/pause2.png')
+Button_Pause = Button_with_Image(True, 340, 15, 80, 80,  'Sprites/pause1.png', 'Sprites/pause2.png', special_need=True)
 Button_Draw_Size = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/size.png',  hover_image='Sprites/hovers/size2.png')
 Button_Forces = Button(False, 40, 270, 200, 80, 'Forces', 40)
 Button_Gravity_Between_Objects = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/size.png',  hover_image='Sprites/hovers/size2.png')
