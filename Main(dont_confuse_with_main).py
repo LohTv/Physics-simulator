@@ -10,6 +10,7 @@ from Gravity import *
 from map1 import CreateMap1
 from pymunk.vec2d import Vec2d
 import math
+from settings import *
 
 
 WIDTH = pyautogui.size()[0] * 0.95
@@ -388,9 +389,7 @@ while running:
 
 
         if Button_Settings.is_clicked(event) and Button_Settings.is_seen:
-            pass
-            # print("Settings button clicked")
-            # open_settings_thread(root, settings, save_callback)
+            open_settings_window(screen,settings, save_callback)
 
         if Button_Map1.is_clicked(event) and Button_Map1.is_seen:
             for obj in Objects:
