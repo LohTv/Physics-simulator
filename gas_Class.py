@@ -38,7 +38,7 @@ class Gas:
         self.color = color
         self.radius = radius
         self.temp = temperature
-        self.radiuspart = 1
+        self.radiuspart = 5
         self.particles = []
 
     def Create_Gas(self, space, pos):
@@ -64,7 +64,7 @@ class Gas:
             particle = Gas_Particle(self.mass, self.color, self.radiuspart)
             particle.Create_Gas_Particle((x, y), space=space)
             velocity_angle = random.uniform(0, 2 * math.pi)
-            speed = random.uniform(self.temp/2, self.temp)
+            speed = random.uniform(self.temp - 10, self.temp)
             particle.body.velocity = (
                 speed * math.cos(velocity_angle),
                 speed * math.sin(velocity_angle)

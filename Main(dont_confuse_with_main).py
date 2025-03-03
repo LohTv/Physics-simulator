@@ -170,10 +170,10 @@ Button_Settings = Button_with_Image(True, WIDTH - 90, 15, 80, 80,  'Sprites/sett
 Button_Pause = Button_with_Image(True, 340, 15, 80, 80,  'Sprites/pause1.png', 'Sprites/pause2.png', special_need=True)
 Button_Draw_Size = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/size.png',  hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
 Button_Forces = Button(False, 40, 270, 200, 80, 'Forces', 40)
-Button_Gravity_Between_Objects = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/size.png',  hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
+Button_Gravity_Between_Objects = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/allow_gravity.png',  hover_image_path='Sprites/hovers/allow_gravity2.png', image_path2='Sprites/hovers/allow_gravity2.png', special_need=True)
 Button_Cube_Elasticity = Button_with_Image(False, 40, 150, 200, 80, 'Sprites/elasticity.png', hover_image_path='Sprites/hovers/elasticity2.png', image_path2='Sprites/hovers/da.png')
 Button_Ball_Elasticity = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/elasticity.png', hover_image_path='Sprites/hovers/elasticity2.png', image_path2='Sprites/hovers/da.png')
-Button_Cube_Size = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/allow_gravity.png',  hover_image_path='Sprites/hovers/allow_gravity2.png', image_path2='Sprites/hovers/da.png')
+Button_Cube_Size = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/size.png',  hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
 Button_Ball_Mass = Button(False, 40, 150, 200, 80, 'Mass', 40)
 Button_Ball_Radius = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/radius.png', hover_image_path='Sprites/hovers/radius2.png', text_color='white', image_path2='Sprites/hovers/da.png')
 Button_Draw = Button(False, 40, 270, 200, 80, 'Draw', 40)
@@ -548,6 +548,8 @@ while running:
                 Button_Show_Tempreature.button_color = (119, 136, 153)
                 Show_Temperature = True
             else:
+                for gaspart in gas_particles:
+                    gaspart.particle.color = (100, 255, 255, 255)
                 Button_Show_Tempreature.button_color = (169, 169, 169)
                 Show_Temperature = False
 
@@ -644,7 +646,7 @@ while running:
             liquid = mouse.Add_Liquid(space, (mouse.mouse_x, mouse.mouse_y), Liquid_Mass, Liquid_Radiuss, surface_tension=0.1, color=(255, 255, 255, 100))
             Objects += liquid
         if state == 'DrawGas' and len(Objects) < 1001:
-            gas = mouse.Add_Gas(space, (mouse.mouse_x, mouse.mouse_y), Gas_Mass, Gas_Radiuss, temperature=Gas_Temp, color=(255, 255, 255, 100))
+            gas = mouse.Add_Gas(space, (mouse.mouse_x, mouse.mouse_y), Gas_Mass, Gas_Radiuss, temperature=Gas_Temp, color=(100, 255, 255, 100))
             Objects += gas
         if event.type == pygame.KEYDOWN and ActivatedButton != None:
             if event.key == pygame.K_BACKSPACE:

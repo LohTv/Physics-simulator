@@ -28,7 +28,7 @@ class Liquid:
         self.surf_tens = surface_tension
         self.color = color
         self.radius = radius
-        self.radiuspart = 7
+        self.radiuspart = 10
         self.particles = []
 
     def Create_Liquid(self, space, pos):
