@@ -11,6 +11,7 @@ from map1 import CreateMap1
 from pymunk.vec2d import Vec2d
 import math
 from settings import *
+import itertools
 
 
 WIDTH = pyautogui.size()[0] * 0.95
@@ -80,7 +81,7 @@ class Button:
 
 
 class Button_with_Image:
-    def __init__(self, is_seen, x, y, width, height, image_path1='', image_path2='', text='', font='', text_color=(255, 255, 255), hover_image = '', font_size=30, special_need=False):
+    def __init__(self, is_seen, x, y, width, height, image_path1='', image_path2='', text='', font='', text_color=(255, 255, 255), hover_image_path = '', font_size=30, special_need=False):
         self.x = x
         self.y = y
         self.width = width
@@ -88,7 +89,7 @@ class Button_with_Image:
         self.image_path2 = image_path2
         self.image_path1 = image_path1
         self.image_path = image_path1
-        self.hover_image = hover_image
+        self.hover_image_path = hover_image_path
         self.rect = pygame.Rect(x, y, width, height)
         self.is_seen = is_seen
         self.childrens = []
@@ -100,29 +101,31 @@ class Button_with_Image:
         self.font = font
         self.text_color = text_color
         self.user_text = ''
+        self.hover_image = ''
+        self.image2 = None
         self.font = pygame.font.SysFont('Arial', font_size)
         self.special_need = special_need
 
-        if image_path1:
+        if self.image_path1:
             self.image1 = pygame.image.load(image_path1)
             self.image1 = pygame.transform.scale(self.image1, (width, height))  # Scale image to button size
             self.image = self.image1  # Set the initial image
 
-        if image_path2:
+        if self.image_path2:
             self.image2 = pygame.image.load(image_path2)
             self.image2 = pygame.transform.scale(self.image2, (width, height))
 
-        if hover_image:
-            self.hover_image= pygame.image.load(hover_image)
+        if self.hover_image_path:
+            self.hover_image= pygame.image.load(hover_image_path)
             self.hover_image = pygame.transform.scale(self.hover_image, (width, height))
         # Scale image to button size
 
     def draw(self, screen, text=''):
             if self.is_seen:
                 mouse_pos = pygame.mouse.get_pos()
-                if self.rect.collidepoint(mouse_pos) and self.hover_image:
+                if self.rect.collidepoint(mouse_pos) and self.hover_image and not self.activated:
                     screen.blit(self.hover_image, (self.x, self.y))
-                elif self.activated and self.image2:
+                elif self.activated:
                     screen.blit(self.image2, (self.x, self.y))
                 else:
                     screen.blit(self.image, (self.x, self.y))
@@ -158,35 +161,35 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 if not 'Sprites/LeBron(Thegoat).png':
     print(1/0)
 
-Button_Gas_Size = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/size.png', hover_image='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
+Button_Gas_Size = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/size.png', hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
 Button_Temperature = Button(False, 40, 150, 200, 80, 'Temperature', 40)
 Button_Gas_Mass = Button(False, 40, 30, 200, 80, 'Mass', 40)
 Button_Add_Gas = Button(False, 40, 510, 200, 80, 'Add Gas', 40)
 Button_Add_Liquid = Button(False, 40, 390, 200, 80, 'Add Liquid', 40)
 Button_Settings = Button_with_Image(True, WIDTH - 90, 15, 80, 80,  'Sprites/settings.png')
 Button_Pause = Button_with_Image(True, 340, 15, 80, 80,  'Sprites/pause1.png', 'Sprites/pause2.png', special_need=True)
-Button_Draw_Size = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/size.png',  hover_image='Sprites/hovers/size2.png')
+Button_Draw_Size = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/size.png',  hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
 Button_Forces = Button(False, 40, 270, 200, 80, 'Forces', 40)
-Button_Gravity_Between_Objects = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/size.png',  hover_image='Sprites/hovers/size2.png')
-Button_Cube_Elasticity = Button_with_Image(False, 40, 150, 200, 80, 'Sprites/elasticity.png', hover_image='Sprites/hovers/elasticity2.png')
-Button_Ball_Elasticity = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/elasticity.png', hover_image='Sprites/hovers/elasticity2.png')
-Button_Cube_Size = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/allow_gravity.png',  hover_image='Sprites/hovers/allow_gravity2.png')
+Button_Gravity_Between_Objects = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/size.png',  hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
+Button_Cube_Elasticity = Button_with_Image(False, 40, 150, 200, 80, 'Sprites/elasticity.png', hover_image_path='Sprites/hovers/elasticity2.png', image_path2='Sprites/hovers/da.png')
+Button_Ball_Elasticity = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/elasticity.png', hover_image_path='Sprites/hovers/elasticity2.png', image_path2='Sprites/hovers/da.png')
+Button_Cube_Size = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/allow_gravity.png',  hover_image_path='Sprites/hovers/allow_gravity2.png', image_path2='Sprites/hovers/da.png')
 Button_Ball_Mass = Button(False, 40, 150, 200, 80, 'Mass', 40)
-Button_Ball_Radius = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/radius.png', hover_image='Sprites/hovers/radius2.png', text_color='white')
+Button_Ball_Radius = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/radius.png', hover_image_path='Sprites/hovers/radius2.png', text_color='white', image_path2='Sprites/hovers/da.png')
 Button_Draw = Button(False, 40, 270, 200, 80, 'Draw', 40)
-Button_CleanAll = Button_with_Image(False, 40, HEIGHT*0.88 - 120, 200, 80, 'Sprites/clean_all.png', hover_image='Sprites/hovers/clean_all2.png')
-Button_Const1 = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/gravity_y.png',  hover_image='Sprites/hovers/gravity_y2.png')
-Button_Const3 = Button_with_Image(False, 40, 150, 200, 80, 'Sprites/gravity_x.png',  hover_image='Sprites/hovers/gravity_x2.png')
-Button_Const2 = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/add_walls.png',  hover_image='Sprites/hovers/add_walls2.png')
+Button_CleanAll = Button_with_Image(False, 40, HEIGHT*0.88 - 120, 200, 80, 'Sprites/clean_all.png', hover_image_path='Sprites/hovers/clean_all2.png', image_path2='Sprites/hovers/da.png')
+Button_Const1 = Button_with_Image(False, 40, 30, 200, 80, 'Sprites/gravity_y.png',  hover_image_path='Sprites/hovers/gravity_y2.png', image_path2='Sprites/hovers/da.png')
+Button_Const3 = Button_with_Image(False, 40, 150, 200, 80, 'Sprites/gravity_x.png',  hover_image_path='Sprites/hovers/gravity_x2.png', image_path2='Sprites/hovers/da.png')
+Button_Const2 = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/add_walls.png',  hover_image_path='Sprites/hovers/add_walls2.png', image_path2='Sprites/hovers/da.png')
 Button_Object1 = Button(False, 40, 30, 200, 80, 'Add Ball', 40)
 Button_Object2 = Button(False, 40, 150, 200, 80, 'Add Cube', 40)
 Button_Map1 = Button(False, 40, 30, 200, 80, 'Galton board', 40)
 Button_Map2 = Button(False, 40, 150, 200, 80, 'Map2', 40)
-Button_Maps = Button_with_Image(True, 40, 150, 200, 80, 'Sprites/maps.png',  hover_image='Sprites/hovers/maps2.png')
-Button_Tools = Button_with_Image(True, 40, 30, 200, 80, 'Sprites/tools.png',  hover_image='Sprites/hovers/tools2.png')
+Button_Maps = Button_with_Image(True, 40, 150, 200, 80, 'Sprites/maps.png',  hover_image_path='Sprites/hovers/maps2.png', image_path2='Sprites/hovers/da.png')
+Button_Tools = Button_with_Image(True, 40, 30, 200, 80, 'Sprites/tools.png',  hover_image_path='Sprites/hovers/tools2.png', image_path2='Sprites/hovers/da.png')
 Button_WorldSettings = Button(False, 40, 30, 200, 80, 'World Settings', 30)
 Button_AddObject = Button(False, 40, 150, 200, 80, 'Add Object', 30)
-Button_GoBack = Button_with_Image(False, 40, HEIGHT*0.88, 200, 80, 'Sprites/go_back.png', hover_image='Sprites/hovers/go_back2.png')
+Button_GoBack = Button_with_Image(False, 40, HEIGHT*0.88, 200, 80, 'Sprites/go_back.png', hover_image_path='Sprites/hovers/go_back2.png', image_path2='Sprites/hovers/da.png')
 Button_Show_Tempreature = Button(False, 40, 390, 200, 80, 'Show Temperature', 28)
 
 Button_Show_Tempreature.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature]
@@ -316,8 +319,9 @@ while running:
             for ob in water_particles:
                 if obj is ob:
                     continue
-                a = apply_surface_tension_acceleration(obj, ob, 7)
-                obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
+                if (obj.body.position[0] - ob.body.position[0])**2 - (obj.body.position[1] - ob.body.position[1])**2 <= 10000:
+                    a = apply_surface_tension_acceleration(obj, ob, 7)
+                    obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
 
         if Allow_Gravity:
             for obj in circles:
@@ -403,6 +407,13 @@ while running:
                     else:
                         space.remove(obj, obj.body)
             Objects = CreateMap1(space)
+
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            paused = not paused
+            if Button_Pause.image == Button_Pause.image1:
+                Button_Pause.image = Button_Pause.image2
+            elif Button_Pause.image == Button_Pause.image2:
+                Button_Pause.image = Button_Pause.image1
 
         if Button_Gas_Size.is_clicked(event) and Button_Gas_Size.is_seen and Button_Gas_Size.activated == False:
             for button in Button_Gas_Size.layer:
