@@ -4,13 +4,14 @@ from liquid_Class import Liquid
 from gas_Class import Gas
 
 class Mouse():
-    def __init__(self, state, ball_radius, cube_size, draw_size, liquid_radius, gas_radius):
+    def __init__(self, state, ball_radius, cube_size, draw_size, liquid_radius, gas_radius, cube_mass):
         self.state = state
         self.ball_radius = ball_radius
         self.cube_size = cube_size
         self.draw_size = draw_size
         self.liquid_radius = liquid_radius
         self.gas_radius = gas_radius
+        self.cube_mass = cube_mass
 
     def Add_Ball(self, space, pos, radius, mass, elasticity, friction, color):
         moment = pymunk.moment_for_circle(mass, 0, radius)
@@ -33,7 +34,7 @@ class Mouse():
         space.add(body, shape)
         return shape
 
-    def Add_Cube_Dynamic(self, space, pos, size, color, elasticity, friction, mass=1):
+    def Add_Cube_Dynamic(self, space, pos, size, color, elasticity, friction, mass):
         moment = pymunk.moment_for_box(mass, size)
         body = pymunk.Body(mass, moment)
         body.position = pos

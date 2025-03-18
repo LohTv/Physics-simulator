@@ -162,7 +162,7 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 if not 'Sprites/LeBron(Thegoat).png':
     print(1/0)
 
-Button_Mass = Button(False, 40, 390, 200, 80, 'Dynamic', 40)
+Button_Cube_Mass = Button(False, 40, 270, 200, 80, 'Mass', 40)
 Button_Cube_Dynamic = Button(False, 40, 390, 200, 80, 'Dynamic', 40)
 Button_Gas_Size = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/size.png', hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
 Button_Temperature = Button(False, 40, 150, 200, 80, 'Temperature', 40)
@@ -223,7 +223,7 @@ Button_Object1.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Butto
 Button_Object1.childrens = [Button_Ball_Elasticity, Button_Ball_Radius, Button_Ball_Mass, Button_GoBack, Button_CleanAll]
 
 Button_Object2.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
-Button_Object2.childrens = [Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
+Button_Object2.childrens = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
 
 Button_Add_Liquid.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Add_Liquid.childrens = []
@@ -243,12 +243,14 @@ Button_Gravity_Between_Objects.layer = [Button_CleanAll, Button_Const1, Button_C
 
 Button_Ball_Radius.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
 Button_Ball_Mass.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
-Button_Cube_Size.layer = [Button_Cube_Dynamic, Button_Cube_Size, Button_Cube_Elasticity, Button_CleanAll, Button_GoBack]
-Button_Cube_Elasticity.layer = [Button_Cube_Dynamic, Button_Cube_Size, Button_Cube_Elasticity, Button_CleanAll, Button_GoBack]
-Button_Cube_Dynamic.layer = [Button_Cube_Dynamic, Button_Cube_Size, Button_Cube_Elasticity, Button_CleanAll, Button_GoBack]
+Button_Cube_Size.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
+Button_Cube_Elasticity.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
+Button_Cube_Dynamic.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
 Button_Ball_Elasticity.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
+Button_Cube_Mass.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
 
 
+Button_Cube_Mass.parent = Button_Object2
 Button_Cube_Dynamic.parent = Button_Object2
 Button_Gas_Size.parent = Button_Add_Gas
 Button_Temperature.parent = Button_Add_Gas
@@ -287,7 +289,7 @@ def save_callback(new_settings):
 
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 Objects = []
-Buttons = [Button_Cube_Dynamic, Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
+Buttons = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
@@ -301,17 +303,17 @@ Gas_Radiuss = 30
 Cube_Size = 50
 Draw_Size = 20
 Ball_Mass = 1
+Cube_Mass = 1
 Ball_Elasticity = 0.8
 Cube_Elasticity = 0.8
 Allow_Gravity = False
 Show_Temperature = False
 G = 10000
-mouse = Mouse(None, Ball_Radius, Cube_Size, Draw_Size, Liquid_Radiuss, Gas_Radiuss)
+mouse = Mouse(None, Ball_Radius, Cube_Size, Draw_Size, Liquid_Radiuss, Gas_Radiuss, Cube_Mass)
 mouse_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
 mouse_joint = None
 paused = False
 Cube_Dynamic = False
-Cube_Mass = 1
 while running:
     mouse_body.position = pygame.mouse.get_pos()
     screen.fill((0, 0, 0))
@@ -435,6 +437,13 @@ while running:
             else:
                 Button_Cube_Dynamic.button_color = (169, 169, 169)
                 Cube_Dynamic = False
+
+        if Button_Cube_Mass.is_clicked(event) and Button_Cube_Mass.is_seen and Button_Cube_Mass.activated == False:
+            for button in Button_Cube_Mass.layer:
+                button.activated = False
+            Button_Cube_Mass.activated = True
+            ActivatedButton = Button_Cube_Mass
+
 
         if Button_Temperature.is_clicked(event) and Button_Temperature.is_seen and Button_Temperature.activated == False:
             for button in Button_Temperature.layer:
@@ -672,6 +681,14 @@ while running:
             if event.key == pygame.K_BACKSPACE:
                 ActivatedButton.user_text = ActivatedButton.user_text[:-1]
             if event.key == pygame.K_RETURN:
+                if ActivatedButton == Button_Cube_Mass:
+                    try:
+                        val = abs(float(ActivatedButton.user_text))
+                        if val != 0:
+                            Cube_Mass = val
+                            mouse.cube_mass= Cube_Mass
+                    except ValueError:
+                        pass
                 if ActivatedButton == Button_Draw_Size:
                     try:
                         val = abs(float(ActivatedButton.user_text))
