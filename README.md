@@ -1,3 +1,16 @@
+
+
+|Name|Description|Date|
+|----|-----------|----|
+|Arsenijs| Testers can clone our repository from GitHub and their local machine|18.03|
+
+
+
+
+
+
+
+
 Our Goal:
 
 Our goal is to make a physics simulator, for studying physics with joy and providing a visual intuition for physics laws.
