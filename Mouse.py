@@ -33,6 +33,17 @@ class Mouse():
         space.add(body, shape)
         return shape
 
+    def Add_Cube_Dynamic(self, space, pos, size, color, elasticity, friction, mass=1):
+        moment = pymunk.moment_for_box(mass, size)
+        body = pymunk.Body(mass, moment)
+        body.position = pos
+        shape = pymunk.Poly.create_box(body, size)
+        shape.elasticity = elasticity
+        shape.friction = friction
+        shape.color = color
+        space.add(body, shape)
+        return shape
+
     def Add_Liquid(self, space: object, pos: object, mass: object, radius: object, surface_tension: object, color: object):
         liquid = Liquid(mass, radius,  surface_tension, (0, 0, 100, 70))
         liquidpart = liquid.Create_Liquid(space, pos)

@@ -81,7 +81,7 @@ class Button:
 
 
 class Button_with_Image:
-    def __init__(self, is_seen, x, y, width, height, image_path1='', image_path2='', text='', font='', text_color=(255, 255, 255), hover_image_path = '', font_size=30, special_need=False):
+    def __init__(self, is_seen, x, y, width, height, image_path1='', image_path2='', text='', font='', text_color=(255, 255, 255), hover_image_path = '', font_size=30, special_need=False, special_need2=False):
         self.x = x
         self.y = y
         self.width = width
@@ -105,6 +105,7 @@ class Button_with_Image:
         self.image2 = None
         self.font = pygame.font.SysFont('Arial', font_size)
         self.special_need = special_need
+        self.special_need2 = special_need2
 
         if self.image_path1:
             self.image1 = pygame.image.load(image_path1)
@@ -161,6 +162,8 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 if not 'Sprites/LeBron(Thegoat).png':
     print(1/0)
 
+Button_Mass = Button(False, 40, 390, 200, 80, 'Dynamic', 40)
+Button_Cube_Dynamic = Button(False, 40, 390, 200, 80, 'Dynamic', 40)
 Button_Gas_Size = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/size.png', hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
 Button_Temperature = Button(False, 40, 150, 200, 80, 'Temperature', 40)
 Button_Gas_Mass = Button(False, 40, 30, 200, 80, 'Mass', 40)
@@ -220,7 +223,7 @@ Button_Object1.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Butto
 Button_Object1.childrens = [Button_Ball_Elasticity, Button_Ball_Radius, Button_Ball_Mass, Button_GoBack, Button_CleanAll]
 
 Button_Object2.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
-Button_Object2.childrens = [Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
+Button_Object2.childrens = [Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
 
 Button_Add_Liquid.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Add_Liquid.childrens = []
@@ -240,11 +243,13 @@ Button_Gravity_Between_Objects.layer = [Button_CleanAll, Button_Const1, Button_C
 
 Button_Ball_Radius.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
 Button_Ball_Mass.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
-Button_Cube_Size.layer = [Button_Cube_Size, Button_Cube_Elasticity, Button_CleanAll, Button_GoBack]
-Button_Cube_Elasticity.layer = [Button_Cube_Size, Button_Cube_Elasticity, Button_CleanAll, Button_GoBack]
+Button_Cube_Size.layer = [Button_Cube_Dynamic, Button_Cube_Size, Button_Cube_Elasticity, Button_CleanAll, Button_GoBack]
+Button_Cube_Elasticity.layer = [Button_Cube_Dynamic, Button_Cube_Size, Button_Cube_Elasticity, Button_CleanAll, Button_GoBack]
+Button_Cube_Dynamic.layer = [Button_Cube_Dynamic, Button_Cube_Size, Button_Cube_Elasticity, Button_CleanAll, Button_GoBack]
 Button_Ball_Elasticity.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
 
 
+Button_Cube_Dynamic.parent = Button_Object2
 Button_Gas_Size.parent = Button_Add_Gas
 Button_Temperature.parent = Button_Add_Gas
 Button_Gas_Mass.parent = Button_Add_Gas
@@ -282,7 +287,7 @@ def save_callback(new_settings):
 
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 Objects = []
-Buttons = [Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
+Buttons = [Button_Cube_Dynamic, Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
@@ -296,8 +301,8 @@ Gas_Radiuss = 30
 Cube_Size = 50
 Draw_Size = 20
 Ball_Mass = 1
-Ball_Elasticity = 1
-Cube_Elasticity = 1
+Ball_Elasticity = 0.8
+Cube_Elasticity = 0.8
 Allow_Gravity = False
 Show_Temperature = False
 G = 10000
@@ -305,6 +310,8 @@ mouse = Mouse(None, Ball_Radius, Cube_Size, Draw_Size, Liquid_Radiuss, Gas_Radiu
 mouse_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
 mouse_joint = None
 paused = False
+Cube_Dynamic = False
+Cube_Mass = 1
 while running:
     mouse_body.position = pygame.mouse.get_pos()
     screen.fill((0, 0, 0))
@@ -420,6 +427,14 @@ while running:
                 button.activated = False
             Button_Gas_Size.activated = True
             ActivatedButton = Button_Gas_Size
+
+        if Button_Cube_Dynamic.is_clicked(event) and Button_Cube_Dynamic.is_seen:
+            if Cube_Dynamic == False:
+                Button_Cube_Dynamic.button_color = (119, 136, 153)
+                Cube_Dynamic = True
+            else:
+                Button_Cube_Dynamic.button_color = (169, 169, 169)
+                Cube_Dynamic = False
 
         if Button_Temperature.is_clicked(event) and Button_Temperature.is_seen and Button_Temperature.activated == False:
             for button in Button_Temperature.layer:
@@ -631,21 +646,26 @@ while running:
             if Button_GoBack.parent.parent:
                 Button_GoBack.childrens = Button_GoBack.parent.parent.layer
                 Button_GoBack.parent = Button_GoBack.parent.parent
+
         state = mouse.getstate(event, screen)
 
-        if state == 'DrawBall':
+        if state == 'DrawBall' and  event.button != 3:
             ball = mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), Ball_Radius, mass=Ball_Mass, elasticity=Ball_Elasticity, friction=0.5, color=(255, 255, 255, 100))
             Objects.append(ball)
-        if state == 'DrawCube':
-            cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Cube_Size, Cube_Size), elasticity=Cube_Elasticity, friction=0.5, color=(255, 255, 255, 100))
-            Objects.append(cube)
-        if state == 'DrawModeCube':
+        if state == 'DrawCube' and  event.button != 3:
+            if Cube_Dynamic == False:
+                cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Cube_Size, Cube_Size), elasticity=Cube_Elasticity, friction=0.5, color=(255, 255, 255, 100))
+                Objects.append(cube)
+            else:
+                cube = mouse.Add_Cube_Dynamic(space, (mouse.mouse_x, mouse.mouse_y), (Cube_Size, Cube_Size), elasticity=Cube_Elasticity, friction=0.5, color=(255, 255, 255, 100), mass=Cube_Mass)
+                Objects.append(cube)
+        if state == 'DrawModeCube' and  event.button != 3:
             cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Draw_Size, Draw_Size), elasticity=1, friction=0, color=(255, 255, 255, 100))
             Objects.append(cube)
-        if state == 'DrawLiquid' and len(Objects) < 1001:
+        if state == 'DrawLiquid' and len(Objects) < 1001 and  event.button != 3:
             liquid = mouse.Add_Liquid(space, (mouse.mouse_x, mouse.mouse_y), Liquid_Mass, Liquid_Radiuss, surface_tension=0.1, color=(255, 255, 255, 100))
             Objects += liquid
-        if state == 'DrawGas' and len(Objects) < 1001:
+        if state == 'DrawGas' and len(Objects) < 1001 and  event.button != 3:
             gas = mouse.Add_Gas(space, (mouse.mouse_x, mouse.mouse_y), Gas_Mass, Gas_Radiuss, temperature=Gas_Temp, color=(100, 255, 255, 100))
             Objects += gas
         if event.type == pygame.KEYDOWN and ActivatedButton != None:
@@ -654,8 +674,10 @@ while running:
             if event.key == pygame.K_RETURN:
                 if ActivatedButton == Button_Draw_Size:
                     try:
-                        Draw_Size = abs(float(ActivatedButton.user_text))
-                        mouse.draw_size = Draw_Size
+                        val = abs(float(ActivatedButton.user_text))
+                        if val != 0:
+                            Draw_Size = val
+                            mouse.draw_size = Draw_Size
                     except ValueError:
                         pass
 
@@ -675,21 +697,27 @@ while running:
 
                 if ActivatedButton == Button_Ball_Radius:
                     try:
-                        Ball_Radius = abs(float(ActivatedButton.user_text))
-                        mouse.ball_radius = Ball_Radius
+                        val = abs(float(ActivatedButton.user_text))
+                        if val != 0:
+                            Ball_Radius = val
+                            mouse.ball_radius = Ball_Radius
                     except ValueError:
                         pass
 
                 if ActivatedButton == Button_Ball_Mass:
                     try:
-                        Ball_Mass = abs(float(ActivatedButton.user_text))
+                        val = abs(float(ActivatedButton.user_text))
+                        if val != 0:
+                            Ball_Mass = val
                     except ValueError:
                         pass
 
                 if ActivatedButton == Button_Cube_Size:
                     try:
-                        Cube_Size= abs(float(ActivatedButton.user_text))
-                        mouse.cube_size = Cube_Size
+                        val = abs(float(ActivatedButton.user_text))
+                        if val != 0:
+                            Cube_Size = val
+                            mouse.cube_size = Cube_Size
                     except ValueError:
                         pass
 
@@ -708,7 +736,9 @@ while running:
 
                 if ActivatedButton == Button_Gas_Mass:
                     try:
-                        Gas_Mass = abs(float(ActivatedButton.user_text))
+                        val = abs(float(ActivatedButton.user_text))
+                        if val != 0:
+                            Gas_Mass = val
                     except ValueError:
                         pass
 
@@ -720,8 +750,10 @@ while running:
 
                 if ActivatedButton == Button_Gas_Size:
                     try:
-                        Gas_Radiuss = abs(float(ActivatedButton.user_text))
-                        mouse.gas_radius = Gas_Radiuss
+                        val = abs(float(ActivatedButton.user_text))
+                        if val != 0:
+                            Gas_Radiuss = val
+                            mouse.gas_radius = Gas_Radiuss
                     except ValueError:
                         pass
 
@@ -752,8 +784,9 @@ while running:
                     (0, 0),
                     shape.body.world_to_local(nearest),
                     )
-                mouse_joint.max_force = 50000  # Limits the force to avoid jerky movements
-                mouse_joint.error_bias = (1 - 0.15) ** 60
+                desired_acceleration = 50000
+                mouse_joint.max_force = shape.body.mass * desired_acceleration   # Limits the force to avoid jerky movements
+                # mouse_joint.error_bias = (1 - 0.15) ** 60
                 space.add(mouse_joint)
 
         elif event.type == pygame.MOUSEBUTTONUP:
