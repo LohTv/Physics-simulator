@@ -8,10 +8,12 @@ from Mouse import Mouse
 from VectorClass import Vector
 from Gravity import *
 from map1 import CreateMap1
+from map2 import CreateMap2
 from pymunk.vec2d import Vec2d
 import math
 from settings import *
-import itertools
+from pymunk.constraints import Constraint
+
 
 
 WIDTH = pyautogui.size()[0] * 0.95
@@ -322,7 +324,7 @@ while running:
         space.step(1 / FPS)
         water_particles = [obj for obj in Objects if isinstance(obj, Water_Particle)]
         gas_particles = [obj for obj in Objects if isinstance(obj, gas_Class.Gas_Particle)]
-        circles = [obj for obj in Objects if isinstance(obj, pymunk.Circle)]
+        dynamic = [obj for obj in Objects if obj.body.body_type == pymunk.Body.DYNAMIC]
 
         for obj in water_particles:
             for ob in water_particles:
@@ -333,20 +335,20 @@ while running:
                     obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
 
         if Allow_Gravity:
-            for obj in circles:
-                for ob in circles + water_particles + gas_particles:
+            for obj in dynamic:
+                for ob in dynamic + water_particles + gas_particles:
                     if ob != obj:
                         a = apply_gravity_acceleration(obj, ob, G)
                         obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
 
             for obj in water_particles:
-                for ob in circles + water_particles + gas_particles:
+                for ob in dynamic + water_particles + gas_particles:
                     if ob != obj:
                         a = apply_gravity_acceleration(obj, ob, G)
                         obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
 
             for obj in gas_particles:
-                for ob in  circles + water_particles + gas_particles:
+                for ob in  dynamic + water_particles + gas_particles:
                     if ob != obj:
                         a = apply_gravity_acceleration(obj, ob, G)
                         obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
@@ -417,6 +419,19 @@ while running:
                         space.remove(obj, obj.body)
             Objects = CreateMap1(space)
 
+        if Button_Map2.is_clicked(event) and Button_Map2.is_seen:
+            for obj in Objects:
+                if isinstance(obj, pymunk.Segment):
+                    space.remove(obj)
+                if obj.body in space.bodies:
+                    if isinstance(obj, Water_Particle):
+                        space.remove(obj.particle, obj.body)
+                    elif isinstance(obj, gas_Class.Gas_Particle):
+                        space.remove(obj.particle, obj.body)
+                    else:
+                        space.remove(obj, obj.body)
+            Objects = CreateMap2(space)
+
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             paused = not paused
             if Button_Pause.image == Button_Pause.image1:
@@ -443,7 +458,6 @@ while running:
                 button.activated = False
             Button_Cube_Mass.activated = True
             ActivatedButton = Button_Cube_Mass
-
 
         if Button_Temperature.is_clicked(event) and Button_Temperature.is_seen and Button_Temperature.activated == False:
             for button in Button_Temperature.layer:
@@ -597,6 +611,8 @@ while running:
         if Button_CleanAll.is_clicked(event) and Button_CleanAll.is_seen:
             for obj in Objects:
                 if isinstance(obj, pymunk.Segment):
+                    space.remove(obj)
+                if isinstance(obj, Constraint):
                     space.remove(obj)
                 if obj.body in space.bodies:
                     if isinstance(obj, Water_Particle):

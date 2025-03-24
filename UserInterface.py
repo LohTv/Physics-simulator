@@ -136,6 +136,7 @@ while running:
             Button_GoBack.parent = Button_WorldSettings
 
         if Button_Tools.is_clicked(event) and Button_Tools.is_seen:
+
             for button in Button_Tools.layer:
                 button.is_seen = False
             for button in Button_Tools.childrens:
