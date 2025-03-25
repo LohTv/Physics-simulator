@@ -36,18 +36,27 @@ def CreateMap2(space):
     segment_shape3.color = pg.color.THECOLORS['grey']
     space.add(segment_shape3)
     objectstoadd = [segment_shape1, segment_shape2, segment_shape3]
+    joints = []
     d = ((330 + WIDTH) / 3 - 380)/5
     for i in range(5):
         ball = Add_Ball_Dynamic(space, (((330 + WIDTH) / 3 + 380)/2 + (i - 2)*d, HEIGHT/3), radius=33)
         joint = pymunk.PinJoint(ball.body, segment_shape1.body, (0, 0), (ball.body.position.x, HEIGHT/6))
         space.add(joint)
+        joints.append(joint)
         objectstoadd.append(ball)
     objectstoadd[-1].body.apply_impulse_at_local_point((400, 0), (0, 0))
     for i in range(5):
         ball = Add_Ball_Dynamic(space, ((WIDTH - 50 + 2*(330 + WIDTH) / 3)/2 + (i - 2)*d, HEIGHT/3), radius=33)
         joint = pymunk.PinJoint(ball.body, segment_shape1.body, (0, 0), (ball.body.position.x, HEIGHT/6))
         space.add(joint)
+        joints.append(joint)
         objectstoadd.append(ball)
     objectstoadd[-2].body.apply_impulse_at_local_point((400, 0), (0, 0))
     objectstoadd[-1].body.apply_impulse_at_local_point((400, 0), (0, 0))
-    return objectstoadd
+    for i in range(5):
+        ball = Add_Ball_Dynamic(space, (((WIDTH + 330)/2 + (i - 2)*d, 2*HEIGHT/3 + 100)), radius=34)
+        joint = pymunk.PinJoint(ball.body, segment_shape1.body, (0, 0), (ball.body.position.x, HEIGHT / 2))
+        space.add(joint)
+        joints.append(joint)
+        objectstoadd.append(ball)
+    return (objectstoadd, joints)

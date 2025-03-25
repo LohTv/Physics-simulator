@@ -12,8 +12,6 @@ from map2 import CreateMap2
 from pymunk.vec2d import Vec2d
 import math
 from settings import *
-from pymunk.constraints import Constraint
-
 
 
 WIDTH = pyautogui.size()[0] * 0.95
@@ -164,6 +162,7 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 if not 'Sprites/LeBron(Thegoat).png':
     print(1/0)
 
+Button_Add_Rope = Button(False, 40, 630, 200, 80, 'Add Joint', 40)
 Button_Cube_Mass = Button(False, 40, 270, 200, 80, 'Mass', 40)
 Button_Cube_Dynamic = Button(False, 40, 390, 200, 80, 'Dynamic', 40)
 Button_Gas_Size = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/size.png', hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
@@ -189,7 +188,7 @@ Button_Const2 = Button_with_Image(False, 40, 270, 200, 80, 'Sprites/add_walls.pn
 Button_Object1 = Button(False, 40, 30, 200, 80, 'Add Ball', 40)
 Button_Object2 = Button(False, 40, 150, 200, 80, 'Add Cube', 40)
 Button_Map1 = Button(False, 40, 30, 200, 80, 'Galton board', 40)
-Button_Map2 = Button(False, 40, 150, 200, 80, 'Map2', 40)
+Button_Map2 = Button(False, 40, 150, 200, 80, "Newton's cradle", 30)
 Button_Maps = Button_with_Image(True, 40, 150, 200, 80, 'Sprites/maps.png',  hover_image_path='Sprites/hovers/maps2.png', image_path2='Sprites/hovers/da.png')
 Button_Tools = Button_with_Image(True, 40, 30, 200, 80, 'Sprites/tools.png',  hover_image_path='Sprites/hovers/tools2.png', image_path2='Sprites/hovers/da.png')
 Button_WorldSettings = Button(False, 40, 30, 200, 80, 'World Settings', 30)
@@ -216,25 +215,27 @@ Button_Maps.layer = [Button_Tools, Button_Maps]
 Button_Maps.childrens = [Button_Map1, Button_Map2, Button_GoBack, Button_CleanAll]
 
 Button_AddObject.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack]
-Button_AddObject.childrens = [Button_Add_Gas, Button_Add_Liquid, Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack]
+Button_AddObject.childrens = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack]
 
 Button_WorldSettings.layer = [Button_Forces, Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack]
 Button_WorldSettings.childrens = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature]
 
-Button_Object1.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
+Button_Object1.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Object1.childrens = [Button_Ball_Elasticity, Button_Ball_Radius, Button_Ball_Mass, Button_GoBack, Button_CleanAll]
 
-Button_Object2.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
+Button_Object2.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Object2.childrens = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
 
-Button_Add_Liquid.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
+Button_Add_Liquid.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Add_Liquid.childrens = []
 
-Button_Add_Gas.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
+Button_Add_Gas.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Add_Gas.childrens = [Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_GoBack, Button_CleanAll]
 
-Button_Draw.layer = [Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
+Button_Draw.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Draw.childrens = [Button_Draw_Size, Button_GoBack, Button_CleanAll]
+
+Button_Add_Rope.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 
 Button_Forces.childrens = [Button_GoBack, Button_CleanAll, Button_Gravity_Between_Objects]
 Button_Forces.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack]
@@ -252,6 +253,7 @@ Button_Ball_Elasticity.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass
 Button_Cube_Mass.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
 
 
+Button_Add_Rope.parent = Button_AddObject
 Button_Cube_Mass.parent = Button_Object2
 Button_Cube_Dynamic.parent = Button_Object2
 Button_Gas_Size.parent = Button_Add_Gas
@@ -291,7 +293,8 @@ def save_callback(new_settings):
 
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 Objects = []
-Buttons = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
+Joints = []
+Buttons = [Button_Add_Rope, Button_Cube_Mass, Button_Cube_Dynamic, Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
@@ -407,6 +410,8 @@ while running:
             open_settings_window(screen,settings, save_callback)
 
         if Button_Map1.is_clicked(event) and Button_Map1.is_seen:
+            for joint_ in Joints:
+                space.remove(joint_)
             for obj in Objects:
                 if isinstance(obj, pymunk.Segment):
                     space.remove(obj)
@@ -418,8 +423,11 @@ while running:
                     else:
                         space.remove(obj, obj.body)
             Objects = CreateMap1(space)
+            Joints.clear()
 
         if Button_Map2.is_clicked(event) and Button_Map2.is_seen:
+            for joint_ in Joints:
+                space.remove(joint_)
             for obj in Objects:
                 if isinstance(obj, pymunk.Segment):
                     space.remove(obj)
@@ -430,7 +438,9 @@ while running:
                         space.remove(obj.particle, obj.body)
                     else:
                         space.remove(obj, obj.body)
-            Objects = CreateMap2(space)
+            Map = CreateMap2(space)
+            Objects = Map[0]
+            Joints = Map[1]
 
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             paused = not paused
@@ -497,6 +507,9 @@ while running:
 
         if Button_Add_Liquid.is_clicked(event) and Button_Add_Liquid.is_seen and event.button != 3:
             mouse.state = 'ReadyToAddLiquid'
+
+        if Button_Add_Rope.is_clicked(event) and Button_Add_Rope.is_seen and event.button != 3:
+            mouse.state = 'ReadyToAddRope'
 
         if Button_Draw_Size.is_clicked(event) and Button_Draw_Size.is_seen and Button_Draw_Size.activated == False:
             for button in Button_Draw_Size.layer:
@@ -609,10 +622,10 @@ while running:
             Objects.append(wall3)
 
         if Button_CleanAll.is_clicked(event) and Button_CleanAll.is_seen:
+            for joint_ in Joints:
+                space.remove(joint_)
             for obj in Objects:
                 if isinstance(obj, pymunk.Segment):
-                    space.remove(obj)
-                if isinstance(obj, Constraint):
                     space.remove(obj)
                 if obj.body in space.bodies:
                     if isinstance(obj, Water_Particle):
@@ -622,6 +635,7 @@ while running:
                     else:
                         space.remove(obj, obj.body)
             Objects.clear()
+            Joints.clear()
 
         if Button_WorldSettings.is_clicked(event) and Button_WorldSettings.is_seen:
             for button in Button_WorldSettings.layer:
@@ -690,9 +704,11 @@ while running:
         if state == 'DrawLiquid' and len(Objects) < 1001 and  event.button != 3:
             liquid = mouse.Add_Liquid(space, (mouse.mouse_x, mouse.mouse_y), Liquid_Mass, Liquid_Radiuss, surface_tension=0.1, color=(255, 255, 255, 100))
             Objects += liquid
-        if state == 'DrawGas' and len(Objects) < 1001 and  event.button != 3:
+        if state == 'DrawGas' and len(Objects) < 1001 and event.button != 3:
             gas = mouse.Add_Gas(space, (mouse.mouse_x, mouse.mouse_y), Gas_Mass, Gas_Radiuss, temperature=Gas_Temp, color=(100, 255, 255, 100))
             Objects += gas
+
+
         if event.type == pygame.KEYDOWN and ActivatedButton != None:
             if event.key == pygame.K_BACKSPACE:
                 ActivatedButton.user_text = ActivatedButton.user_text[:-1]

@@ -12,6 +12,7 @@ class Mouse():
         self.liquid_radius = liquid_radius
         self.gas_radius = gas_radius
         self.cube_mass = cube_mass
+        self.joint_pos_start = (0, 0)
 
     def Add_Ball(self, space, pos, radius, mass, elasticity, friction, color):
         moment = pymunk.moment_for_circle(mass, 0, radius)
@@ -110,5 +111,15 @@ class Mouse():
             if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
                 pygame.draw.circle(screen, circle_color, (self.mouse_x, self.mouse_y), circle_radius, outline_thickness)
                 return 'DrawGas'
+
+        if self.state == 'ReadyToAddRope':
+            if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
+                self.joint_pos_start = (self.mouse_x, self.mouse_y)
+                self.state = 'DrawingRope'
+                return  'DrawRopeStart'
+
+        if self.state == 'DrawingRope':
+            pygame.draw.line(screen, (255, 0 , 0), self.joint_pos_start, (self.mouse_x, self.mouse_y), 10)
+            if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
 
         return None
