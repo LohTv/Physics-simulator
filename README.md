@@ -2,10 +2,17 @@
 
 |Name|Description|Date|
 |----|-----------|----|
-|Arsenijs| Testers can clone our repository from GitHub and their local machine|18.03|
+|Arsenijs| Testers can clone our repository from GitHub and their local machine |18.03|
+|Arsenijs| Added new map and test it for final user |25.03|
+|Arsenijs| Started to create webpage for downlounding our project (Waiting until DNS recording will accept our request)|25.03|
 
 
 
+|File type|Link|
+|----|-----------|
+|Main document|https://docs.google.com/document/d/1YdrjLxV-tsfsBy-2Zk96stcroOZ92SDeMhVguwEANpU/edit?usp=sharing|
+|Requirement Specification|https://docs.google.com/document/d/1-hhYZ5qiQz9U1BhRbmdtmlho04OM_H10PGsCRxosmgg/edit?usp=sharing|
+|Testing Request|https://docs.google.com/document/d/1jBq44Kqaj0euDHLlZKVQFuv9qyjdXIglMMZguoJXEmo/edit?usp=sharing|
 
 
 
@@ -44,5 +51,3 @@ We will use programming language python, as it is easy to use, we will also use 
 Limitations:
 As project uses high level language(python) starting big and complex simulation could run slow. Apart from the limitations of a programming language and library that we use(pymunk), project have theoretically no limitations, because it is only limited by our knowledge and skills of programming.
 
-https://docs.google.com/document/d/1YdrjLxV-tsfsBy-2Zk96stcroOZ92SDeMhVguwEANpU/edit?tab=t.0
-https://docs.google.com/document/d/1-hhYZ5qiQz9U1BhRbmdtmlho04OM_H10PGsCRxosmgg/edit?tab=t.0
