@@ -1,5 +1,8 @@
 import pygame
 import pymunk
+from pymunk import Vec2d
+
+from UserInterface import space
 from liquid_Class import Liquid
 from gas_Class import Gas
 
@@ -13,6 +16,7 @@ class Mouse():
         self.gas_radius = gas_radius
         self.cube_mass = cube_mass
         self.joint_pos_start = (0, 0)
+        self.space = None
 
     def Add_Ball(self, space, pos, radius, mass, elasticity, friction, color):
         moment = pymunk.moment_for_circle(mass, 0, radius)
@@ -115,11 +119,19 @@ class Mouse():
         if self.state == 'ReadyToAddRope':
             if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
                 self.joint_pos_start = (self.mouse_x, self.mouse_y)
-                self.state = 'DrawingRope'
-                return  'DrawRopeStart'
+                p = Vec2d(*(self.mouse_x, self.mouse_y))
+                self.body1 = self.space.point_query_nearest(p, 5, pymunk.ShapeFilter())
+                if self.body1 != None:
+                    self.body1 =self.body1.shape.body
+                    self.state = 'DrawingRope'
+                    return  'DrawRopeStart'
+                else:
+                    pass
 
         if self.state == 'DrawingRope':
             pygame.draw.line(screen, (255, 0 , 0), self.joint_pos_start, (self.mouse_x, self.mouse_y), 10)
             if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
+                self.state = None
+                return 'DrawRope'
 
         return None

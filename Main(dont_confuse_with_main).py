@@ -323,6 +323,7 @@ while running:
     mouse_body.position = pygame.mouse.get_pos()
     screen.fill((0, 0, 0))
     space.debug_draw(draw_options)
+    mouse.space = space
     if paused == False:
         space.step(1 / FPS)
         water_particles = [obj for obj in Objects if isinstance(obj, Water_Particle)]
@@ -698,16 +699,24 @@ while running:
             else:
                 cube = mouse.Add_Cube_Dynamic(space, (mouse.mouse_x, mouse.mouse_y), (Cube_Size, Cube_Size), elasticity=Cube_Elasticity, friction=0.5, color=(255, 255, 255, 100), mass=Cube_Mass)
                 Objects.append(cube)
-        if state == 'DrawModeCube' and  event.button != 3:
+        if state == 'DrawModeCube':
             cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Draw_Size, Draw_Size), elasticity=1, friction=0, color=(255, 255, 255, 100))
             Objects.append(cube)
-        if state == 'DrawLiquid' and len(Objects) < 1001 and  event.button != 3:
+        if state == 'DrawLiquid' and len(Objects) < 1001 and event.button != 3:
             liquid = mouse.Add_Liquid(space, (mouse.mouse_x, mouse.mouse_y), Liquid_Mass, Liquid_Radiuss, surface_tension=0.1, color=(255, 255, 255, 100))
             Objects += liquid
         if state == 'DrawGas' and len(Objects) < 1001 and event.button != 3:
             gas = mouse.Add_Gas(space, (mouse.mouse_x, mouse.mouse_y), Gas_Mass, Gas_Radiuss, temperature=Gas_Temp, color=(100, 255, 255, 100))
             Objects += gas
-
+        if state == 'DrawRope' and event.button != 3:
+            p = Vec2d(*event.pos)
+            body2 = space.point_query_nearest(p, 5, pymunk.ShapeFilter())
+            if body2 != None:
+                body2 =body2.shape.body
+            body1 = mouse.body1
+            if body1 != None and body2 != None:
+                joint = pymunk.PinJoint(body1, body2, (0, 0), (0, 0))
+                space.add(joint)
 
         if event.type == pygame.KEYDOWN and ActivatedButton != None:
             if event.key == pygame.K_BACKSPACE:
