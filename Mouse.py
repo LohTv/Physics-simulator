@@ -1,8 +1,6 @@
 import pygame
 import pymunk
 from pymunk import Vec2d
-
-from UserInterface import space
 from liquid_Class import Liquid
 from gas_Class import Gas
 

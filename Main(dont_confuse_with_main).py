@@ -716,6 +716,7 @@ while running:
             body1 = mouse.body1
             if body1 != None and body2 != None:
                 joint = pymunk.PinJoint(body1, body2, (0, 0), (0, 0))
+                Joints.append(joint)
                 space.add(joint)
 
         if event.type == pygame.KEYDOWN and ActivatedButton != None:
