@@ -132,4 +132,8 @@ class Mouse():
                 self.state = None
                 return 'DrawRope'
 
+        if self.state == 'Deleting':
+            if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
+                return 'Delete'
+
         return None

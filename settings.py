@@ -14,6 +14,7 @@ def draw_settings_components(surface, x, y, width, value, min_value, max_value):
 def open_settings_window(screen, current_settings, save_callback, languages=None, volume_range=(0, 100)):
     if languages is None:
         languages = ["English", "Spanish", "French", "German", "Chinese"]
+        languages = ["English"]
 
     font = pygame.font.Font(None, 36)
     button_font = pygame.font.Font(None, 28)

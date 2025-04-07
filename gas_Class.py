@@ -29,6 +29,7 @@ class Gas_Particle:
     def Create_Gas_Particle(self, pos, space):
         self.particle = Add_Ball(space, radius=self.radius, mass=self.mass,  elasticity=1, friction = 0, color=self.color, pos=pos)
         self.body = self.particle.body
+        self.shape = self.particle
         return self.particle
 
 

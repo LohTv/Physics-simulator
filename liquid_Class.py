@@ -18,6 +18,7 @@ class Water_Particle:
 
     def Create_Water_Particle(self, pos, space):
         self.particle = Add_Ball(space, radius=self.radius, mass=self.mass,  elasticity=0.5, friction = 0.5, color=self.color, pos=pos)
+        self.shape = self.particle
         self.body = self.particle.body
         return self.particle
 

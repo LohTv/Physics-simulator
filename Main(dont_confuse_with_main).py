@@ -162,6 +162,7 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 if not 'Sprites/LeBron(Thegoat).png':
     print(1/0)
 
+Button_Delete = Button(False, 40, HEIGHT*0.88 - 240, 200, 80, 'Delete', 40)
 Button_Add_Rope = Button(False, 40, 630, 200, 80, 'Add Joint', 40)
 Button_Cube_Mass = Button(False, 40, 270, 200, 80, 'Mass', 40)
 Button_Cube_Dynamic = Button(False, 40, 390, 200, 80, 'Dynamic', 40)
@@ -196,63 +197,63 @@ Button_AddObject = Button(False, 40, 150, 200, 80, 'Add Object', 30)
 Button_GoBack = Button_with_Image(False, 40, HEIGHT*0.88, 200, 80, 'Sprites/go_back.png', hover_image_path='Sprites/hovers/go_back2.png', image_path2='Sprites/hovers/da.png')
 Button_Show_Tempreature = Button(False, 40, 390, 200, 80, 'Show Temperature', 28)
 
-Button_Show_Tempreature.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature]
+Button_Show_Tempreature.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature, Button_Delete]
 Button_Show_Tempreature.childrens = []
 
-Button_Gas_Size.layer = [Button_CleanAll, Button_GoBack, Button_Gas_Mass, Button_Temperature, Button_Gas_Size]
+Button_Gas_Size.layer = [Button_CleanAll, Button_GoBack, Button_Gas_Mass, Button_Temperature, Button_Gas_Size, Button_Delete]
 Button_Gas_Size.childrens = []
 
-Button_Temperature.layer = [Button_CleanAll, Button_GoBack, Button_Gas_Mass, Button_Temperature, Button_Gas_Size]
+Button_Temperature.layer = [Button_CleanAll, Button_GoBack, Button_Gas_Mass, Button_Temperature, Button_Gas_Size, Button_Delete]
 Button_Temperature.childrens = []
 
-Button_Gas_Mass.layer = [Button_CleanAll, Button_GoBack, Button_Gas_Mass, Button_Temperature, Button_Gas_Size]
+Button_Gas_Mass.layer = [Button_CleanAll, Button_GoBack, Button_Gas_Mass, Button_Temperature, Button_Gas_Size, Button_Delete]
 Button_Gas_Mass.childrens = []
 
-Button_Tools.childrens = [Button_WorldSettings, Button_Forces, Button_AddObject, Button_GoBack, Button_CleanAll]
+Button_Tools.childrens = [Button_WorldSettings, Button_Forces, Button_AddObject, Button_GoBack, Button_CleanAll, Button_Delete]
 Button_Tools.layer = [Button_Tools, Button_Maps]
 
 Button_Maps.layer = [Button_Tools, Button_Maps]
-Button_Maps.childrens = [Button_Map1, Button_Map2, Button_GoBack, Button_CleanAll]
+Button_Maps.childrens = [Button_Map1, Button_Map2, Button_GoBack, Button_CleanAll, Button_Delete]
 
-Button_AddObject.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack]
-Button_AddObject.childrens = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack]
+Button_AddObject.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack, Button_Delete]
+Button_AddObject.childrens = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack, Button_Delete]
 
-Button_WorldSettings.layer = [Button_Forces, Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack]
-Button_WorldSettings.childrens = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature]
+Button_WorldSettings.layer = [Button_Forces, Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack, Button_Delete]
+Button_WorldSettings.childrens = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature, Button_Delete]
 
-Button_Object1.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
-Button_Object1.childrens = [Button_Ball_Elasticity, Button_Ball_Radius, Button_Ball_Mass, Button_GoBack, Button_CleanAll]
+Button_Object1.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll, Button_Delete]
+Button_Object1.childrens = [Button_Ball_Elasticity, Button_Ball_Radius, Button_Ball_Mass, Button_GoBack, Button_CleanAll, Button_Delete]
 
-Button_Object2.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
-Button_Object2.childrens = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
+Button_Object2.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll, Button_Delete]
+Button_Object2.childrens = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll, Button_Delete]
 
 Button_Add_Liquid.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
 Button_Add_Liquid.childrens = []
 
-Button_Add_Gas.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
-Button_Add_Gas.childrens = [Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_GoBack, Button_CleanAll]
+Button_Add_Gas.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll, Button_Delete]
+Button_Add_Gas.childrens = [Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_GoBack, Button_CleanAll, Button_Delete]
 
-Button_Draw.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
-Button_Draw.childrens = [Button_Draw_Size, Button_GoBack, Button_CleanAll]
+Button_Draw.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll, Button_Delete]
+Button_Draw.childrens = [Button_Draw_Size, Button_GoBack, Button_CleanAll, Button_Delete]
 
-Button_Add_Rope.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll]
+Button_Add_Rope.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll, Button_Delete]
 
-Button_Forces.childrens = [Button_GoBack, Button_CleanAll, Button_Gravity_Between_Objects]
-Button_Forces.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack]
+Button_Forces.childrens = [Button_GoBack, Button_CleanAll, Button_Gravity_Between_Objects, Button_Delete]
+Button_Forces.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack, Button_Delete]
 
-Button_Const1.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature]
-Button_Const3.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature]
-Button_Gravity_Between_Objects.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature]
+Button_Const1.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature, Button_Delete]
+Button_Const3.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature, Button_Delete]
+Button_Gravity_Between_Objects.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature, Button_Delete]
 
-Button_Ball_Radius.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
-Button_Ball_Mass.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
-Button_Cube_Size.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
-Button_Cube_Elasticity.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
-Button_Cube_Dynamic.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
-Button_Ball_Elasticity.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity]
-Button_Cube_Mass.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll]
+Button_Ball_Radius.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity, Button_Delete]
+Button_Ball_Mass.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity, Button_Delete]
+Button_Cube_Size.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll, Button_Delete]
+Button_Cube_Elasticity.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll, Button_Delete]
+Button_Cube_Dynamic.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll, Button_Delete]
+Button_Ball_Elasticity.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity, Button_Delete]
+Button_Cube_Mass.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll, Button_Delete]
 
-
+Button_Delete.parent = Button_Tools
 Button_Add_Rope.parent = Button_AddObject
 Button_Cube_Mass.parent = Button_Object2
 Button_Cube_Dynamic.parent = Button_Object2
@@ -294,7 +295,7 @@ def save_callback(new_settings):
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 Objects = []
 Joints = []
-Buttons = [Button_Add_Rope, Button_Cube_Mass, Button_Cube_Dynamic, Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
+Buttons = [Button_Delete, Button_Add_Rope, Button_Cube_Mass, Button_Cube_Dynamic, Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
@@ -319,6 +320,7 @@ mouse_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
 mouse_joint = None
 paused = False
 Cube_Dynamic = False
+Deleting = False
 while running:
     mouse_body.position = pygame.mouse.get_pos()
     screen.fill((0, 0, 0))
@@ -327,7 +329,9 @@ while running:
     if paused == False:
         space.step(1 / FPS)
         water_particles = [obj for obj in Objects if isinstance(obj, Water_Particle)]
+        water_particles_shapes = [obj.shape for obj in Objects if isinstance(obj, Water_Particle)]
         gas_particles = [obj for obj in Objects if isinstance(obj, gas_Class.Gas_Particle)]
+        gas_particles_shapes = [obj.shape for obj in Objects if isinstance(obj, gas_Class.Gas_Particle)]
         dynamic = [obj for obj in Objects if obj.body.body_type == pymunk.Body.DYNAMIC]
 
         for obj in water_particles:
@@ -359,7 +363,7 @@ while running:
         if Show_Temperature:
             for obj in gas_particles:
                 grad = math.exp(-0.001 * obj.body.velocity.length)
-                obj.particle.color = ((1 - grad) * 255, 0, grad * 255, 255)
+                obj.particle.color = ((1 - grad) * 255, 0, 0, 255)
 
         for obj in Objects:
             if obj.body in space.bodies:
@@ -494,22 +498,22 @@ while running:
         if Button_Pause.is_clicked(event) and Button_Pause.is_seen:
             paused = not paused
 
-        if Button_Add_Gas.is_clicked(event) and Button_Add_Gas.is_seen and event.button != 3:
+        if Button_Add_Gas.is_clicked(event) and Button_Add_Gas.is_seen and event.button != 3 and not Deleting:
             mouse.state = 'ReadyToAddGas'
 
-        if Button_Object1.is_clicked(event) and Button_Object1.is_seen and event.button != 3:
+        if Button_Object1.is_clicked(event) and Button_Object1.is_seen and event.button != 3 and not Deleting:
             mouse.state = 'ReadyToAddBall'
 
-        if Button_Object2.is_clicked(event) and Button_Object2.is_seen:
+        if Button_Object2.is_clicked(event) and Button_Object2.is_seen and not Deleting:
             mouse.state = 'ReadyToAddCube'
 
-        if Button_Draw.is_clicked(event) and Button_Draw.is_seen and event.button != 3:
+        if Button_Draw.is_clicked(event) and Button_Draw.is_seen and event.button != 3 and not Deleting:
             mouse.state = 'ReadyToAddDraw'
 
-        if Button_Add_Liquid.is_clicked(event) and Button_Add_Liquid.is_seen and event.button != 3:
+        if Button_Add_Liquid.is_clicked(event) and Button_Add_Liquid.is_seen and event.button != 3 and not Deleting:
             mouse.state = 'ReadyToAddLiquid'
 
-        if Button_Add_Rope.is_clicked(event) and Button_Add_Rope.is_seen and event.button != 3:
+        if Button_Add_Rope.is_clicked(event) and Button_Add_Rope.is_seen and event.button != 3 and not Deleting:
             mouse.state = 'ReadyToAddRope'
 
         if Button_Draw_Size.is_clicked(event) and Button_Draw_Size.is_seen and Button_Draw_Size.activated == False:
@@ -689,9 +693,44 @@ while running:
 
         state = mouse.getstate(event, screen)
 
+        if Button_Delete.is_clicked(event) and Button_Delete.is_seen:
+            if Deleting == False:
+                Button_Delete.button_color = (119, 136, 153)
+                Deleting = True
+                mouse.state = 'Deleting'
+            else:
+                Button_Delete.button_color = (169, 169, 169)
+                Deleting = False
+                mouse.state = None
+
         if state == 'DrawBall' and  event.button != 3:
             ball = mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), Ball_Radius, mass=Ball_Mass, elasticity=Ball_Elasticity, friction=0.5, color=(255, 255, 255, 100))
             Objects.append(ball)
+
+        if state == 'Delete':
+            p = Vec2d(*event.pos)
+            hit = space.point_query_nearest(p, 5, pymunk.ShapeFilter())
+            if hit:
+                hit_shape = hit.shape
+                body = hit_shape.body
+                if hit_shape in Objects or hit_shape in water_particles_shapes or hit_shape in gas_particles_shapes:
+                    for constraint in space.constraints[:]:
+                        if constraint.a == body or constraint.b == body:
+                            space.remove(constraint)
+                    space.remove(hit_shape, body)
+                if hit_shape in Objects:
+                    Objects.remove(hit_shape)
+                if hit_shape in water_particles_shapes:
+                    ind = water_particles_shapes.index(hit_shape)
+                    water_particles_shapes.remove(hit_shape)
+                    Objects.remove(water_particles[ind])
+                    water_particles.remove(water_particles[ind])
+                if hit_shape in gas_particles_shapes:
+                    ind = gas_particles_shapes.index(hit_shape)
+                    gas_particles_shapes.remove(hit_shape)
+                    Objects.remove(gas_particles[ind])
+                    gas_particles.remove(gas_particles[ind])
+
         if state == 'DrawCube' and  event.button != 3:
             if Cube_Dynamic == False:
                 cube = mouse.Add_Cube(space, (mouse.mouse_x, mouse.mouse_y), (Cube_Size, Cube_Size), elasticity=Cube_Elasticity, friction=0.5, color=(255, 255, 255, 100))
@@ -714,8 +753,8 @@ while running:
             if body2 != None:
                 body2 =body2.shape.body
             body1 = mouse.body1
-            if body1 != None and body2 != None:
-                joint = pymunk.PinJoint(body1, body2, (0, 0), (0, 0))
+            if body1 != None and body2 != None and body1 != body2:
+                joint =  pymunk.PinJoint(body1, body2, (0, 0), (0, 0))
                 Joints.append(joint)
                 space.add(joint)
 
@@ -821,7 +860,7 @@ while running:
             elif event.key != pygame.K_BACKSPACE and event.key != pygame.K_RETURN:
                 ActivatedButton.user_text += event.unicode
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN and state != 'DrawRopeStart':
             if mouse_joint is not None:
                 space.remove(mouse_joint)
                 mouse_joint = None
