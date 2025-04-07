@@ -322,6 +322,9 @@ paused = False
 Cube_Dynamic = False
 Deleting = False
 while running:
+    print(f'Bodies: {space.bodies}')
+    print(f'Shapes: {space.shapes}')
+    print(Objects)
     mouse_body.position = pygame.mouse.get_pos()
     screen.fill((0, 0, 0))
     space.debug_draw(draw_options)
@@ -713,23 +716,34 @@ while running:
             if hit:
                 hit_shape = hit.shape
                 body = hit_shape.body
-                if hit_shape in Objects or hit_shape in water_particles_shapes or hit_shape in gas_particles_shapes:
+
+                # Check if it's a static segment
+                if isinstance(hit_shape, pymunk.Segment):
+                    if hit_shape in space.shapes:
+                        space.remove(hit_shape)
+                    if hit_shape in Objects:
+                        Objects.remove(hit_shape)
+                # If it's not a segment, handle dynamic objects (balls, liquids, gases)
+                elif hit_shape in Objects or hit_shape in water_particles_shapes or hit_shape in gas_particles_shapes:
                     for constraint in space.constraints[:]:
                         if constraint.a == body or constraint.b == body:
                             space.remove(constraint)
-                    space.remove(hit_shape, body)
-                if hit_shape in Objects:
-                    Objects.remove(hit_shape)
-                if hit_shape in water_particles_shapes:
-                    ind = water_particles_shapes.index(hit_shape)
-                    water_particles_shapes.remove(hit_shape)
-                    Objects.remove(water_particles[ind])
-                    water_particles.remove(water_particles[ind])
-                if hit_shape in gas_particles_shapes:
-                    ind = gas_particles_shapes.index(hit_shape)
-                    gas_particles_shapes.remove(hit_shape)
-                    Objects.remove(gas_particles[ind])
-                    gas_particles.remove(gas_particles[ind])
+                    if body in space.bodies:
+                        space.remove(hit_shape, body)
+                    if hit_shape in Objects:
+                        Objects.remove(hit_shape)
+                    if hit_shape in water_particles_shapes:
+                        ind = water_particles_shapes.index(hit_shape)
+                        water_particles_shapes.remove(hit_shape)
+                        # Use the simpler way to remove by element!
+                        Objects.remove(water_particles[ind])
+                        water_particles.remove(water_particles[ind])
+                    if hit_shape in gas_particles_shapes:
+                        ind = gas_particles_shapes.index(hit_shape)
+                        gas_particles_shapes.remove(hit_shape)
+                        # Use the simpler way to remove by element!
+                        Objects.remove(gas_particles[ind])
+                        gas_particles.remove(gas_particles[ind])
 
         if state == 'DrawCube' and  event.button != 3:
             if Cube_Dynamic == False:
