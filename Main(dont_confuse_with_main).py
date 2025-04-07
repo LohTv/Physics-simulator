@@ -365,7 +365,7 @@ while running:
                         obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
         if Show_Temperature:
             for obj in gas_particles:
-                grad = math.exp(-0.001 * obj.body.velocity.length)
+                grad = math.exp(-0.0005 * obj.body.velocity.length)
                 obj.particle.color = ((1 - grad) * 255, 0, 0, 255)
 
         for obj in Objects:
