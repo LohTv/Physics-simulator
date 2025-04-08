@@ -8,6 +8,7 @@
 |Arsenijs|Finished creating webpage for downloading TinyLab at tinylab.eu |01.04|
 |Petr|Fixed bugs with joints|01.04|
 |Petr|Added delete button|08.04|
+|Kirils|Added new map|08.04|
 
 
 
