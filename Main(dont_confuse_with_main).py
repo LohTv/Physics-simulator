@@ -373,8 +373,8 @@ while running:
                 grad = math.exp(-0.0005 * obj.body.velocity.length)
                 obj.particle.color = ((1 - grad) * 255, 0, 0, 255)
 
-        if Tracing:
-            ball_for_trace = Objects[2]
+        if Tracing and Objects:
+            ball_for_trace = Objects[-1]
             trace_points.append((int(ball_for_trace.body.position.x), int(ball_for_trace.body.position.y)))
             if len(trace_points) > 1:
                 pygame.draw.lines(screen, (255, 0, 0), False, trace_points, 2)
