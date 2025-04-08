@@ -5,7 +5,11 @@
 |Arsenijs| Testers can clone our repository from GitHub and their local machine |18.03|
 |Arsenijs| Added new map and test it for final user |25.03|
 |Arsenijs| Started to create webpage for downloading our project (Waiting until DNS recording will accept our request)|25.03|
-|Arsenijs|Finished creating webpage for downloading TinyLab at tinylab.eu |08.04|
+|Arsenijs|Finished creating webpage for downloading TinyLab at tinylab.eu |01.04|
+|Petr|Fixed bugs with joints|01.04|
+|Petr|Added delete button|08.04|
+
+
 
 
 
