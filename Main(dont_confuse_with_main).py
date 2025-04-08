@@ -12,7 +12,7 @@ from map2 import CreateMap2
 from pymunk.vec2d import Vec2d
 import math
 from settings import *
-
+from map3 import  CreateMap3
 
 WIDTH = pyautogui.size()[0] * 0.95
 HEIGHT = pyautogui.size()[1] * 0.95
@@ -162,6 +162,8 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
 if not 'Sprites/LeBron(Thegoat).png':
     print(1/0)
 
+
+Button_Pendulum = Button(False, 40, 270, 200, 80, 'Pendulum', 40)
 Button_Delete = Button(False, 40, HEIGHT*0.88 - 240, 200, 80, 'Delete', 40)
 Button_Add_Rope = Button(False, 40, 630, 200, 80, 'Add Joint', 40)
 Button_Cube_Mass = Button(False, 40, 270, 200, 80, 'Mass', 40)
@@ -213,7 +215,7 @@ Button_Tools.childrens = [Button_WorldSettings, Button_Forces, Button_AddObject,
 Button_Tools.layer = [Button_Tools, Button_Maps]
 
 Button_Maps.layer = [Button_Tools, Button_Maps]
-Button_Maps.childrens = [Button_Map1, Button_Map2, Button_GoBack, Button_CleanAll, Button_Delete]
+Button_Maps.childrens = [Button_Map1, Button_Map2, Button_GoBack, Button_CleanAll, Button_Delete, Button_Pendulum]
 
 Button_AddObject.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack, Button_Delete]
 Button_AddObject.childrens = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack, Button_Delete]
@@ -253,6 +255,7 @@ Button_Cube_Dynamic.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_
 Button_Ball_Elasticity.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity, Button_Delete]
 Button_Cube_Mass.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll, Button_Delete]
 
+Button_Pendulum.parent = Button_Maps
 Button_Delete.parent = Button_Tools
 Button_Add_Rope.parent = Button_AddObject
 Button_Cube_Mass.parent = Button_Object2
@@ -295,7 +298,7 @@ def save_callback(new_settings):
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 Objects = []
 Joints = []
-Buttons = [Button_Delete, Button_Add_Rope, Button_Cube_Mass, Button_Cube_Dynamic, Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
+Buttons = [Button_Pendulum, Button_Delete, Button_Add_Rope, Button_Cube_Mass, Button_Cube_Dynamic, Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
@@ -321,10 +324,12 @@ mouse_joint = None
 paused = False
 Cube_Dynamic = False
 Deleting = False
+trace_points = []
+Tracing = False
 while running:
-    print(f'Bodies: {space.bodies}')
-    print(f'Shapes: {space.shapes}')
-    print(Objects)
+    # print(f'Bodies: {space.bodies}')
+    # print(f'Shapes: {space.shapes}')
+    # print(Objects)
     mouse_body.position = pygame.mouse.get_pos()
     screen.fill((0, 0, 0))
     space.debug_draw(draw_options)
@@ -367,6 +372,12 @@ while running:
             for obj in gas_particles:
                 grad = math.exp(-0.0005 * obj.body.velocity.length)
                 obj.particle.color = ((1 - grad) * 255, 0, 0, 255)
+
+        if Tracing:
+            ball_for_trace = Objects[2]
+            trace_points.append((int(ball_for_trace.body.position.x), int(ball_for_trace.body.position.y)))
+            if len(trace_points) > 1:
+                pygame.draw.lines(screen, (255, 0, 0), False, trace_points, 2)
 
         for obj in Objects:
             if obj.body in space.bodies:
@@ -418,6 +429,8 @@ while running:
             open_settings_window(screen,settings, save_callback)
 
         if Button_Map1.is_clicked(event) and Button_Map1.is_seen:
+            Tracing = False
+            trace_points = []
             for joint_ in Joints:
                 space.remove(joint_)
             for obj in Objects:
@@ -433,7 +446,28 @@ while running:
             Objects = CreateMap1(space)
             Joints.clear()
 
+        if Button_Pendulum.is_clicked(event) and Button_Pendulum.is_seen:
+            Tracing = True
+            trace_points = []
+            for joint_ in Joints:
+                space.remove(joint_)
+            for obj in Objects:
+                if isinstance(obj, pymunk.Segment):
+                    space.remove(obj)
+                if obj.body in space.bodies:
+                    if isinstance(obj, Water_Particle):
+                        space.remove(obj.particle, obj.body)
+                    elif isinstance(obj, gas_Class.Gas_Particle):
+                        space.remove(obj.particle, obj.body)
+                    else:
+                        space.remove(obj, obj.body)
+            Map = CreateMap3(space)
+            Objects = Map[0]
+            Joints = Map[1]
+
         if Button_Map2.is_clicked(event) and Button_Map2.is_seen:
+            Tracing = False
+            trace_points = []
             for joint_ in Joints:
                 space.remove(joint_)
             for obj in Objects:
@@ -630,6 +664,8 @@ while running:
             Objects.append(wall3)
 
         if Button_CleanAll.is_clicked(event) and Button_CleanAll.is_seen:
+            Tracing = False
+            trace_points = []
             for joint_ in Joints:
                 space.remove(joint_)
             for obj in Objects:
@@ -682,6 +718,8 @@ while running:
             Button_GoBack.parent = Button_AddObject
 
         if Button_GoBack.is_clicked(event) and Button_GoBack.is_seen:
+            Tracing = False
+            trace_points = []
             mouse.state = None
             ActivatedButton = None
             for button in Button_GoBack.layer:
@@ -728,6 +766,7 @@ while running:
                     for constraint in space.constraints[:]:
                         if constraint.a == body or constraint.b == body:
                             space.remove(constraint)
+                            Joints.remove(constraint)
                     if body in space.bodies:
                         space.remove(hit_shape, body)
                     if hit_shape in Objects:
