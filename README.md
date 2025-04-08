@@ -5,6 +5,7 @@
 |Arsenijs| Testers can clone our repository from GitHub and their local machine |18.03|
 |Arsenijs| Added new map and test it for final user |25.03|
 |Arsenijs| Started to create webpage for downloading our project (Waiting until DNS recording will accept our request)|25.03|
+|Arsenijs|Finished creating webpage for downloading TinyLab at tinylab.eu |08.04|
 
 
 
@@ -13,6 +14,7 @@
 |Main document|https://docs.google.com/document/d/1YdrjLxV-tsfsBy-2Zk96stcroOZ92SDeMhVguwEANpU/edit?usp=sharing|
 |Requirement Specification|https://docs.google.com/document/d/1-hhYZ5qiQz9U1BhRbmdtmlho04OM_H10PGsCRxosmgg/edit?usp=sharing|
 |Testing Request|https://docs.google.com/document/d/1jBq44Kqaj0euDHLlZKVQFuv9qyjdXIglMMZguoJXEmo/edit?usp=sharing|
+|Webpage|https://tinyl.eu/en/|
 
 
 
