@@ -10,6 +10,7 @@
 |Petr|Added delete button|08.04|
 |Kirils|Added new map|08.04|
 |Arseniijs, Petr and Kiril|Testing different aspects of "LigveBait" project|15.04|
+|Arseniijs|Finishing to write testing requarments for "LigveBait" project|15.04|
 
 
 
