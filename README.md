@@ -20,6 +20,8 @@
 |Main document|https://docs.google.com/document/d/1YdrjLxV-tsfsBy-2Zk96stcroOZ92SDeMhVguwEANpU/edit?usp=sharing|
 |Requirement Specification|https://docs.google.com/document/d/1-hhYZ5qiQz9U1BhRbmdtmlho04OM_H10PGsCRxosmgg/edit?usp=sharing|
 |Testing Request|https://docs.google.com/document/d/1jBq44Kqaj0euDHLlZKVQFuv9qyjdXIglMMZguoJXEmo/edit?usp=sharing|
+|Testing requirements (from HelthBite)|https://docs.google.com/document/d/1jBq44Kqaj0euDHLlZKVQFuv9qyjdXIglMMZguoJXEmo/edit?usp=sharing|
+|Testing requirements (for LiveBait)|https://docs.google.com/document/d/1z9xPclxrfMkjxtvWnX2vsNB_LoTVWPG7PWQwt9ruGig/edit?usp=sharing|
 |Webpage|https://tinyl.eu/en/|
 
 
