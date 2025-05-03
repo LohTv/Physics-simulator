@@ -5,7 +5,7 @@ import pyautogui
 from liquid_Class import *
 import gas_Class
 from Mouse import Mouse
-from VectorClass import Vector
+from VectorClass import draw_arrow_angle
 from Gravity import *
 from map1 import CreateMap1
 from map2 import CreateMap2
@@ -266,7 +266,7 @@ Button_Draw.childrens = [Button_Draw_Size, Button_GoBack, Button_CleanAll, Butto
 Button_Add_Rope.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll, Button_Delete]
 
 Button_Forces.childrens = [Button_GoBack, Button_CleanAll, Button_Gravity_Between_Objects, Button_Delete]
-Button_Forces.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack, Button_Delete]
+Button_Forces.layer = [Button_Data, Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack, Button_Delete]
 
 Button_Const1.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature, Button_Delete]
 Button_Const3.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature, Button_Delete]
@@ -385,6 +385,7 @@ while running:
         gas_particles_shapes = [obj.shape for obj in Objects if isinstance(obj, gas_Class.Gas_Particle)]
         dynamic = [obj for obj in Objects if obj.body.body_type == pymunk.Body.DYNAMIC]
 
+
         for obj in water_particles:
             for ob in water_particles:
                 if obj is ob:
@@ -463,6 +464,15 @@ while running:
                 else:
                     space.remove(last_obj, last_obj.body)
 
+    for obj in Velocity_Tracing_Objects:
+        start = obj.body.position
+        vx, vy = obj.body.velocity
+        length = math.sqrt(vy ** 2 + vx ** 2)
+        if vx == 0 and vy == 0:
+            pass
+        else:
+            angle = math.atan2(vy, vx)
+            draw_arrow_angle(screen, start, 0.2 * length, angle)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
