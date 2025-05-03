@@ -24,7 +24,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Physics-simulator")
 pygame.mixer.init()
 pygame.mixer.music.load(r'Music/Saoundtrack1.mp3')
-pygame.mixer.music.play(-1)
+pygame.mixer.music.play(loops=-1)
 pygame.mixer.music.set_volume(0.5)
 clock = pygame.time.Clock()
 space = pymunk.Space()
@@ -377,7 +377,11 @@ while running:
     screen.fill((0, 0, 0))
     space.debug_draw(draw_options)
     mouse.space = space
+    prev_vx = [0 for obj in Acceleration_Tracing_Objects]
+    prev_vy = [0 for obj in Acceleration_Tracing_Objects]
     if paused == False:
+        prev_vx = [obj.body.velocity[0] for obj in Acceleration_Tracing_Objects]
+        prev_vy = [obj.body.velocity[1] for obj in Acceleration_Tracing_Objects]
         space.step(1 / FPS)
         water_particles = [obj for obj in Objects if isinstance(obj, Water_Particle)]
         water_particles_shapes = [obj.shape for obj in Objects if isinstance(obj, Water_Particle)]
@@ -427,6 +431,21 @@ while running:
         for obj in Objects:
             if obj.body in space.bodies:
                 if obj.body.position[0] < 300:
+                    if obj in Velocity_Tracing_Objects:
+                        Velocity_Tracing_Objects.remove(obj)
+
+                    if obj in Acceleration_Tracing_Objects:
+                        Acceleration_Tracing_Objects.remove(obj)
+
+                    if obj in Kinetic_Tracing_Objects:
+                        Kinetic_Tracing_Objects.remove(obj)
+
+                    if obj in Potential_Tracing_Objects:
+                        Potential_Tracing_Objects.remove(obj)
+
+                    if obj in Full_Tracing_Objects:
+                        Full_Tracing_Objects.remove(obj)
+
                     if isinstance(obj, pymunk.Segment):
                         pass
                     elif isinstance(obj, Water_Particle):
@@ -441,6 +460,22 @@ while running:
 
             if obj.body in space.bodies:
                 if obj.body.position[1] > 10000:
+
+                    if obj in Velocity_Tracing_Objects:
+                        Velocity_Tracing_Objects.remove(obj)
+
+                    if obj in Acceleration_Tracing_Objects:
+                        Acceleration_Tracing_Objects.remove(obj)
+
+                    if obj in Kinetic_Tracing_Objects:
+                        Kinetic_Tracing_Objects.remove(obj)
+
+                    if obj in Potential_Tracing_Objects:
+                        Potential_Tracing_Objects.remove(obj)
+
+                    if obj in Full_Tracing_Objects:
+                        Full_Tracing_Objects.remove(obj)
+
                     if isinstance(obj, pymunk.Segment):
                         space.remove(obj)
                     if obj.body in space.bodies:
@@ -453,7 +488,21 @@ while running:
 
         if len(Objects) > 2000:
             last_obj = Objects.pop()
-            print(last_obj)
+            if last_obj in Velocity_Tracing_Objects:
+                Velocity_Tracing_Objects.remove(last_obj)
+
+            if last_obj in Acceleration_Tracing_Objects:
+                Acceleration_Tracing_Objects.remove(last_obj)
+
+            if last_obj in Kinetic_Tracing_Objects:
+                Kinetic_Tracing_Objects.remove(last_obj)
+
+            if last_obj in Potential_Tracing_Objects:
+                Potential_Tracing_Objects.remove(last_obj)
+
+            if last_obj in Full_Tracing_Objects:
+                Full_Tracing_Objects.remove(last_obj)
+
             if isinstance(last_obj, pymunk.Segment):
                 space.remove(last_obj)
             if last_obj.body in space.bodies:
@@ -472,6 +521,21 @@ while running:
             pass
         else:
             angle = math.atan2(vy, vx)
+            draw_arrow_angle(screen, start, 0.2 * length, angle)
+
+    for obj_index in range(len(Acceleration_Tracing_Objects)):
+        obj = Acceleration_Tracing_Objects[obj_index]
+        start = obj.body.position
+        vx, vy = obj.body.velocity
+        vx_prev = prev_vx[obj_index]
+        vy_prev = prev_vy[obj_index]
+        dvx = vx - vx_prev
+        dvy = vy - vy_prev
+        length = math.sqrt(dvy ** 2 + dvx ** 2) * FPS
+        if dvx == 0 and dvy == 0:
+            pass
+        else:
+            angle = math.atan2(dvy, dvx)
             draw_arrow_angle(screen, start, 0.2 * length, angle)
 
     for event in pygame.event.get():
@@ -1123,7 +1187,6 @@ while running:
             button.draw(screen, button.user_text)
         else:
             button.draw(screen, button.text)
-    print(Velocity_Tracing_Objects)
     pygame.display.flip()
     pygame.display.set_caption(f"fps: {clock.get_fps()}")
     clock.tick(FPS)
