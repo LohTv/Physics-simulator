@@ -14,8 +14,8 @@ import math
 from settings import *
 from map3 import  CreateMap3
 
-WIDTH = pyautogui.size()[0] * 0.95
-HEIGHT = pyautogui.size()[1] * 0.95
+WIDTH = pyautogui.size()[0] * 0.9
+HEIGHT = pyautogui.size()[1] * 0.9
 pygame.init()
 FPS = 60
 # WIDTH, HEIGHT = 1600, 1000
@@ -23,7 +23,7 @@ FPS = 60
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Physics-simulator")
 pygame.mixer.init()
-pygame.mixer.music.load(r'Music/Music1.mp3')
+pygame.mixer.music.load(r'Music/Saoundtrack1.mp3')
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.5)
 clock = pygame.time.Clock()
@@ -211,7 +211,7 @@ Button_Tools = Button_with_Image(True, 40, 30, button_width, button_height, 'Spr
 Button_WorldSettings = Button(False, 40, 30, button_width, button_height, 'World Settings', int(30*FontSize))
 Button_AddObject = Button(False, 40, 30 + dy, button_width, button_height, 'Add Object', int(30*FontSize))
 Button_GoBack = Button_with_Image(False, 40, HEIGHT*0.88, button_width, button_height, 'Sprites/go_back.png', hover_image_path='Sprites/hovers/go_back2.png', image_path2='Sprites/hovers/da.png')
-Button_Show_Tempreature = Button(False, 40, 30 + 3*dy, button_width, button_height, 'Show Temperature', int(28*FontSize))
+Button_Show_Tempreature = Button(False, 40, 30 + 3*dy, button_width, button_height, 'Show Temperature', int(25*FontSize))
 
 
 Button_Show_Tempreature.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature, Button_Delete]
@@ -317,7 +317,7 @@ Button_Show_Tempreature.parent = Button_WorldSettings
 
 settings = {
     "language": "English",
-    "volume": 50
+    "volume": 25
 }
 
 
@@ -331,6 +331,10 @@ create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 Objects = []
 Joints = []
 Velocity_Tracing_Objects = []
+Acceleration_Tracing_Objects = []
+Kinetic_Tracing_Objects = []
+Potential_Tracing_Objects = []
+Full_Tracing_Objects = []
 Buttons = [Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Velocity, Button_Show_Acceleration, Button_Show_Full_Energy, Button_Data, Button_Pendulum, Button_Delete, Button_Add_Rope, Button_Cube_Mass, Button_Cube_Dynamic, Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
@@ -358,8 +362,13 @@ paused = False
 Cube_Dynamic = False
 Deleting = False
 Showing_Velocity = False
+Showing_Acceleration = False
+Showing_Kinetic_Energy = False
+Showing_Potential_Energy = False
+Showing_Full_Energy = False
 trace_points = []
 Tracing = False
+
 while running:
     # print(f'Bodies: {space.bodies}')
     # print(f'Shapes: {space.shapes}')
@@ -462,6 +471,16 @@ while running:
 
         if Button_Settings.is_clicked(event) and Button_Settings.is_seen:
             open_settings_window(screen, settings, save_callback)
+
+        if Button_Show_Potential_Energy.is_clicked(event) and Button_Show_Potential_Energy.is_seen:
+            if Showing_Potential_Energy == False:
+                Button_Show_Potential_Energy.button_color = (119, 136, 153)
+                Showing_Potential_Energy = True
+                mouse.state = 'Showing Potential Energy'
+            else:
+                Button_Show_Potential_Energy.button_color = (169, 169, 169)
+                Showing_Potential_Energy = False
+                mouse.state = None
 
         if Button_Data.is_clicked(event) and Button_Data.is_seen:
             for button in Button_Data.layer:
@@ -790,6 +809,36 @@ while running:
                 Showing_Velocity = False
                 mouse.state = None
 
+        if Button_Show_Acceleration.is_clicked(event) and Button_Show_Acceleration.is_seen:
+            if Showing_Acceleration == False:
+                Button_Show_Acceleration.button_color = (119, 136, 153)
+                Showing_Acceleration = True
+                mouse.state = 'Showing Acceleration'
+            else:
+                Button_Show_Acceleration.button_color = (169, 169, 169)
+                Showing_Acceleration = False
+                mouse.state = None
+
+        if Button_Show_Full_Energy.is_clicked(event) and Button_Show_Full_Energy.is_seen:
+            if Showing_Full_Energy == False:
+                Button_Show_Full_Energy.button_color = (119, 136, 153)
+                Showing_Full_Energy = True
+                mouse.state = 'Showing Full Energy'
+            else:
+                Button_Show_Full_Energy.button_color = (169, 169, 169)
+                Showing_Full_Energy = False
+                mouse.state = None
+
+        if Button_Show_Kinetic_Energy.is_clicked(event) and Button_Show_Kinetic_Energy.is_seen:
+            if Showing_Kinetic_Energy == False:
+                Button_Show_Kinetic_Energy.button_color = (119, 136, 153)
+                Showing_Kinetic_Energy = True
+                mouse.state = 'Showing Kinetic Energy'
+            else:
+                Button_Show_Kinetic_Energy.button_color = (169, 169, 169)
+                Showing_Kinetic_Energy = False
+                mouse.state = None
+
 
         if Button_Delete.is_clicked(event) and Button_Delete.is_seen:
             if Deleting == False:
@@ -811,12 +860,54 @@ while running:
             if hit:
                 hit_shape = hit.shape
                 body = hit_shape.body
-                print(hit_shape)
-                print(hit_shape in Velocity_Tracing_Objects)
                 if (hit_shape in Objects or hit_shape in water_particles_shapes or hit_shape in gas_particles_shapes) and (hit_shape not in Velocity_Tracing_Objects):
                     Velocity_Tracing_Objects.append(hit_shape)
                 elif hit_shape in Velocity_Tracing_Objects:
                     Velocity_Tracing_Objects.remove(hit_shape)
+
+        if state == 'Show Acceleration':
+            p = Vec2d(*event.pos)
+            hit = space.point_query_nearest(p, 5, pymunk.ShapeFilter())
+            if hit:
+                hit_shape = hit.shape
+                body = hit_shape.body
+                if (hit_shape in Objects or hit_shape in water_particles_shapes or hit_shape in gas_particles_shapes) and (hit_shape not in Acceleration_Tracing_Objects):
+                    Acceleration_Tracing_Objects.append(hit_shape)
+                elif hit_shape in Acceleration_Tracing_Objects:
+                    Acceleration_Tracing_Objects.remove(hit_shape)
+
+        if state == 'Show Kinetic Energy':
+            p = Vec2d(*event.pos)
+            hit = space.point_query_nearest(p, 5, pymunk.ShapeFilter())
+            if hit:
+                hit_shape = hit.shape
+                body = hit_shape.body
+                if (hit_shape in Objects or hit_shape in water_particles_shapes or hit_shape in gas_particles_shapes) and (hit_shape not in Kinetic_Tracing_Objects):
+                    Kinetic_Tracing_Objects.append(hit_shape)
+                elif hit_shape in Kinetic_Tracing_Objects:
+                    Kinetic_Tracing_Objects.remove(hit_shape)
+
+        if state == 'Show Potential Energy':
+            p = Vec2d(*event.pos)
+            hit = space.point_query_nearest(p, 5, pymunk.ShapeFilter())
+            if hit:
+                hit_shape = hit.shape
+                body = hit_shape.body
+                if (hit_shape in Objects or hit_shape in water_particles_shapes or hit_shape in gas_particles_shapes) and (hit_shape not in Potential_Tracing_Objects):
+                    Potential_Tracing_Objects.append(hit_shape)
+                elif hit_shape in Potential_Tracing_Objects:
+                    Potential_Tracing_Objects.remove(hit_shape)
+
+        if state == 'Show Full Energy':
+            p = Vec2d(*event.pos)
+            hit = space.point_query_nearest(p, 5, pymunk.ShapeFilter())
+            if hit:
+                hit_shape = hit.shape
+                body = hit_shape.body
+                if (hit_shape in Objects or hit_shape in water_particles_shapes or hit_shape in gas_particles_shapes) and (hit_shape not in Full_Tracing_Objects):
+                    Full_Tracing_Objects.append(hit_shape)
+                elif hit_shape in Full_Tracing_Objects:
+                    Full_Tracing_Objects.remove(hit_shape)
 
         if state == 'Delete':
             p = Vec2d(*event.pos)

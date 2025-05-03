@@ -140,4 +140,20 @@ class Mouse():
             if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
                 return 'Show Velocity'
 
+        if self.state == 'Showing Acceleration':
+            if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
+                return 'Show Acceleration'
+
+        if self.state == 'Showing Kinetic Energy':
+            if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
+                return 'Show Kinetic Energy'
+
+        if self.state == 'Showing Potential Energy':
+            if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
+                return 'Show Potential Energy'
+
+        if self.state == 'Showing Full Energy':
+            if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
+                return 'Show Full Energy'
+
         return None
