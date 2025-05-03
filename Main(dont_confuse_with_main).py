@@ -168,8 +168,15 @@ button_width = 200 * FontSize
 button_height = HEIGHT/13
 dy = HEIGHT/10
 
-print(button_width)
-print(button_height)
+# print(button_width)
+# print(button_height)
+
+Button_Show_Velocity = Button(False, 40, 30, button_width, button_height, 'Show velocity', int(25*FontSize))
+Button_Show_Acceleration = Button(False, 40, 30 + dy, button_width, button_height, 'Show acceleration', int(25*FontSize))
+Button_Show_Kinetic_Energy = Button(False, 40, 30 + 2*dy, button_width, button_height, 'Show kinetic energy', int(20*FontSize))
+Button_Show_Potential_Energy = Button(False, 40, 30 + 3*dy, button_width, button_height, 'Show potential energy', int(20*FontSize))
+Button_Show_Full_Energy = Button(False, 40, 30 + 4*dy, button_width, button_height, 'Show full energy', int(25*FontSize))
+Button_Data = Button(False, 40, 30 + 3*dy, button_width, button_height, 'Data', int(40*FontSize))
 Button_Pendulum = Button(False, 40, 30 + 2*dy, button_width, button_height, 'Pendulum', int(40*FontSize))
 Button_Delete = Button(False, 40, HEIGHT*0.88 - 2*dy, button_width, button_height, 'Delete', int(40*FontSize))
 Button_Add_Rope = Button(False, 40, 30 + 5*dy, button_width, button_height, 'Add Joint', int(40*FontSize))
@@ -219,16 +226,26 @@ Button_Temperature.childrens = []
 Button_Gas_Mass.layer = [Button_CleanAll, Button_GoBack, Button_Gas_Mass, Button_Temperature, Button_Gas_Size, Button_Delete]
 Button_Gas_Mass.childrens = []
 
-Button_Tools.childrens = [Button_WorldSettings, Button_Forces, Button_AddObject, Button_GoBack, Button_CleanAll, Button_Delete]
+Button_Tools.childrens = [Button_Data, Button_WorldSettings, Button_Forces, Button_AddObject, Button_GoBack, Button_CleanAll, Button_Delete]
 Button_Tools.layer = [Button_Tools, Button_Maps]
 
 Button_Maps.layer = [Button_Tools, Button_Maps]
 Button_Maps.childrens = [Button_Map1, Button_Map2, Button_GoBack, Button_CleanAll, Button_Delete, Button_Pendulum]
 
-Button_AddObject.layer = [Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack, Button_Delete]
+Button_AddObject.layer = [Button_Data, Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack, Button_Delete]
 Button_AddObject.childrens = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack, Button_Delete]
 
-Button_WorldSettings.layer = [Button_Forces, Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack, Button_Delete]
+Button_Data.layer = [Button_Data, Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack, Button_Delete]
+Button_Data.childrens = [Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
+
+Button_Show_Velocity.layer = [Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
+Button_Show_Acceleration.layer = [Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
+Button_Show_Kinetic_Energy.layer = [Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
+Button_Show_Potential_Energy.layer = [Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
+Button_Show_Full_Energy.layer =  [Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
+
+
+Button_WorldSettings.layer = [Button_Data, Button_Forces, Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack, Button_Delete]
 Button_WorldSettings.childrens = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature, Button_Delete]
 
 Button_Object1.layer = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Object1, Button_Object2, Button_Draw, Button_GoBack, Button_CleanAll, Button_Delete]
@@ -263,6 +280,13 @@ Button_Cube_Dynamic.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_
 Button_Ball_Elasticity.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity, Button_Delete]
 Button_Cube_Mass.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll, Button_Delete]
 
+Button_Show_Acceleration.parent = Button_Data
+Button_Show_Potential_Energy.parent = Button_Data
+Button_Show_Kinetic_Energy.parent = Button_Data
+Button_Show_Velocity.parent = Button_Data
+Button_Show_Full_Energy.parent = Button_Data
+
+Button_Data.parent = Button_Tools
 Button_Pendulum.parent = Button_Maps
 Button_Delete.parent = Button_Tools
 Button_Add_Rope.parent = Button_AddObject
@@ -306,7 +330,8 @@ def save_callback(new_settings):
 create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
 Objects = []
 Joints = []
-Buttons = [Button_Pendulum, Button_Delete, Button_Add_Rope, Button_Cube_Mass, Button_Cube_Dynamic, Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
+Velocity_Tracing_Objects = []
+Buttons = [Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Velocity, Button_Show_Acceleration, Button_Show_Full_Energy, Button_Data, Button_Pendulum, Button_Delete, Button_Add_Rope, Button_Cube_Mass, Button_Cube_Dynamic, Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
@@ -332,6 +357,7 @@ mouse_joint = None
 paused = False
 Cube_Dynamic = False
 Deleting = False
+Showing_Velocity = False
 trace_points = []
 Tracing = False
 while running:
@@ -376,6 +402,7 @@ while running:
                     if ob != obj:
                         a = apply_gravity_acceleration(obj, ob, G)
                         obj.body.velocity += pymunk.Vec2d(a[0], a[1]) * (1 / FPS)
+
         if Show_Temperature:
             for obj in gas_particles:
                 grad = math.exp(-0.0005 * obj.body.velocity.length)
@@ -434,7 +461,16 @@ while running:
 
 
         if Button_Settings.is_clicked(event) and Button_Settings.is_seen:
-            open_settings_window(screen,settings, save_callback)
+            open_settings_window(screen, settings, save_callback)
+
+        if Button_Data.is_clicked(event) and Button_Data.is_seen:
+            for button in Button_Data.layer:
+                button.is_seen = False
+            for button in Button_Data.childrens:
+                button.is_seen = True
+            Button_GoBack.layer = Button_Data.childrens
+            Button_GoBack.childrens = Button_Data.layer
+            Button_GoBack.parent = Button_Data
 
         if Button_Map1.is_clicked(event) and Button_Map1.is_seen:
             Tracing = False
@@ -730,6 +766,8 @@ while running:
             trace_points = []
             mouse.state = None
             ActivatedButton = None
+            Button_Show_Velocity.button_color = (169, 169, 169)
+            Button_Delete.button_color = (169, 169, 169)
             for button in Button_GoBack.layer:
                 button.activated = False
                 button.is_seen = False
@@ -741,6 +779,17 @@ while running:
                 Button_GoBack.parent = Button_GoBack.parent.parent
 
         state = mouse.getstate(event, screen)
+
+        if Button_Show_Velocity.is_clicked(event) and Button_Show_Velocity.is_seen:
+            if Showing_Velocity == False:
+                Button_Show_Velocity.button_color = (119, 136, 153)
+                Showing_Velocity = True
+                mouse.state = 'Showing Velocity'
+            else:
+                Button_Show_Velocity.button_color = (169, 169, 169)
+                Showing_Velocity = False
+                mouse.state = None
+
 
         if Button_Delete.is_clicked(event) and Button_Delete.is_seen:
             if Deleting == False:
@@ -755,6 +804,19 @@ while running:
         if state == 'DrawBall' and  event.button != 3:
             ball = mouse.Add_Ball(space, (mouse.mouse_x, mouse.mouse_y), Ball_Radius, mass=Ball_Mass, elasticity=Ball_Elasticity, friction=0.5, color=(255, 255, 255, 100))
             Objects.append(ball)
+
+        if state == 'Show Velocity':
+            p = Vec2d(*event.pos)
+            hit = space.point_query_nearest(p, 5, pymunk.ShapeFilter())
+            if hit:
+                hit_shape = hit.shape
+                body = hit_shape.body
+                print(hit_shape)
+                print(hit_shape in Velocity_Tracing_Objects)
+                if (hit_shape in Objects or hit_shape in water_particles_shapes or hit_shape in gas_particles_shapes) and (hit_shape not in Velocity_Tracing_Objects):
+                    Velocity_Tracing_Objects.append(hit_shape)
+                elif hit_shape in Velocity_Tracing_Objects:
+                    Velocity_Tracing_Objects.remove(hit_shape)
 
         if state == 'Delete':
             p = Vec2d(*event.pos)
@@ -960,7 +1022,7 @@ while running:
             button.draw(screen, button.user_text)
         else:
             button.draw(screen, button.text)
-
+    print(Velocity_Tracing_Objects)
     pygame.display.flip()
     pygame.display.set_caption(f"fps: {clock.get_fps()}")
     clock.tick(FPS)

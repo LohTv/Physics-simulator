@@ -136,4 +136,8 @@ class Mouse():
             if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
                 return 'Delete'
 
+        if self.state == 'Showing Velocity':
+            if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
+                return 'Show Velocity'
+
         return None

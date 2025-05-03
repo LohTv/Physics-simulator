@@ -79,7 +79,7 @@ def create_wall(space, width, height, pos, color, elasticity, friction):
     return shape
 
 
-Button_Const1 = Button(False, 40, 30, 200, 80, 'Const1', 40)
+Button_Const1 = Button(False, 40, 30, 200, 80, 'Const1', Fon)
 Button_Const2 = Button(False, 40, 150, 200, 80, 'Const2', 40)
 Button_Object1 = Button(False, 40, 30, 200, 80, 'Add Ball', 40)
 Button_Object2 = Button(False, 40, 150, 200, 80, 'Object2', 40)
