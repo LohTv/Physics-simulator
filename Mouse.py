@@ -156,4 +156,8 @@ class Mouse():
             if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
                 return 'Show Full Energy'
 
+        if self.state == 'Trace Prep':
+            if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
+                return 'Trace'
+
         return None

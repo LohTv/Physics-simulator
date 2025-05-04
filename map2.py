@@ -3,8 +3,8 @@ import pymunk
 import pymunk.pygame_util
 import pyautogui
 
-WIDTH = int(pyautogui.size()[0] * 0.95)
-HEIGHT = int(pyautogui.size()[1] * 0.95)
+WIDTH = int(pyautogui.size()[0] * 0.9)
+HEIGHT = int(pyautogui.size()[1] * 0.90)
 
 
 def create_segment(from_, to_, thickness, space, color):
@@ -39,14 +39,14 @@ def CreateMap2(space):
     joints = []
     d = ((330 + WIDTH) / 3 - 380)/5
     for i in range(5):
-        ball = Add_Ball_Dynamic(space, (((330 + WIDTH) / 3 + 380)/2 + (i - 2)*d, HEIGHT/3), radius=33)
+        ball = Add_Ball_Dynamic(space, (((330 + WIDTH) / 3 + 380)/2 + (i - 2)*d, HEIGHT/3), radius=30)
         joint = pymunk.PinJoint(ball.body, segment_shape1.body, (0, 0), (ball.body.position.x, HEIGHT/6))
         space.add(joint)
         joints.append(joint)
         objectstoadd.append(ball)
     objectstoadd[-1].body.apply_impulse_at_local_point((400, 0), (0, 0))
     for i in range(5):
-        ball = Add_Ball_Dynamic(space, ((WIDTH - 50 + 2*(330 + WIDTH) / 3)/2 + (i - 2)*d, HEIGHT/3), radius=33)
+        ball = Add_Ball_Dynamic(space, ((WIDTH - 50 + 2*(330 + WIDTH) / 3)/2 + (i - 2)*d, HEIGHT/3), radius=30)
         joint = pymunk.PinJoint(ball.body, segment_shape1.body, (0, 0), (ball.body.position.x, HEIGHT/6))
         space.add(joint)
         joints.append(joint)
@@ -54,7 +54,7 @@ def CreateMap2(space):
     objectstoadd[-2].body.apply_impulse_at_local_point((400, 0), (0, 0))
     objectstoadd[-1].body.apply_impulse_at_local_point((400, 0), (0, 0))
     for i in range(5):
-        ball = Add_Ball_Dynamic(space, (((WIDTH + 330)/2 + (i - 2)*d, 2*HEIGHT/3 + 100)), radius=34)
+        ball = Add_Ball_Dynamic(space, (((WIDTH + 330)/2 + (i - 2)*d, 2*HEIGHT/3 + 100)), radius=30)
         joint = pymunk.PinJoint(ball.body, segment_shape1.body, (0, 0), (ball.body.position.x, HEIGHT / 2))
         space.add(joint)
         joints.append(joint)

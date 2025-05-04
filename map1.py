@@ -3,8 +3,8 @@ import pygame as pg
 import pymunk
 import pymunk.pygame_util
 import pyautogui
-WIDTH = pyautogui.size()[0] * 0.95
-HEIGHT = pyautogui.size()[1] * 0.95
+WIDTH = pyautogui.size()[0] * 0.90
+HEIGHT = pyautogui.size()[1] * 0.90
 
 def create_segment(from_, to_, thickness, space, color):
     segment_shape = pymunk.Segment(space.static_body, from_, to_, thickness)
