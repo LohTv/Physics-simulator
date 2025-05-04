@@ -6,6 +6,7 @@ from liquid_Class import *
 import gas_Class
 from Mouse import Mouse
 from VectorClass import draw_arrow_angle
+from VectorClass import draw_text
 from Gravity import *
 from map1 import CreateMap1
 from map2 import CreateMap2
@@ -513,6 +514,28 @@ while running:
                 else:
                     space.remove(last_obj, last_obj.body)
 
+    for obj in Kinetic_Tracing_Objects:
+        start = obj.body.position
+        vx, vy = obj.body.velocity
+        length = obj.body.mass * (vy ** 2 + vx ** 2)/2
+        draw_text(screen, start, 0.2*length, math.radians(30),-30, color = (0, 255, 0))
+
+    for obj in Potential_Tracing_Objects:
+        if not Allow_Gravity:
+            start = obj.body.position
+            length = obj.body.mass * Gravity_Y * (HEIGHT - obj.body.position[1]) + obj.body.mass * Gravity_X * (WIDTH - obj.body.position[0])
+            draw_text(screen, start, 0.2*length, math.radians(30),0, color = (255, 0, 255))
+
+    for obj in Full_Tracing_Objects:
+        start = obj.body.position
+        vx, vy = obj.body.velocity
+        length1 = obj.body.mass * (vy ** 2 + vx ** 2) / 2
+        if not Allow_Gravity:
+            length2 = obj.body.mass * Gravity_Y * (HEIGHT - obj.body.position[1]) + obj.body.mass * Gravity_X * (WIDTH - obj.body.position[0])
+        length = length1 + length2
+        draw_text(screen, start, 0.2 * length, math.radians(30), 30, color=(255, 155, 0))
+
+
     for obj in Velocity_Tracing_Objects:
         start = obj.body.position
         vx, vy = obj.body.velocity
@@ -882,7 +905,10 @@ while running:
             mouse.state = None
             ActivatedButton = None
             Button_Show_Velocity.button_color = (169, 169, 169)
-            Button_Delete.button_color = (169, 169, 169)
+            Button_Show_Acceleration.button_color = (169, 169, 169)
+            Button_Show_Kinetic_Energy.button_color = (169, 169, 169)
+            Button_Show_Potential_Energy.button_color = (169, 169, 169)
+            Button_Show_Full_Energy.button_color = (169, 169, 169)
             for button in Button_GoBack.layer:
                 button.activated = False
                 button.is_seen = False
@@ -1231,7 +1257,7 @@ while running:
             button.draw(screen, button.user_text)
         else:
             button.draw(screen, button.text)
-    print(Velocity_Tracing_Objects)
+    print(mouse.state)
     pygame.display.flip()
     pygame.display.set_caption(f"fps: {clock.get_fps()}")
     clock.tick(FPS)
