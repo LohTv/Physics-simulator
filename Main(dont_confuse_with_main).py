@@ -521,7 +521,7 @@ while running:
             pass
         else:
             angle = math.atan2(vy, vx)
-            draw_arrow_angle(screen, start, 0.2 * length, angle)
+            draw_arrow_angle(screen, start, 0.2 * length, angle, (0, 0, 255))
 
     for obj_index in range(len(Acceleration_Tracing_Objects)):
         obj = Acceleration_Tracing_Objects[obj_index]
@@ -548,6 +548,8 @@ while running:
 
         if Button_Show_Potential_Energy.is_clicked(event) and Button_Show_Potential_Energy.is_seen:
             if Showing_Potential_Energy == False:
+                for button_ in Button_Show_Velocity.layer:
+                    button_.button_color = (169, 169, 169)
                 Button_Show_Potential_Energy.button_color = (119, 136, 153)
                 Showing_Potential_Energy = True
                 mouse.state = 'Showing Potential Energy'
@@ -568,6 +570,11 @@ while running:
         if Button_Map1.is_clicked(event) and Button_Map1.is_seen:
             Tracing = False
             trace_points = []
+            Velocity_Tracing_Objects.clear()
+            Acceleration_Tracing_Objects.clear()
+            Kinetic_Tracing_Objects.clear()
+            Potential_Tracing_Objects.clear()
+            Full_Tracing_Objects.clear()
             for joint_ in Joints:
                 space.remove(joint_)
             for obj in Objects:
@@ -584,6 +591,11 @@ while running:
             Joints.clear()
 
         if Button_Pendulum.is_clicked(event) and Button_Pendulum.is_seen:
+            Velocity_Tracing_Objects.clear()
+            Acceleration_Tracing_Objects.clear()
+            Kinetic_Tracing_Objects.clear()
+            Potential_Tracing_Objects.clear()
+            Full_Tracing_Objects.clear()
             Tracing = True
             trace_points = []
             for joint_ in Joints:
@@ -603,6 +615,11 @@ while running:
             Joints = Map[1]
 
         if Button_Map2.is_clicked(event) and Button_Map2.is_seen:
+            Velocity_Tracing_Objects.clear()
+            Acceleration_Tracing_Objects.clear()
+            Kinetic_Tracing_Objects.clear()
+            Potential_Tracing_Objects.clear()
+            Full_Tracing_Objects.clear()
             Tracing = False
             trace_points = []
             for joint_ in Joints:
@@ -803,6 +820,11 @@ while running:
         if Button_CleanAll.is_clicked(event) and Button_CleanAll.is_seen:
             Tracing = False
             trace_points = []
+            Velocity_Tracing_Objects.clear()
+            Acceleration_Tracing_Objects.clear()
+            Kinetic_Tracing_Objects.clear()
+            Potential_Tracing_Objects.clear()
+            Full_Tracing_Objects.clear()
             for joint_ in Joints:
                 space.remove(joint_)
             for obj in Objects:
@@ -875,6 +897,8 @@ while running:
 
         if Button_Show_Velocity.is_clicked(event) and Button_Show_Velocity.is_seen:
             if Showing_Velocity == False:
+                for button_ in Button_Show_Velocity.layer:
+                    button_.button_color = (169, 169, 169)
                 Button_Show_Velocity.button_color = (119, 136, 153)
                 Showing_Velocity = True
                 mouse.state = 'Showing Velocity'
@@ -885,6 +909,8 @@ while running:
 
         if Button_Show_Acceleration.is_clicked(event) and Button_Show_Acceleration.is_seen:
             if Showing_Acceleration == False:
+                for button_ in Button_Show_Velocity.layer:
+                    button_.button_color = (169, 169, 169)
                 Button_Show_Acceleration.button_color = (119, 136, 153)
                 Showing_Acceleration = True
                 mouse.state = 'Showing Acceleration'
@@ -895,6 +921,8 @@ while running:
 
         if Button_Show_Full_Energy.is_clicked(event) and Button_Show_Full_Energy.is_seen:
             if Showing_Full_Energy == False:
+                for button_ in Button_Show_Velocity.layer:
+                    button_.button_color = (169, 169, 169)
                 Button_Show_Full_Energy.button_color = (119, 136, 153)
                 Showing_Full_Energy = True
                 mouse.state = 'Showing Full Energy'
@@ -905,6 +933,8 @@ while running:
 
         if Button_Show_Kinetic_Energy.is_clicked(event) and Button_Show_Kinetic_Energy.is_seen:
             if Showing_Kinetic_Energy == False:
+                for button_ in Button_Show_Velocity.layer:
+                    button_.button_color = (169, 169, 169)
                 Button_Show_Kinetic_Energy.button_color = (119, 136, 153)
                 Showing_Kinetic_Energy = True
                 mouse.state = 'Showing Kinetic Energy'
@@ -989,6 +1019,20 @@ while running:
             if hit:
                 hit_shape = hit.shape
                 body = hit_shape.body
+                if hit_shape in Velocity_Tracing_Objects:
+                    Velocity_Tracing_Objects.remove(hit_shape)
+
+                if hit_shape in Acceleration_Tracing_Objects:
+                    Acceleration_Tracing_Objects.remove(hit_shape)
+
+                if hit_shape in Kinetic_Tracing_Objects:
+                    Kinetic_Tracing_Objects.remove(hit_shape)
+
+                if hit_shape in Potential_Tracing_Objects:
+                    Potential_Tracing_Objects.remove(hit_shape)
+
+                if hit_shape in Full_Tracing_Objects:
+                    Full_Tracing_Objects.remove(hit_shape)
 
                 # Check if it's a static segment
                 if isinstance(hit_shape, pymunk.Segment):
@@ -1187,6 +1231,7 @@ while running:
             button.draw(screen, button.user_text)
         else:
             button.draw(screen, button.text)
+    print(Velocity_Tracing_Objects)
     pygame.display.flip()
     pygame.display.set_caption(f"fps: {clock.get_fps()}")
     clock.tick(FPS)
