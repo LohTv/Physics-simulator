@@ -374,7 +374,8 @@ Showing_Full_Energy = False
 trace_points_list = []
 trace_point_colors = []
 Tracing = False
-
+prev_vx = [0 for obj in Acceleration_Tracing_Objects]
+prev_vy = [0 for obj in Acceleration_Tracing_Objects]
 
 while running:
     # print(f'Bodies: {space.bodies}')
@@ -384,8 +385,6 @@ while running:
     screen.fill((0, 0, 0))
     space.debug_draw(draw_options)
     mouse.space = space
-    prev_vx = [0 for obj in Acceleration_Tracing_Objects]
-    prev_vy = [0 for obj in Acceleration_Tracing_Objects]
     if paused == False:
         prev_vx = [obj.body.velocity[0] for obj in Acceleration_Tracing_Objects]
         prev_vy = [obj.body.velocity[1] for obj in Acceleration_Tracing_Objects]
@@ -428,12 +427,6 @@ while running:
             for obj in gas_particles:
                 grad = math.exp(-0.0005 * obj.body.velocity.length)
                 obj.particle.color = ((1 - grad) * 255, 0, 0, 255)
-
-        if Position_Tracing_Objects:
-            for ball_for_trace, trace_points, color in zip(Position_Tracing_Objects, trace_points_list, trace_point_colors):
-                trace_points.append((int(ball_for_trace.body.position.x), int(ball_for_trace.body.position.y)))
-                if len(trace_points) > 1:
-                    pygame.draw.lines(screen, color, False, trace_points, 2)
 
         for obj in Objects:
             if obj.body in space.bodies:
@@ -537,6 +530,12 @@ while running:
                     space.remove(last_obj.particle, last_obj.body)
                 else:
                     space.remove(last_obj, last_obj.body)
+
+    if Position_Tracing_Objects:
+        for ball_for_trace, trace_points, color in zip(Position_Tracing_Objects, trace_points_list, trace_point_colors):
+            trace_points.append((int(ball_for_trace.body.position.x), int(ball_for_trace.body.position.y)))
+            if len(trace_points) > 1:
+                pygame.draw.lines(screen, color, False, trace_points, 2)
 
     for obj in Kinetic_Tracing_Objects:
         start = obj.body.position
@@ -1325,7 +1324,6 @@ while running:
             button.draw(screen, button.user_text)
         else:
             button.draw(screen, button.text)
-    print(mouse.state)
     pygame.display.flip()
     pygame.display.set_caption(f"fps: {clock.get_fps()}")
     clock.tick(FPS)
