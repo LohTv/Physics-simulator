@@ -1,3 +1,5 @@
+import random
+
 import pygame
 import pymunk
 import pymunk.pygame_util
@@ -369,7 +371,8 @@ Showing_Acceleration = False
 Showing_Kinetic_Energy = False
 Showing_Potential_Energy = False
 Showing_Full_Energy = False
-trace_points = []
+trace_points_list = []
+trace_point_colors = []
 Tracing = False
 
 
@@ -427,10 +430,10 @@ while running:
                 obj.particle.color = ((1 - grad) * 255, 0, 0, 255)
 
         if Position_Tracing_Objects:
-            ball_for_trace = Position_Tracing_Objects[-1]
-            trace_points.append((int(ball_for_trace.body.position.x), int(ball_for_trace.body.position.y)))
-            if len(trace_points) > 1:
-                pygame.draw.lines(screen, (255, 0, 0), False, trace_points, 2)
+            for ball_for_trace, trace_points, color in zip(Position_Tracing_Objects, trace_points_list, trace_point_colors):
+                trace_points.append((int(ball_for_trace.body.position.x), int(ball_for_trace.body.position.y)))
+                if len(trace_points) > 1:
+                    pygame.draw.lines(screen, color, False, trace_points, 2)
 
         for obj in Objects:
             if obj.body in space.bodies:
@@ -451,8 +454,10 @@ while running:
                         Full_Tracing_Objects.remove(obj)
 
                     if obj in Position_Tracing_Objects:
+                        ind = Position_Tracing_Objects.index(obj)
+                        del trace_points_list[ind]
+                        del trace_point_colors[ind]
                         Position_Tracing_Objects.remove(obj)
-                        trace_points.clear()
 
                     if isinstance(obj, pymunk.Segment):
                         pass
@@ -485,8 +490,10 @@ while running:
                         Full_Tracing_Objects.remove(obj)
 
                     if obj in Position_Tracing_Objects:
+                        ind = Position_Tracing_Objects.index(obj)
+                        del trace_points_list[ind]
+                        del trace_point_colors[ind]
                         Position_Tracing_Objects.remove(obj)
-                        trace_points.clear()
 
                     if isinstance(obj, pymunk.Segment):
                         space.remove(obj)
@@ -516,8 +523,10 @@ while running:
                 Full_Tracing_Objects.remove(last_obj)
 
             if last_obj in Position_Tracing_Objects:
+                ind = Position_Tracing_Objects.index(last_obj)
+                del trace_points_list[ind]
+                del trace_point_colors[ind]
                 Position_Tracing_Objects.remove(last_obj)
-                trace_points.clear()
 
             if isinstance(last_obj, pymunk.Segment):
                 space.remove(last_obj)
@@ -614,6 +623,8 @@ while running:
             Potential_Tracing_Objects.clear()
             Full_Tracing_Objects.clear()
             Position_Tracing_Objects.clear()
+            trace_point_colors.clear()
+            trace_points_list.clear()
             for joint_ in Joints:
                 space.remove(joint_)
             for obj in Objects:
@@ -636,7 +647,8 @@ while running:
             Potential_Tracing_Objects.clear()
             Full_Tracing_Objects.clear()
             Position_Tracing_Objects.clear()
-            trace_points = []
+            trace_point_colors.clear()
+            trace_points_list.clear()
             for joint_ in Joints:
                 space.remove(joint_)
             for obj in Objects:
@@ -662,7 +674,8 @@ while running:
             Full_Tracing_Objects.clear()
             Position_Tracing_Objects.clear()
             Tracing = False
-            trace_points = []
+            trace_point_colors.clear()
+            trace_points_list.clear()
             for joint_ in Joints:
                 space.remove(joint_)
             for obj in Objects:
@@ -860,7 +873,8 @@ while running:
 
         if Button_CleanAll.is_clicked(event) and Button_CleanAll.is_seen:
             Tracing = False
-            trace_points = []
+            trace_point_colors.clear()
+            trace_points_list.clear()
             Velocity_Tracing_Objects.clear()
             Acceleration_Tracing_Objects.clear()
             Kinetic_Tracing_Objects.clear()
@@ -1073,13 +1087,19 @@ while running:
             p = Vec2d(*event.pos)
             hit = space.point_query_nearest(p, 5, pymunk.ShapeFilter())
             if hit:
-                trace_points.clear()
                 hit_shape = hit.shape
                 body = hit_shape.body
                 if (hit_shape in Objects or hit_shape in water_particles_shapes or hit_shape in gas_particles_shapes) and (hit_shape not in Position_Tracing_Objects):
                     Position_Tracing_Objects.append(hit_shape)
+                    trace_points_list.append([])
+                    rnd_color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))
+                    trace_point_colors.append(rnd_color)
                 elif hit_shape in Position_Tracing_Objects:
+                    ind = Position_Tracing_Objects.index(hit_shape)
+                    del trace_points_list[ind]
+                    del trace_point_colors[ind]
                     Position_Tracing_Objects.remove(hit_shape)
+
 
         if state == 'Delete':
             p = Vec2d(*event.pos)
@@ -1103,8 +1123,10 @@ while running:
                     Full_Tracing_Objects.remove(hit_shape)
 
                 if hit_shape in Position_Tracing_Objects:
+                    ind = Position_Tracing_Objects.index(hit_shape)
+                    del trace_points_list[ind]
+                    del trace_point_colors[ind]
                     Position_Tracing_Objects.remove(hit_shape)
-                    trace_points.clear()
 
                 # Check if it's a static segment
                 if isinstance(hit_shape, pymunk.Segment):
