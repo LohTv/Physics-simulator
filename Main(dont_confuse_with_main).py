@@ -374,8 +374,8 @@ Showing_Full_Energy = False
 trace_points_list = []
 trace_point_colors = []
 Tracing = False
-prev_vx = [0 for obj in Acceleration_Tracing_Objects]
-prev_vy = [0 for obj in Acceleration_Tracing_Objects]
+prev_vx = []
+prev_vy = []
 
 while running:
     # print(f'Bodies: {space.bodies}')
@@ -385,6 +385,9 @@ while running:
     screen.fill((0, 0, 0))
     space.debug_draw(draw_options)
     mouse.space = space
+    # prev_vx = [obj.body.velocity[0] for obj in Acceleration_Tracing_Objects]
+    # prev_vy = [obj.body.velocity[1] for obj in Acceleration_Tracing_Objects]
+
     if paused == False:
         prev_vx = [obj.body.velocity[0] for obj in Acceleration_Tracing_Objects]
         prev_vy = [obj.body.velocity[1] for obj in Acceleration_Tracing_Objects]
@@ -573,16 +576,17 @@ while running:
         obj = Acceleration_Tracing_Objects[obj_index]
         start = obj.body.position
         vx, vy = obj.body.velocity
-        vx_prev = prev_vx[obj_index]
-        vy_prev = prev_vy[obj_index]
-        dvx = vx - vx_prev
-        dvy = vy - vy_prev
-        length = math.sqrt(dvy ** 2 + dvx ** 2) * FPS
-        if dvx == 0 and dvy == 0:
-            pass
-        else:
-            angle = math.atan2(dvy, dvx)
-            draw_arrow_angle(screen, start, 0.2 * length, angle)
+        if prev_vx and prev_vy:
+            vx_prev = prev_vx[obj_index]
+            vy_prev = prev_vy[obj_index]
+            dvx = vx - vx_prev
+            dvy = vy - vy_prev
+            length = math.sqrt(dvy ** 2 + dvx ** 2) * FPS
+            if dvx == 0 and dvy == 0:
+                pass
+            else:
+                angle = math.atan2(dvy, dvx)
+                draw_arrow_angle(screen, start, 0.2 * length, angle)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
