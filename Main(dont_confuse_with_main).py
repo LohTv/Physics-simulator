@@ -397,9 +397,8 @@ while running:
     mouse.space = space
     mouse_x, mouse_y = mouse_body.position
     coord_text = f"({mouse_x - 300}, {HEIGHT - mouse_y})"
-
     # Render the text
-    text_surface = font_m.render(coord_text, True, (255, 255, 255))
+    text_surface = font_m.render(coord_text, True, (0, 0, 255))
     # prev_vx = [obj.body.velocity[0] for obj in Acceleration_Tracing_Objects]
     # prev_vy = [obj.body.velocity[1] for obj in Acceleration_Tracing_Objects]
     screen.blit(text_surface, (mouse_x - 10, mouse_y - 20))
@@ -562,10 +561,15 @@ while running:
         length = obj.body.mass * (vy ** 2 + vx ** 2)/2
         draw_text(screen, start, 0.2*length, math.radians(30),-30, color = (0, 255, 0))
 
+    for obj in Rotational_Energy_Tracing:
+        start = obj.body.position
+        length =0.5 * obj.body.moment * obj.body.angular_velocity**2
+        draw_text(screen, start, 0.2*length, math.radians(30), 30 , color = (0, 0, 255))
+
     for obj in Potential_Tracing_Objects:
         if not Allow_Gravity:
             start = obj.body.position
-            length = obj.body.mass * Gravity_Y * (HEIGHT - obj.body.position[1]) + obj.body.mass * Gravity_X * (WIDTH - obj.body.position[0])
+            length = obj.body.mass * space.gravity[1] * (HEIGHT - obj.body.position[1]) + obj.body.mass * space.gravity[0] * (WIDTH - obj.body.position[0])
             draw_text(screen, start, 0.2*length, math.radians(30),0, color = (255, 0, 255))
         else:
             start = obj.body.position
@@ -621,7 +625,8 @@ while running:
                     potential_ = -G * obj.body.mass * ob.body.mass / distance
                     potenials += potential_
             length2 = potenials
-        length = length1 + length2
+        length3 = 0.5 * obj.body.moment * obj.body.angular_velocity ** 2
+        length = length1 + length2 + length3
         draw_text(screen, start, 0.2 * length, math.radians(30), 60, color=(255, 155, 0))
 
 
@@ -1094,6 +1099,19 @@ while running:
                 Showing_Acceleration = False
                 mouse.state = None
 
+        if Button_Rotational_energy.is_clicked(event) and Button_Rotational_energy.is_seen:
+            if Showing_Rotational_Energy == False:
+                for button_ in Button_Show_Velocity.layer:
+                    button_.button_color = (169, 169, 169)
+                Button_Rotational_energy.button_color = (119, 136, 153)
+                Showing_Rotational_Energy = True
+                mouse.state = 'Showing Rotational Energy'
+            else:
+                Button_Rotational_energy.button_color = (169, 169, 169)
+                Showing_Rotational_Energy = False
+                mouse.state = None
+
+
         if Button_Show_Full_Energy.is_clicked(event) and Button_Show_Full_Energy.is_seen:
             if Showing_Full_Energy == False:
                 for button_ in Button_Show_Velocity.layer:
@@ -1187,6 +1205,17 @@ while running:
                     Full_Tracing_Objects.append(hit_shape)
                 elif hit_shape in Full_Tracing_Objects:
                     Full_Tracing_Objects.remove(hit_shape)
+
+        if state == 'Show Rotational Energy':
+            p = Vec2d(*event.pos)
+            hit = space.point_query_nearest(p, 5, pymunk.ShapeFilter())
+            if hit:
+                hit_shape = hit.shape
+                body = hit_shape.body
+                if (hit_shape in Objects or hit_shape in water_particles_shapes or hit_shape in gas_particles_shapes) and (hit_shape not in Rotational_Energy_Tracing):
+                    Rotational_Energy_Tracing.append(hit_shape)
+                elif hit_shape in Rotational_Energy_Tracing:
+                    Rotational_Energy_Tracing.remove(hit_shape)
 
         if state == 'Trace':
             p = Vec2d(*event.pos)

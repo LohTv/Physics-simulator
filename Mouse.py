@@ -160,4 +160,8 @@ class Mouse():
             if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
                 return 'Trace'
 
+        if self.state == 'Showing Rotational Energy':
+            if self.mouse_x > 300 and event.type == pygame.MOUSEBUTTONDOWN:
+                return 'Show Rotational Energy'
+
         return None
