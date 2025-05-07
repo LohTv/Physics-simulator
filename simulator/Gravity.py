@@ -1,6 +1,6 @@
 import math
 import pymunk
-from VectorClass import Vector
+from simulator.VectorClass import Vector
 
 
 def calculate_gravity(obj1, obj2, G):

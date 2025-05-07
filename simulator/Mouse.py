@@ -1,8 +1,8 @@
 import pygame
 import pymunk
 from pymunk import Vec2d
-from liquid_Class import Liquid
-from gas_Class import Gas
+from simulator.liquid_Class import Liquid
+from simulator.gas_Class import Gas
 
 class Mouse():
     def __init__(self, state, ball_radius, cube_size, draw_size, liquid_radius, gas_radius, cube_mass):

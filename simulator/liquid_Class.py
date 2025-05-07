@@ -2,10 +2,10 @@ import pygame
 import pymunk
 import pymunk.pygame_util
 from pygame import Surface
-from VectorClass import *
+from simulator.VectorClass import *
 import random
 import math
-from Button_Add_Ball import Add_Ball
+from simulator.Button_Add_Ball import Add_Ball
 
 
 class Water_Particle:
