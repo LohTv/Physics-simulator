@@ -1,5 +1,4 @@
 import random
-
 import pygame
 import pymunk
 import pymunk.pygame_util
@@ -12,6 +11,7 @@ from VectorClass import draw_text
 from Gravity import *
 from map1 import CreateMap1
 from map2 import CreateMap2
+from map4 import CreateMap4
 from pymunk.vec2d import Vec2d
 import math
 from settings import *
@@ -174,12 +174,14 @@ dy = HEIGHT/10
 # print(button_width)
 # print(button_height)
 
+Button_Rotational_energy = Button(False, 40, 30 + 4*dy, button_width, button_height,  'Show rotational energy', int(20*FontSize))
+Button_Map_4 = Button(False, 40, 30 + 3*dy, button_width, button_height, 'Orbit', int(40*FontSize))
 Button_Tracing = Button(False, 40, 30 + 5*dy, button_width, button_height, 'Trace', int(40*FontSize))
 Button_Show_Velocity = Button(False, 40, 30, button_width, button_height, 'Show velocity', int(25*FontSize))
 Button_Show_Acceleration = Button(False, 40, 30 + dy, button_width, button_height, 'Show acceleration', int(25*FontSize))
 Button_Show_Kinetic_Energy = Button(False, 40, 30 + 2*dy, button_width, button_height, 'Show kinetic energy', int(20*FontSize))
 Button_Show_Potential_Energy = Button(False, 40, 30 + 3*dy, button_width, button_height, 'Show potential energy', int(20*FontSize))
-Button_Show_Full_Energy = Button(False, 40, 30 + 4*dy, button_width, button_height, 'Show full energy', int(25*FontSize))
+Button_Show_Full_Energy = Button(False, 40, 30 + 5*dy, button_width, button_height, 'Show full energy', int(25*FontSize))
 Button_Data = Button(False, 40, 30 + 3*dy, button_width, button_height, 'Data', int(40*FontSize))
 Button_Pendulum = Button(False, 40, 30 + 2*dy, button_width, button_height, 'Pendulum', int(40*FontSize))
 Button_Delete = Button(False, 40, HEIGHT*0.88 - 2*dy, button_width, button_height, 'Delete', int(40*FontSize))
@@ -234,20 +236,21 @@ Button_Tools.childrens = [Button_Data, Button_WorldSettings, Button_Forces, Butt
 Button_Tools.layer = [Button_Tools, Button_Maps]
 
 Button_Maps.layer = [Button_Tools, Button_Maps]
-Button_Maps.childrens = [Button_Map1, Button_Map2, Button_GoBack, Button_CleanAll, Button_Delete, Button_Pendulum]
+Button_Maps.childrens = [Button_Map_4, Button_Map1, Button_Map2, Button_GoBack, Button_CleanAll, Button_Delete, Button_Pendulum]
 
 Button_AddObject.layer = [Button_Data, Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack, Button_Delete]
 Button_AddObject.childrens = [Button_Add_Rope, Button_Add_Gas, Button_Add_Liquid, Button_Draw, Button_CleanAll, Button_Object1, Button_Object2, Button_GoBack, Button_Delete]
 
 Button_Data.layer = [Button_Data, Button_Forces, Button_CleanAll, Button_AddObject, Button_WorldSettings, Button_GoBack, Button_Delete]
-Button_Data.childrens = [Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
+Button_Data.childrens = [Button_Rotational_energy, Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
 
-Button_Show_Velocity.layer = [Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
-Button_Show_Acceleration.layer = [Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
-Button_Show_Kinetic_Energy.layer = [Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
-Button_Show_Potential_Energy.layer = [Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
-Button_Show_Full_Energy.layer =  [Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
-Button_Tracing.layer = [Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
+Button_Show_Velocity.layer = [Button_Rotational_energy, Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
+Button_Show_Acceleration.layer = [Button_Rotational_energy, Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
+Button_Show_Kinetic_Energy.layer = [Button_Rotational_energy, Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
+Button_Show_Potential_Energy.layer = [Button_Rotational_energy, Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
+Button_Show_Full_Energy.layer =  [Button_Rotational_energy, Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
+Button_Tracing.layer = [Button_Rotational_energy, Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
+Button_Rotational_energy.layer = [Button_Rotational_energy, Button_Tracing, Button_Show_Full_Energy, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Acceleration, Button_Show_Velocity, Button_GoBack, Button_Delete, Button_CleanAll]
 
 Button_WorldSettings.layer = [Button_Data, Button_Forces, Button_CleanAll, Button_WorldSettings, Button_AddObject, Button_GoBack, Button_Delete]
 Button_WorldSettings.childrens = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature, Button_Delete]
@@ -284,6 +287,7 @@ Button_Cube_Dynamic.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_
 Button_Ball_Elasticity.layer = [Button_CleanAll, Button_GoBack, Button_Ball_Mass, Button_Ball_Radius, Button_Ball_Elasticity, Button_Delete]
 Button_Cube_Mass.layer = [Button_Cube_Mass, Button_Cube_Dynamic, Button_Cube_Elasticity, Button_Cube_Size, Button_GoBack, Button_CleanAll, Button_Delete]
 
+Button_Rotational_energy.parent = Button_Data
 Button_Show_Acceleration.parent = Button_Data
 Button_Show_Potential_Energy.parent = Button_Data
 Button_Show_Kinetic_Energy.parent = Button_Data
@@ -317,6 +321,7 @@ Button_WorldSettings.parent = Button_Tools
 Button_AddObject.parent = Button_Tools
 Button_Forces.parent = Button_Tools
 Button_Map2.parent = Button_Maps
+Button_Map_4.parent = Button_Maps
 Button_Show_Tempreature.parent = Button_WorldSettings
 
 settings = {
@@ -340,7 +345,8 @@ Kinetic_Tracing_Objects = []
 Potential_Tracing_Objects = []
 Full_Tracing_Objects = []
 Position_Tracing_Objects = []
-Buttons = [Button_Tracing, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Velocity, Button_Show_Acceleration, Button_Show_Full_Energy, Button_Data, Button_Pendulum, Button_Delete, Button_Add_Rope, Button_Cube_Mass, Button_Cube_Dynamic, Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
+Rotational_Energy_Tracing = []
+Buttons = [Button_Rotational_energy, Button_Map_4, Button_Tracing, Button_Show_Potential_Energy, Button_Show_Kinetic_Energy, Button_Show_Velocity, Button_Show_Acceleration, Button_Show_Full_Energy, Button_Data, Button_Pendulum, Button_Delete, Button_Add_Rope, Button_Cube_Mass, Button_Cube_Dynamic, Button_Show_Tempreature, Button_Gas_Size, Button_Temperature, Button_Gas_Mass, Button_Add_Gas, Button_Add_Liquid, Button_Pause, Button_Settings, Button_Draw_Size, Button_Forces, Button_Gravity_Between_Objects, Button_Cube_Elasticity, Button_Ball_Elasticity, Button_Cube_Size, Button_Ball_Radius, Button_Ball_Mass ,Button_Const3, Button_Draw, Button_Tools, Button_GoBack, Button_AddObject, Button_WorldSettings, Button_Maps, Button_Map1, Button_Map2, Button_Object1, Button_Object2, Button_Const2, Button_Const1, Button_CleanAll,]
 Top_Layer = Button_Tools.layer
 ActivatedButton = None
 Gravity_Y = 1000
@@ -371,13 +377,17 @@ Showing_Acceleration = False
 Showing_Kinetic_Energy = False
 Showing_Potential_Energy = False
 Showing_Full_Energy = False
+Showing_Rotational_Energy = False
 trace_points_list = []
 trace_point_colors = []
 Tracing = False
 prev_vx = []
 prev_vy = []
-
+font_m = pygame.font.SysFont('Arial', 24)
 while running:
+
+
+    # Draw the text near the cursor
     # print(f'Bodies: {space.bodies}')
     # print(f'Shapes: {space.shapes}')
     # print(Objects)
@@ -385,8 +395,14 @@ while running:
     screen.fill((0, 0, 0))
     space.debug_draw(draw_options)
     mouse.space = space
+    mouse_x, mouse_y = mouse_body.position
+    coord_text = f"({mouse_x - 300}, {HEIGHT - mouse_y})"
+
+    # Render the text
+    text_surface = font_m.render(coord_text, True, (255, 255, 255))
     # prev_vx = [obj.body.velocity[0] for obj in Acceleration_Tracing_Objects]
     # prev_vy = [obj.body.velocity[1] for obj in Acceleration_Tracing_Objects]
+    screen.blit(text_surface, (mouse_x - 10, mouse_y - 20))
 
     if paused == False:
         prev_vx = [obj.body.velocity[0] for obj in Acceleration_Tracing_Objects]
@@ -551,6 +567,30 @@ while running:
             start = obj.body.position
             length = obj.body.mass * Gravity_Y * (HEIGHT - obj.body.position[1]) + obj.body.mass * Gravity_X * (WIDTH - obj.body.position[0])
             draw_text(screen, start, 0.2*length, math.radians(30),0, color = (255, 0, 255))
+        else:
+            start = obj.body.position
+            potenials = 0
+            for ob in dynamic:
+                if ob != obj:
+                    distance = math.sqrt((obj.body.position[0] - ob.body.position[0])**2 + (obj.body.position[1] - ob.body.position[1])**2)
+                    potential_ = -G*obj.body.mass*ob.body.mass/distance
+                    potenials += potential_
+
+            for ob in water_particles_shapes:
+                if ob != obj:
+                    distance = math.sqrt((obj.body.position[0] - ob.body.position[0]) ** 2 + (
+                                obj.body.position[1] - ob.body.position[1]) ** 2)
+                    potential_ = -G * obj.body.mass * ob.body.mass / distance
+                    potenials += potential_
+
+            for ob in gas_particles_shapes:
+                if ob != obj:
+                    distance = math.sqrt((obj.body.position[0] - ob.body.position[0]) ** 2 + (
+                                obj.body.position[1] - ob.body.position[1]) ** 2)
+                    potential_ = -G * obj.body.mass * ob.body.mass / distance
+                    potenials += potential_
+            length = potenials
+            draw_text(screen, start, 0.2 * length, math.radians(30), 0, color=(255, 0, 255))
 
     for obj in Full_Tracing_Objects:
         start = obj.body.position
@@ -558,8 +598,31 @@ while running:
         length1 = obj.body.mass * (vy ** 2 + vx ** 2) / 2
         if not Allow_Gravity:
             length2 = obj.body.mass * Gravity_Y * (HEIGHT - obj.body.position[1]) + obj.body.mass * Gravity_X * (WIDTH - obj.body.position[0])
+        else:
+            start = obj.body.position
+            potenials = 0
+            for ob in dynamic:
+                if ob != obj:
+                    distance = math.sqrt((obj.body.position[0] - ob.body.position[0])**2 + (obj.body.position[1] - ob.body.position[1])**2)
+                    potential_ = -G*obj.body.mass*ob.body.mass/distance
+                    potenials += potential_
+
+            for ob in water_particles_shapes:
+                if ob != obj:
+                    distance = math.sqrt((obj.body.position[0] - ob.body.position[0]) ** 2 + (
+                                obj.body.position[1] - ob.body.position[1]) ** 2)
+                    potential_ = -G * obj.body.mass * ob.body.mass / distance
+                    potenials += potential_
+
+            for ob in gas_particles_shapes:
+                if ob != obj:
+                    distance = math.sqrt((obj.body.position[0] - ob.body.position[0]) ** 2 + (
+                                obj.body.position[1] - ob.body.position[1]) ** 2)
+                    potential_ = -G * obj.body.mass * ob.body.mass / distance
+                    potenials += potential_
+            length2 = potenials
         length = length1 + length2
-        draw_text(screen, start, 0.2 * length, math.radians(30), 30, color=(255, 155, 0))
+        draw_text(screen, start, 0.2 * length, math.radians(30), 60, color=(255, 155, 0))
 
 
     for obj in Velocity_Tracing_Objects:
@@ -666,8 +729,47 @@ while running:
                         space.remove(obj, obj.body)
             Map = CreateMap3(space)
             Objects = Map[0]
-            Position_Tracing_Objects = Map[0].copy()
+            Position_Tracing_Objects = [Map[0][-1]]
+            trace_points_list = [[]]
+            trace_point_colors = [(255, 0 , 0)]
             Joints = Map[1]
+
+        if Button_Map_4.is_clicked(event) and Button_Map_4.is_seen:
+            Velocity_Tracing_Objects.clear()
+            Acceleration_Tracing_Objects.clear()
+            Kinetic_Tracing_Objects.clear()
+            Potential_Tracing_Objects.clear()
+            Full_Tracing_Objects.clear()
+            Position_Tracing_Objects.clear()
+            trace_point_colors.clear()
+            trace_points_list.clear()
+            Gravity_Y = 0
+            Gravity_X = 0
+            space.gravity = (Gravity_X, Gravity_Y)
+            Allow_Gravity = True
+            if Button_Gravity_Between_Objects.image_path2:
+                if Button_Gravity_Between_Objects.image == Button_Gravity_Between_Objects.image1:
+                    Button_Gravity_Between_Objects.image = Button_Gravity_Between_Objects.image2
+                elif Button_Gravity_Between_Objects.image == Button_Gravity_Between_Objects.image2:
+                    Button_Gravity_Between_Objects.image = Button_Gravity_Between_Objects.image1
+            for joint_ in Joints:
+                space.remove(joint_)
+            for obj in Objects:
+                if isinstance(obj, pymunk.Segment):
+                    space.remove(obj)
+                if obj.body in space.bodies:
+                    if isinstance(obj, Water_Particle):
+                        space.remove(obj.particle, obj.body)
+                    elif isinstance(obj, gas_Class.Gas_Particle):
+                        space.remove(obj.particle, obj.body)
+                    else:
+                        space.remove(obj, obj.body)
+            Map = CreateMap4(space, G)
+            Objects = Map
+            Position_Tracing_Objects = [Map[-1]]
+            trace_points_list = [[]]
+            trace_point_colors = [(255, 0 , 0)]
+
 
         if Button_Map2.is_clicked(event) and Button_Map2.is_seen:
             Velocity_Tracing_Objects.clear()
