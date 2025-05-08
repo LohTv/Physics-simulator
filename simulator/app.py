@@ -38,8 +38,7 @@ def run():
     draw_options = pymunk.pygame_util.DrawOptions(screen)
     MouseState = None
     FontSize = 1/(2600) * (HEIGHT + WIDTH)
-    # root = tk.Tk()
-    # root.withdraw()
+
 
     class Button:
         def __init__(self, is_seen, x, y, width, height, text='', font_size=30,
