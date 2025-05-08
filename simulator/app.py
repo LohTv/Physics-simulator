@@ -19,8 +19,8 @@ from simulator.settings import *
 from simulator.map3 import  CreateMap3
 
 def run():
-    WIDTH = pyautogui.size()[0] * 0.9
-    HEIGHT = pyautogui.size()[1] * 0.9
+    WIDTH = pyautogui.size()[0] * 0.7
+    HEIGHT = pyautogui.size()[1] * 0.5
     pygame.init()
     FPS = 60
     # WIDTH, HEIGHT = 1600, 1000
@@ -168,57 +168,60 @@ def run():
     if not 'Sprites/LeBron(Thegoat).png':
         print(1/0)
 
-    button_width = 200 * WIDTH/1600
+    button_width = WIDTH/8
     button_height = HEIGHT/13
     dy = HEIGHT/10
 
     # print(button_width)
     # print(button_height)
-
-    Button_Rotational_energy = Button(False, 40, 30 + 4*dy, button_width, button_height,  'Show rotational energy', int(20*FontSize))
-    Button_Map_4 = Button(False, 40, 30 + 3*dy, button_width, button_height, 'Orbit', int(40*FontSize))
-    Button_Tracing = Button(False, 40, 30 + 5*dy, button_width, button_height, 'Trace', int(40*FontSize))
-    Button_Show_Velocity = Button(False, 40, 30, button_width, button_height, 'Show velocity', int(25*FontSize))
-    Button_Show_Acceleration = Button(False, 40, 30 + dy, button_width, button_height, 'Show acceleration', int(25*FontSize))
-    Button_Show_Kinetic_Energy = Button(False, 40, 30 + 2*dy, button_width, button_height, 'Show kinetic energy', int(20*FontSize))
-    Button_Show_Potential_Energy = Button(False, 40, 30 + 3*dy, button_width, button_height, 'Show potential energy', int(20*FontSize))
-    Button_Show_Full_Energy = Button(False, 40, 30 + 5*dy, button_width, button_height, 'Show full energy', int(25*FontSize))
-    Button_Data = Button(False, 40, 30 + 3*dy, button_width, button_height, 'Data', int(40*FontSize))
-    Button_Pendulum = Button(False, 40, 30 + 2*dy, button_width, button_height, 'Pendulum', int(40*FontSize))
-    Button_Delete = Button(False, 40, HEIGHT*0.88 - 2*dy, button_width, button_height, 'Delete', int(40*FontSize))
-    Button_Add_Rope = Button(False, 40, 30 + 5*dy, button_width, button_height, 'Add Joint', int(40*FontSize))
-    Button_Cube_Mass = Button(False, 40, 30 + 2*dy, button_width, button_height, 'Mass', int(40*FontSize))
-    Button_Cube_Dynamic = Button(False, 40, 30 + 3*dy, button_width, button_height, 'Dynamic', int(40*FontSize))
-    Button_Gas_Size = Button_with_Image(False, 40, 30 + 2*dy, button_width, button_height, 'Sprites/size.png', hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
-    Button_Temperature = Button(False, 40, 30 + dy, button_width, button_height, 'Temperature', int(40*FontSize))
-    Button_Gas_Mass = Button(False, 40, 30, button_width, button_height, 'Mass', int(40*FontSize))
-    Button_Add_Gas = Button(False, 40, 30 + 4*dy, button_width, button_height, 'Add Gas', int(40*FontSize))
-    Button_Add_Liquid = Button(False, 40, 30 + 3*dy, button_width, button_height, 'Add Liquid', int(40*FontSize))
+    x_s = WIDTH/40
+    print(button_width)
+    print(button_height)
+    print(x_s)
+    Button_Rotational_energy = Button(False, x_s, 30 + 4*dy, button_width, button_height,  'Show rotational energy', int(20*FontSize))
+    Button_Map_4 = Button(False, x_s, 30 + 3*dy, button_width, button_height, 'Orbit', int(40*FontSize))
+    Button_Tracing = Button(False, x_s, 30 + 5*dy, button_width, button_height, 'Trace', int(40*FontSize))
+    Button_Show_Velocity = Button(False, x_s, 30, button_width, button_height, 'Show velocity', int(25*FontSize))
+    Button_Show_Acceleration = Button(False, x_s, 30 + dy, button_width, button_height, 'Show acceleration', int(25*FontSize))
+    Button_Show_Kinetic_Energy = Button(False, x_s, 30 + 2*dy, button_width, button_height, 'Show kinetic energy', int(20*FontSize))
+    Button_Show_Potential_Energy = Button(False, x_s, 30 + 3*dy, button_width, button_height, 'Show potential energy', int(20*FontSize))
+    Button_Show_Full_Energy = Button(False, x_s, 30 + 5*dy, button_width, button_height, 'Show full energy', int(25*FontSize))
+    Button_Data = Button(False, x_s, 30 + 3*dy, button_width, button_height, 'Data', int(40*FontSize))
+    Button_Pendulum = Button(False, x_s, 30 + 2*dy, button_width, button_height, 'Pendulum', int(40*FontSize))
+    Button_Delete = Button(False, x_s, HEIGHT*0.88 - 2*dy, button_width, button_height, 'Delete', int(40*FontSize))
+    Button_Add_Rope = Button(False, x_s, 30 + 5*dy, button_width, button_height, 'Add Joint', int(40*FontSize))
+    Button_Cube_Mass = Button(False, x_s, 30 + 2*dy, button_width, button_height, 'Mass', int(40*FontSize))
+    Button_Cube_Dynamic = Button(False, x_s, 30 + 3*dy, button_width, button_height, 'Dynamic', int(40*FontSize))
+    Button_Gas_Size = Button_with_Image(False, x_s, 30 + 2*dy, button_width, button_height, 'Sprites/size.png', hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
+    Button_Temperature = Button(False, x_s, 30 + dy, button_width, button_height, 'Temperature', int(40*FontSize))
+    Button_Gas_Mass = Button(False, x_s, 30, button_width, button_height, 'Mass', int(40*FontSize))
+    Button_Add_Gas = Button(False, x_s, 30 + 4*dy, button_width, button_height, 'Add Gas', int(40*FontSize))
+    Button_Add_Liquid = Button(False, x_s, 30 + 3*dy, button_width, button_height, 'Add Liquid', int(40*FontSize))
     Button_Settings = Button_with_Image(True, WIDTH - 90, 15, button_height, button_height,  'Sprites/settings.png')
     Button_Pause = Button_with_Image(True, 340, 15, 80, button_height,  'Sprites/pause1.png', 'Sprites/pause2.png', special_need=True)
-    Button_Draw_Size = Button_with_Image(False, 40, 30, button_width, button_height, 'Sprites/size.png', hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
-    Button_Forces = Button(False, 40, 30 + 2*dy, button_width, button_height, 'Forces', int(40*FontSize))
-    Button_Gravity_Between_Objects = Button_with_Image(False, 40, 30, button_width, button_height, 'Sprites/allow_gravity.png', hover_image_path='Sprites/hovers/allow_gravity2.png', image_path2='Sprites/hovers/allow_gravity2.png', special_need=True)
-    Button_Cube_Elasticity = Button_with_Image(False, 40, 30 + dy, button_width, button_height, 'Sprites/elasticity.png', hover_image_path='Sprites/hovers/elasticity2.png', image_path2='Sprites/hovers/da.png')
-    Button_Ball_Elasticity = Button_with_Image(False, 40, 30 + 2*dy, button_width, button_height, 'Sprites/elasticity.png', hover_image_path='Sprites/hovers/elasticity2.png', image_path2='Sprites/hovers/da.png')
-    Button_Cube_Size = Button_with_Image(False, 40, 30, button_width, button_height, 'Sprites/size.png', hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
-    Button_Ball_Mass = Button(False, 40, 30 + dy, button_width, button_height, 'Mass', int(40*FontSize))
-    Button_Ball_Radius = Button_with_Image(False, 40, 30, button_width, button_height, 'Sprites/radius.png', hover_image_path='Sprites/hovers/radius2.png', text_color='white', image_path2='Sprites/hovers/da.png')
-    Button_Draw = Button(False, 40, 30 + 2*dy, button_width, button_height, 'Draw', int(40*FontSize))
-    Button_CleanAll = Button_with_Image(False, 40, HEIGHT*0.88 - dy, button_width, button_height, 'Sprites/clean_all.png', hover_image_path='Sprites/hovers/clean_all2.png', image_path2='Sprites/hovers/da.png')
-    Button_Const1 = Button_with_Image(False, 40, 30, button_width, button_height, 'Sprites/gravity_y.png', hover_image_path='Sprites/hovers/gravity_y2.png', image_path2='Sprites/hovers/da.png')
-    Button_Const3 = Button_with_Image(False, 40, 30 + dy, button_width, button_height, 'Sprites/gravity_x.png', hover_image_path='Sprites/hovers/gravity_x2.png', image_path2='Sprites/hovers/da.png')
-    Button_Const2 = Button_with_Image(False, 40, 30 + 2*dy, button_width, button_height, 'Sprites/add_walls.png', hover_image_path='Sprites/hovers/add_walls2.png', image_path2='Sprites/hovers/da.png')
-    Button_Object1 = Button(False, 40, 30, button_width, button_height, 'Add Ball', int(40*FontSize))
-    Button_Object2 = Button(False, 40, 30 + dy, button_width, button_height, 'Add Cube', int(40*FontSize))
-    Button_Map1 = Button(False, 40, 30, button_width, button_height, 'Galton board', int(30*FontSize))
-    Button_Map2 = Button(False, 40, 30 + dy, button_width, button_height, "Newton's cradle", int(25*FontSize))
-    Button_Maps = Button_with_Image(True, 40, 30 + dy, button_width, button_height, 'Sprites/maps.png', hover_image_path='Sprites/hovers/maps2.png', image_path2='Sprites/hovers/da.png')
-    Button_Tools = Button_with_Image(True, 40, 30, button_width, button_height, 'Sprites/tools.png', hover_image_path='Sprites/hovers/tools2.png', image_path2='Sprites/hovers/da.png')
-    Button_WorldSettings = Button(False, 40, 30, button_width, button_height, 'World Settings', int(30*FontSize))
-    Button_AddObject = Button(False, 40, 30 + dy, button_width, button_height, 'Add Object', int(30*FontSize))
-    Button_GoBack = Button_with_Image(False, 40, HEIGHT*0.88, button_width, button_height, 'Sprites/go_back.png', hover_image_path='Sprites/hovers/go_back2.png', image_path2='Sprites/hovers/da.png')
-    Button_Show_Tempreature = Button(False, 40, 30 + 3*dy, button_width, button_height, 'Show Temperature', int(25*FontSize))
+    Button_Draw_Size = Button_with_Image(False, x_s, 30, button_width, button_height, 'Sprites/size.png', hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
+    Button_Forces = Button(False, x_s, 30 + 2*dy, button_width, button_height, 'Forces', int(40*FontSize))
+    Button_Gravity_Between_Objects = Button_with_Image(False, x_s, 30, button_width, button_height, 'Sprites/allow_gravity.png', hover_image_path='Sprites/hovers/allow_gravity2.png', image_path2='Sprites/hovers/allow_gravity2.png', special_need=True)
+    Button_Cube_Elasticity = Button_with_Image(False, x_s, 30 + dy, button_width, button_height, 'Sprites/elasticity.png', hover_image_path='Sprites/hovers/elasticity2.png', image_path2='Sprites/hovers/da.png')
+    Button_Ball_Elasticity = Button_with_Image(False, x_s, 30 + 2*dy, button_width, button_height, 'Sprites/elasticity.png', hover_image_path='Sprites/hovers/elasticity2.png', image_path2='Sprites/hovers/da.png')
+    Button_Cube_Size = Button_with_Image(False, x_s, 30, button_width, button_height, 'Sprites/size.png', hover_image_path='Sprites/hovers/size2.png', image_path2='Sprites/hovers/da.png')
+    Button_Ball_Mass = Button(False, x_s, 30 + dy, button_width, button_height, 'Mass', int(40*FontSize))
+    Button_Ball_Radius = Button_with_Image(False, x_s, 30, button_width, button_height, 'Sprites/radius.png', hover_image_path='Sprites/hovers/radius2.png', text_color='white', image_path2='Sprites/hovers/da.png')
+    Button_Draw = Button(False, x_s, 30 + 2*dy, button_width, button_height, 'Draw', int(40*FontSize))
+    Button_CleanAll = Button_with_Image(False, x_s, HEIGHT*0.88 - dy, button_width, button_height, 'Sprites/clean_all.png', hover_image_path='Sprites/hovers/clean_all2.png', image_path2='Sprites/hovers/da.png')
+    Button_Const1 = Button_with_Image(False, x_s, x_s, button_width, button_height, 'Sprites/gravity_y.png', hover_image_path='Sprites/hovers/gravity_y2.png', image_path2='Sprites/hovers/da.png')
+    Button_Const3 = Button_with_Image(False, x_s, 30 + dy, button_width, button_height, 'Sprites/gravity_x.png', hover_image_path='Sprites/hovers/gravity_x2.png', image_path2='Sprites/hovers/da.png')
+    Button_Const2 = Button_with_Image(False, x_s, 30 + 2*dy, button_width, button_height, 'Sprites/add_walls.png', hover_image_path='Sprites/hovers/add_walls2.png', image_path2='Sprites/hovers/da.png')
+    Button_Object1 = Button(False, x_s, 30, button_width, button_height, 'Add Ball', int(40*FontSize))
+    Button_Object2 = Button(False, x_s, 30 + dy, button_width, button_height, 'Add Cube', int(40*FontSize))
+    Button_Map1 = Button(False, x_s, 30, button_width, button_height, 'Galton board', int(30*FontSize))
+    Button_Map2 = Button(False, x_s, 30 + dy, button_width, button_height, "Newton's cradle", int(25*FontSize))
+    Button_Maps = Button_with_Image(True, x_s, 30 + dy, button_width, button_height, 'Sprites/maps.png', hover_image_path='Sprites/hovers/maps2.png', image_path2='Sprites/hovers/da.png')
+    Button_Tools = Button_with_Image(True, x_s, 30, button_width, button_height, 'Sprites/tools.png', hover_image_path='Sprites/hovers/tools2.png', image_path2='Sprites/hovers/da.png')
+    Button_WorldSettings = Button(False, x_s, 30, button_width, button_height, 'World Settings', int(30*FontSize))
+    Button_AddObject = Button(False, x_s, 30 + dy, button_width, button_height, 'Add Object', int(30*FontSize))
+    Button_GoBack = Button_with_Image(False, x_s, HEIGHT*0.88, button_width, button_height, 'Sprites/go_back.png', hover_image_path='Sprites/hovers/go_back2.png', image_path2='Sprites/hovers/da.png')
+    Button_Show_Tempreature = Button(False, x_s, 30 + 3*dy, button_width, button_height, 'Show Temperature', int(25*FontSize))
 
 
     Button_Show_Tempreature.layer = [Button_CleanAll, Button_Const1, Button_Const2, Button_Const3, Button_GoBack, Button_Show_Tempreature, Button_Delete]
