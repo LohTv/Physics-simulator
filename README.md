@@ -1,4 +1,19 @@
+## 🚀 Getting Started
 
+Follow these steps to download and run the program:
+
+### 📦 Download & Setup
+
+1. Click the **`Code`** button in the top-left corner of this page.
+2. Select **`Download ZIP`** to download the repository to your computer.
+3. Extract the downloaded ZIP file.
+4. Open the extracted folder and navigate to the `TinyLab` directory.
+5. Run the `tinylab.exe` file to start the program.
+
+## 🛠 Requirements
+
+- Windows OS  
+- No installation required — just run the executable!
 
 |Name|Description|Date|
 |----|-----------|----|
