@@ -174,6 +174,7 @@ def run():
 
     # print(button_width)
     # print(button_height)
+    # print(button_height)
     x_s = WIDTH/40
     Button_Rotational_energy = Button(False, x_s, 30 + 4*dy, button_width, button_height,  'Show rotational energy', int(20*FontSize))
     Button_Map_4 = Button(False, x_s, 30 + 3*dy, button_width, button_height, 'Orbit', int(40*FontSize))
