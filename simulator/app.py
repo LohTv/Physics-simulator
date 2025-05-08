@@ -182,7 +182,7 @@ def run():
     Button_Show_Acceleration = Button(False, x_s, 30 + dy, button_width, button_height, 'Show acceleration', int(25*FontSize))
     Button_Show_Kinetic_Energy = Button(False, x_s, 30 + 2*dy, button_width, button_height, 'Show kinetic energy', int(20*FontSize))
     Button_Show_Potential_Energy = Button(False, x_s, 30 + 3*dy, button_width, button_height, 'Show potential energy', int(20*FontSize))
-    Button_Show_Full_Energy = Button(False, x_s, 30 + 5*dy, button_width, button_height, 'Show full energy', int(25*FontSize))
+    Button_Show_Full_Energy = Button(False, x_s, 30 + 6*dy, button_width, button_height, 'Show full energy', int(25*FontSize))
     Button_Data = Button(False, x_s, 30 + 3*dy, button_width, button_height, 'Data', int(40*FontSize))
     Button_Pendulum = Button(False, x_s, 30 + 2*dy, button_width, button_height, 'Pendulum', int(40*FontSize))
     Button_Delete = Button(False, x_s, HEIGHT*0.88 - 2*dy, button_width, button_height, 'Delete', int(40*FontSize))
