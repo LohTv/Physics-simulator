@@ -19,8 +19,8 @@ from simulator.settings import *
 from simulator.map3 import  CreateMap3
 
 def run():
-    WIDTH = pyautogui.size()[0] * 0.7
-    HEIGHT = pyautogui.size()[1] * 0.5
+    WIDTH = pyautogui.size()[0] * 0.9
+    HEIGHT = pyautogui.size()[1] * 0.9
     pygame.init()
     FPS = 60
     # WIDTH, HEIGHT = 1600, 1000
