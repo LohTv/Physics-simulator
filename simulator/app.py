@@ -27,7 +27,6 @@ settings = {
 def save_callback(new_settings):
     global settings
     settings.update(new_settings)
-    print("Updated settings:", new_settings)
 
 def run():
     WIDTH = pyautogui.size()[0] * 0.9
