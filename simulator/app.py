@@ -501,6 +501,9 @@ def run():
                         if obj in Full_Tracing_Objects:
                             Full_Tracing_Objects.remove(obj)
 
+                        if obj in Rotational_Energy_Tracing:
+                            Rotational_Energy_Tracing.remove(obj)
+
                         if obj in Position_Tracing_Objects:
                             ind = Position_Tracing_Objects.index(obj)
                             del trace_points_list[ind]
@@ -530,6 +533,9 @@ def run():
 
                 if last_obj in Potential_Tracing_Objects:
                     Potential_Tracing_Objects.remove(last_obj)
+
+                if last_obj in Rotational_Energy_Tracing:
+                    Rotational_Energy_Tracing.remove(last_obj)
 
                 if last_obj in Full_Tracing_Objects:
                     Full_Tracing_Objects.remove(last_obj)
@@ -697,6 +703,7 @@ def run():
                 Potential_Tracing_Objects.clear()
                 Full_Tracing_Objects.clear()
                 Position_Tracing_Objects.clear()
+                Rotational_Energy_Tracing.clear()
                 trace_point_colors.clear()
                 trace_points_list.clear()
                 for joint_ in Joints:
@@ -721,6 +728,7 @@ def run():
                 Potential_Tracing_Objects.clear()
                 Full_Tracing_Objects.clear()
                 Position_Tracing_Objects.clear()
+                Rotational_Energy_Tracing.clear()
                 trace_point_colors.clear()
                 trace_points_list.clear()
                 for joint_ in Joints:
@@ -751,6 +759,7 @@ def run():
                 Position_Tracing_Objects.clear()
                 trace_point_colors.clear()
                 trace_points_list.clear()
+                Rotational_Energy_Tracing.clear()
                 Gravity_Y = 0
                 Gravity_X = 0
                 space.gravity = (Gravity_X, Gravity_Y)
@@ -786,6 +795,7 @@ def run():
                 Potential_Tracing_Objects.clear()
                 Full_Tracing_Objects.clear()
                 Position_Tracing_Objects.clear()
+                Rotational_Energy_Tracing.clear()
                 Tracing = False
                 trace_point_colors.clear()
                 trace_points_list.clear()
@@ -994,6 +1004,7 @@ def run():
                 Potential_Tracing_Objects.clear()
                 Full_Tracing_Objects.clear()
                 Position_Tracing_Objects.clear()
+                Rotational_Energy_Tracing.clear()
                 for joint_ in Joints:
                     space.remove(joint_)
                 for obj in Objects:
@@ -1258,6 +1269,9 @@ def run():
 
                     if hit_shape in Full_Tracing_Objects:
                         Full_Tracing_Objects.remove(hit_shape)
+
+                    if hit_shape in Rotational_Energy_Tracing:
+                        Rotational_Energy_Tracing.remove(hit_shape)
 
                     if hit_shape in Position_Tracing_Objects:
                         ind = Position_Tracing_Objects.index(hit_shape)
