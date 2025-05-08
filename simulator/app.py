@@ -207,7 +207,7 @@ def run():
     Button_Ball_Radius = Button_with_Image(False, x_s, 30, button_width, button_height, 'Sprites/radius.png', hover_image_path='Sprites/hovers/radius2.png', text_color='white', image_path2='Sprites/hovers/da.png')
     Button_Draw = Button(False, x_s, 30 + 2*dy, button_width, button_height, 'Draw', int(40*FontSize))
     Button_CleanAll = Button_with_Image(False, x_s, HEIGHT*0.88 - dy, button_width, button_height, 'Sprites/clean_all.png', hover_image_path='Sprites/hovers/clean_all2.png', image_path2='Sprites/hovers/da.png')
-    Button_Const1 = Button_with_Image(False, x_s, x_s, button_width, button_height, 'Sprites/gravity_y.png', hover_image_path='Sprites/hovers/gravity_y2.png', image_path2='Sprites/hovers/da.png')
+    Button_Const1 = Button_with_Image(False, x_s, 30, button_width, button_height, 'Sprites/gravity_y.png', hover_image_path='Sprites/hovers/gravity_y2.png', image_path2='Sprites/hovers/da.png')
     Button_Const3 = Button_with_Image(False, x_s, 30 + dy, button_width, button_height, 'Sprites/gravity_x.png', hover_image_path='Sprites/hovers/gravity_x2.png', image_path2='Sprites/hovers/da.png')
     Button_Const2 = Button_with_Image(False, x_s, 30 + 2*dy, button_width, button_height, 'Sprites/add_walls.png', hover_image_path='Sprites/hovers/add_walls2.png', image_path2='Sprites/hovers/da.png')
     Button_Object1 = Button(False, x_s, 30, button_width, button_height, 'Add Ball', int(40*FontSize))
