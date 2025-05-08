@@ -168,7 +168,7 @@ def run():
     if not 'Sprites/LeBron(Thegoat).png':
         print(1/0)
 
-    button_width = 200 * FontSize
+    button_width = 200 * WIDTH/1600
     button_height = HEIGHT/13
     dy = HEIGHT/10
 
