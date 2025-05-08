@@ -18,6 +18,17 @@ import math
 from simulator.settings import *
 from simulator.map3 import  CreateMap3
 
+settings = {
+    "language": "English",
+    "volume": 25
+}
+
+
+def save_callback(new_settings):
+    global settings
+    settings.update(new_settings)
+    print("Updated settings:", new_settings)
+
 def run():
     WIDTH = pyautogui.size()[0] * 0.9
     HEIGHT = pyautogui.size()[1] * 0.9
@@ -324,17 +335,6 @@ def run():
     Button_Map2.parent = Button_Maps
     Button_Map_4.parent = Button_Maps
     Button_Show_Tempreature.parent = Button_WorldSettings
-
-    settings = {
-        "language": "English",
-        "volume": 25
-    }
-
-
-    def save_callback(new_settings):
-        global settings
-        settings.update(new_settings)
-        print("Updated settings:", new_settings)
 
 
     create_wall(space, 40, 2000, (300, 500), (255, 255, 255), 1, 0)
