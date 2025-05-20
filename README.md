@@ -1,16 +1,16 @@
-## 🚀 Getting Started
+##  Getting Started
 
 Follow these steps to download and run the program:
 
-### 📦 Download & Setup
+###  Download & Setup
 
-1. Click the **`Code`** button in the top-left corner of this page.
-2. Select **`Download ZIP`** to download the repository to your computer.
+1. Click the **Code** button in the top-left corner of this page.
+2. Select **Download ZIP** to download the repository to your computer.
 3. Extract the downloaded ZIP file.
-4. Open the extracted folder and navigate to the `TinyLab` directory.
-5. Run the `tinylab.exe` file to start the program.
+4. Open the extracted folder and navigate to the TinyLab directory.
+5. Run the tinylab.exe file to start the program.
 
-## 🛠 Requirements
+##  Requirements
 
 - Windows OS  
 - No installation required — just run the executable!
@@ -33,7 +33,8 @@ Follow these steps to download and run the program:
 
 |File type|Link|
 |----|-----------|
-|Main document|https://docs.google.com/document/d/1PlRcGJJZTASu76uitn1uD5Ylh5TQQdO87ETfff3gTmk/edit?usp=sharing|
+|**Main document**|**https://docs.google.com/document/d/1PlRcGJJZTASu76uitn1uD5Ylh5TQQdO87ETfff3gTmk/edit?usp=sharing**|
+|First document|https://docs.google.com/document/d/1PlRcGJJZTASu76uitn1uD5Ylh5TQQdO87ETfff3gTmk/edit?usp=sharing|
 |Requirement Specification|https://docs.google.com/document/d/1-hhYZ5qiQz9U1BhRbmdtmlho04OM_H10PGsCRxosmgg/edit?usp=sharing|
 |Testing Request|https://docs.google.com/document/d/1jBq44Kqaj0euDHLlZKVQFuv9qyjdXIglMMZguoJXEmo/edit?usp=sharing|
 |Testing requirements (from HelthBite)|https://docs.google.com/document/d/1jBq44Kqaj0euDHLlZKVQFuv9qyjdXIglMMZguoJXEmo/edit?usp=sharing|
