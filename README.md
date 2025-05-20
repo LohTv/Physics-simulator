@@ -33,7 +33,7 @@ Follow these steps to download and run the program:
 
 |File type|Link|
 |----|-----------|
-|Main document|https://docs.google.com/document/d/1YdrjLxV-tsfsBy-2Zk96stcroOZ92SDeMhVguwEANpU/edit?usp=sharing|
+|Main document|https://docs.google.com/document/d/1PlRcGJJZTASu76uitn1uD5Ylh5TQQdO87ETfff3gTmk/edit?usp=sharing]|
 |Requirement Specification|https://docs.google.com/document/d/1-hhYZ5qiQz9U1BhRbmdtmlho04OM_H10PGsCRxosmgg/edit?usp=sharing|
 |Testing Request|https://docs.google.com/document/d/1jBq44Kqaj0euDHLlZKVQFuv9qyjdXIglMMZguoJXEmo/edit?usp=sharing|
 |Testing requirements (from HelthBite)|https://docs.google.com/document/d/1jBq44Kqaj0euDHLlZKVQFuv9qyjdXIglMMZguoJXEmo/edit?usp=sharing|
